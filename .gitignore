@@ -1,15 +1,18 @@
-# Python
-__pycache__/
-*.py[cod]
-
-# Virtual Environment
-venv/
-
-# Environment Variables
+# Environment variables
 .env
+.env.*
 
 # Database
 db.sqlite3
+
+# Virtual environment
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
 
 # IDE
 .idea/
@@ -18,5 +21,8 @@ db.sqlite3
 # Logs
 *.log
 
-# Python cache
-*.pyc
+# Media
+media/
+
+# Static collected files
+staticfiles/
