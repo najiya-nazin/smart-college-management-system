@@ -4,7 +4,7 @@ from django.core.cache import cache
 from django.core.mail import send_mail
 
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -24,6 +24,8 @@ from .serializers import (
 
 class RegisterView(APIView):
 
+    permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -38,6 +40,8 @@ class RegisterView(APIView):
 
 
 class LoginView(APIView):
+
+    permission_classes = [AllowAny]
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -97,6 +101,8 @@ class LogoutView(APIView):
 
 class ForgotPasswordView(APIView):
 
+    permission_classes = [AllowAny]
+
     def post(self, request):
 
         serializer = ForgotPasswordSerializer(data=request.data)
@@ -135,6 +141,7 @@ class ForgotPasswordView(APIView):
 
 
 class VerifyOTPView(APIView):
+    permission_classes = [AllowAny]
 
     def post(self, request):
 
@@ -163,6 +170,7 @@ class VerifyOTPView(APIView):
 
 
 class ResetPasswordView(APIView):
+    permission_classes = [AllowAny]
 
     def post(self, request):
 
