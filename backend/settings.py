@@ -47,6 +47,10 @@ INSTALLED_APPS = [
     'departments',
     'students',
     'teachers',
+    'marks',
+    'attendences',
+    'fees',
+    'timetable',
 
 ]
 
