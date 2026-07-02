@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.models import update_last_login
 
 from .models import User
 from .serializers import (
@@ -43,6 +44,8 @@ class LoginView(APIView):
         serializer.is_valid(raise_exception=True)
 
         user = serializer.validated_data["user"]
+
+        update_last_login(None, user)
 
         refresh = RefreshToken.for_user(user)
 
