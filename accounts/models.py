@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 
 class Role(models.TextChoices):
-    ADMIN   = "admin", "Admin"
+    ADMIN = "admin", "Admin"
     TEACHER = "teacher", "Teacher"
     STUDENT = "student", "Student"
 
@@ -18,8 +18,8 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
 
         user = self.model(
-            email = email,
-            name  = name,
+            email=email,
+            name=name,
             **extra_fields
         )
 
@@ -44,15 +44,15 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-    name       = models.CharField(max_length=150)
-    email      = models.EmailField(unique=True)
-    role       = models.CharField(max_length=20,choices=Role.choices,default=Role.STUDENT,db_index=True)
-    phone      = models.CharField(max_length=15,blank=True,null=True)
-    is_active  = models.BooleanField(default=True)
-    is_staff   = models.BooleanField(default=False)
+    name = models.CharField(max_length=150)
+    email = models.EmailField(unique=True)
+    role = models.CharField(max_length=20,choices=Role.choices,default=Role.STUDENT,db_index=True)
+    phone = models.CharField(max_length=15,blank=True,null=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    objects    = UserManager()
+    objects = UserManager()
 
     USERNAME_FIELD = "email"
 
