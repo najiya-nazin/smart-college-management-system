@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'accounts',
     'courses',
     'departments',
@@ -85,7 +86,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'college_db',
+        'NAME': 'smartcollege_db',
         'USER': 'postgres',
         'PASSWORD': 'nujaib@123',
         'HOST': 'localhost',  # Set to the correct host if your DB is hosted elsewhere
@@ -154,3 +155,19 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "accounts.User"
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp.gmail.com"
+
+EMAIL_PORT = 587
+
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = "nujaibnuju441@gmail.com"
+
+EMAIL_HOST_PASSWORD = "gjyuoeitwflrrnyf"
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+ 
