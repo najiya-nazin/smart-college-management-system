@@ -27,13 +27,12 @@ urlpatterns = [
     path('marks/', include('marks.urls')),
     path('attendences/', include('attendences.urls')),
     path('timetable/', include('timetable.urls')),
+    path('fees/', include('fees.urls')),
+    path('exams/', include('exams.urls')),
+    path('library/', include('library.urls')),
+    path('hostel/', include('hostel.urls')),
+    path('placement/', include('placement.urls')),
+    path('event/', include('event.urls')),
+    path('reports/', include('reports.urls')),
 
-
-    
-    
-    
-    
-     
-    
-    
 ]
