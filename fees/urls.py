@@ -1,21 +1,36 @@
 from django.urls import path
-from .views import (
-    FeeListCreateAPIView,
-    FeeDetailAPIView,
-)
+from . import views
 
 urlpatterns = [
 
     path(
         "",
-        FeeListCreateAPIView.as_view(),
-        name="fee-list-create"
+        views.fee_list,
+        name="fee-list"
+    ),
+
+    path(
+        "create/",
+        views.fee_create,
+        name="fee-create"
     ),
 
     path(
         "<int:pk>/",
-        FeeDetailAPIView.as_view(),
+        views.fee_detail,
         name="fee-detail"
+    ),
+
+    path(
+        "<int:pk>/edit/",
+        views.fee_update,
+        name="fee-update"
+    ),
+
+    path(
+        "<int:pk>/delete/",
+        views.fee_delete,
+        name="fee-delete"
     ),
 
 ]

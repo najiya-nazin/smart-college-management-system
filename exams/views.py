@@ -1,138 +1,134 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 
 from .models import Exam
-from .serializers import ExamSerializer
+from .forms import ExamForm
+
+
+# List Exams
+def exam_list(request):
+
+    exams = Exam.objects.select_related("course").all()
+
+    return render(
+        request,
+        "exams/exam_list.html",
+        {
+            "exams": exams
+        }
+    )
 
 
 # Create Exam
-class ExamCreateAPIView(APIView):
+def exam_create(request):
 
-    permission_classes = [IsAuthenticated]
+    if request.method == "POST":
 
-    def post(self, request):
-        serializer = ExamSerializer(data=request.data)
+        form = ExamForm(request.POST)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "message": "Exam created successfully",
-                    "data": serializer.data
-                },
-                status=status.HTTP_201_CREATED
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                "Exam created successfully."
             )
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return redirect("exam-list")
+
+    else:
+
+        form = ExamForm()
+
+    return render(
+        request,
+        "exams/exam_form.html",
+        {
+            "form": form
+        }
+    )
 
 
-# List All Exams
-class ExamListAPIView(APIView):
+# Exam Detail
+def exam_detail(request, pk):
 
-    permission_classes = [IsAuthenticated]
+    exam = get_object_or_404(
+        Exam.objects.select_related("course"),
+        pk=pk
+    )
 
-    def get(self, request):
-        exams = Exam.objects.all()
-        serializer = ExamSerializer(exams, many=True)
-        return Response(serializer.data)
-
-
-# Get Single Exam
-class ExamDetailAPIView(APIView):
-
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, pk):
-        try:
-            exam = Exam.objects.get(id=pk)
-        except Exam.DoesNotExist:
-            return Response(
-                {"message": "Exam not found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        serializer = ExamSerializer(exam)
-        return Response(serializer.data)
+    return render(
+        request,
+        "exams/exam_detail.html",
+        {
+            "exam": exam
+        }
+    )
 
 
 # Update Exam
-class ExamUpdateAPIView(APIView):
+def exam_update(request, pk):
 
-    permission_classes = [IsAuthenticated]
+    exam = get_object_or_404(
+        Exam,
+        pk=pk
+    )
 
-    def put(self, request, pk):
-        try:
-            exam = Exam.objects.get(id=pk)
-        except Exam.DoesNotExist:
-            return Response(
-                {"message": "Exam not found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
+    if request.method == "POST":
 
-        serializer = ExamSerializer(exam, data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "message": "Exam updated successfully",
-                    "data": serializer.data
-                }
-            )
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# Partial Update Exam
-class ExamPatchAPIView(APIView):
-
-    permission_classes = [IsAuthenticated]
-
-    def patch(self, request, pk):
-        try:
-            exam = Exam.objects.get(id=pk)
-        except Exam.DoesNotExist:
-            return Response(
-                {"message": "Exam not found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        serializer = ExamSerializer(
-            exam,
-            data=request.data,
-            partial=True
+        form = ExamForm(
+            request.POST,
+            instance=exam
         )
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "message": "Exam updated successfully",
-                    "data": serializer.data
-                }
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                "Exam updated successfully."
             )
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return redirect("exam-list")
+
+    else:
+
+        form = ExamForm(instance=exam)
+
+    return render(
+        request,
+        "exams/exam_form.html",
+        {
+            "form": form
+        }
+    )
 
 
 # Delete Exam
-class ExamDeleteAPIView(APIView):
+def exam_delete(request, pk):
 
-    permission_classes = [IsAuthenticated]
+    exam = get_object_or_404(
+        Exam,
+        pk=pk
+    )
 
-    def delete(self, request, pk):
-        try:
-            exam = Exam.objects.get(id=pk)
-        except Exam.DoesNotExist:
-            return Response(
-                {"message": "Exam not found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
+    if request.method == "POST":
 
         exam.delete()
-        return Response(
-            {"message": "Exam deleted successfully"},
-            status=status.HTTP_204_NO_CONTENT
+
+        messages.success(
+            request,
+            "Exam deleted successfully."
         )
+
+        return redirect("exam-list")
+
+    return render(
+        request,
+        "exams/exam_confirm_delete.html",
+        {
+            "exam": exam
+        }
+    )

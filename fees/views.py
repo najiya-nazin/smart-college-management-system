@@ -1,120 +1,140 @@
-from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework import status
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+
 from .models import Fee
-from .serializers import FeeSerializer
+from .forms import FeeForm
 
 
-class FeeListCreateAPIView(APIView):
+# List Fees
+def fee_list(request):
 
-    permission_classes = [IsAuthenticated]
+    fees = Fee.objects.select_related(
+        "student",
+        "student__user"
+    ).all().order_by("-payment_date")
 
-    def get(self, request):
+    return render(
+        request,
+        "fees/fee_list.html",
+        {
+            "fees": fees
+        }
+    )
 
-        fees = Fee.objects.select_related(
+
+# Create Fee
+def fee_create(request):
+
+    if request.method == "POST":
+
+        form = FeeForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                "Fee record created successfully."
+            )
+
+            return redirect("fee-list")
+
+    else:
+
+        form = FeeForm()
+
+    return render(
+        request,
+        "fees/fee_form.html",
+        {
+            "form": form
+        }
+    )
+
+
+# Fee Detail
+def fee_detail(request, pk):
+
+    fee = get_object_or_404(
+        Fee.objects.select_related(
             "student",
             "student__user"
-        ).all().order_by("-payment_date")
+        ),
+        pk=pk
+    )
 
-        serializer = FeeSerializer(
-            fees,
-            many=True
+    return render(
+        request,
+        "fees/fee_detail.html",
+        {
+            "fee": fee
+        }
+    )
+
+
+# Update Fee
+def fee_update(request, pk):
+
+    fee = get_object_or_404(
+        Fee,
+        pk=pk
+    )
+
+    if request.method == "POST":
+
+        form = FeeForm(
+            request.POST,
+            instance=fee
         )
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
+        if form.is_valid():
 
-    def post(self, request):
+            form.save()
 
-        serializer = FeeSerializer(
-            data=request.data
-        )
+            messages.success(
+                request,
+                "Fee record updated successfully."
+            )
 
-        serializer.is_valid(raise_exception=True)
+            return redirect("fee-list")
 
-        serializer.save()
+    else:
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED
-        )
+        form = FeeForm(instance=fee)
+
+    return render(
+        request,
+        "fees/fee_form.html",
+        {
+            "form": form
+        }
+    )
 
 
-class FeeDetailAPIView(APIView):
+# Delete Fee
+def fee_delete(request, pk):
 
-    permission_classes = [IsAuthenticated]
+    fee = get_object_or_404(
+        Fee,
+        pk=pk
+    )
 
-    def get_object(self, pk):
-
-        return get_object_or_404(
-            Fee.objects.select_related(
-                "student",
-                "student__user"
-            ),
-            pk=pk
-        )
-
-    def get(self, request, pk):
-
-        fee = self.get_object(pk)
-
-        serializer = FeeSerializer(fee)
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def put(self, request, pk):
-
-        fee = self.get_object(pk)
-
-        serializer = FeeSerializer(
-            fee,
-            data=request.data
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def patch(self, request, pk):
-
-        fee = self.get_object(pk)
-
-        serializer = FeeSerializer(
-            fee,
-            data=request.data,
-            partial=True
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def delete(self, request, pk):
-
-        fee = self.get_object(pk)
+    if request.method == "POST":
 
         fee.delete()
 
-        return Response(
-            {
-                "message": "Fee record deleted successfully."
-            },
-            status=status.HTTP_204_NO_CONTENT
+        messages.success(
+            request,
+            "Fee record deleted successfully."
         )
+
+        return redirect("fee-list")
+
+    return render(
+        request,
+        "fees/fee_confirm_delete.html",
+        {
+            "fee": fee
+        }
+    )

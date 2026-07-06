@@ -1,18 +1,36 @@
 from django.urls import path
-from .views import (
-    ExamCreateAPIView,
-    ExamListAPIView,
-    ExamDetailAPIView,
-    ExamUpdateAPIView,
-    ExamPatchAPIView,
-    ExamDeleteAPIView,
-)
+from . import views
 
 urlpatterns = [
-    path("exam_create/", ExamCreateAPIView.as_view()),
-    path("exam_list/", ExamListAPIView.as_view()),
-    path("exam_detail/<int:pk>/", ExamDetailAPIView.as_view()),
-    path("exam_update/<int:pk>/", ExamUpdateAPIView.as_view()),
-    path("exam_patch/<int:pk>/", ExamPatchAPIView.as_view()),
-    path("exam_delete/<int:pk>/", ExamDeleteAPIView.as_view()),
+
+    path(
+        "",
+        views.exam_list,
+        name="exam-list"
+    ),
+
+    path(
+        "create/",
+        views.exam_create,
+        name="exam-create"
+    ),
+
+    path(
+        "<int:pk>/",
+        views.exam_detail,
+        name="exam-detail"
+    ),
+
+    path(
+        "<int:pk>/edit/",
+        views.exam_update,
+        name="exam-update"
+    ),
+
+    path(
+        "<int:pk>/delete/",
+        views.exam_delete,
+        name="exam-delete"
+    ),
+
 ]

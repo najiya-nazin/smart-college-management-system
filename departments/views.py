@@ -1,115 +1,131 @@
-from django.shortcuts import get_object_or_404
-
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework import status
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 
 from .models import Department
-from .serializers import DepartmentSerializer
+from .forms import DepartmentForm
 
 
-class DepartmentListCreateAPIView(APIView):
+def department_list(request):
 
-    # permission_classes = [IsAuthenticated]
+    departments = Department.objects.all().order_by("name")
 
-    def get(self, request):
+    return render(
+        request,
+        "departments/department_list.html",
+        {
+            "departments": departments
+        }
+    )
 
-        departments = Department.objects.all().order_by("name")
 
-        serializer = DepartmentSerializer(
-            departments,
-            many=True
+def department_create(request):
+
+    if request.method == "POST":
+
+        form = DepartmentForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                "Department created successfully."
+            )
+
+            return redirect("department-list")
+
+    else:
+
+        form = DepartmentForm()
+
+    return render(
+        request,
+        "departments/department_form.html",
+        {
+            "form": form
+        }
+    )
+
+
+def department_detail(request, pk):
+
+    department = get_object_or_404(
+        Department,
+        pk=pk
+    )
+
+    return render(
+        request,
+        "departments/department_detail.html",
+        {
+            "department": department
+        }
+    )
+
+
+def department_update(request, pk):
+
+    department = get_object_or_404(
+        Department,
+        pk=pk
+    )
+
+    if request.method == "POST":
+
+        form = DepartmentForm(
+            request.POST,
+            instance=department
         )
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                "Department updated successfully."
+            )
+
+            return redirect("department-list")
+
+    else:
+
+        form = DepartmentForm(
+            instance=department
         )
 
-    def post(self, request):
-
-        serializer = DepartmentSerializer(
-            data=request.data
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED
-        )
+    return render(
+        request,
+        "departments/department_form.html",
+        {
+            "form": form
+        }
+    )
 
 
-class DepartmentDetailAPIView(APIView):
+def department_delete(request, pk):
 
-    # permission_classes = [IsAuthenticated]
+    department = get_object_or_404(
+        Department,
+        pk=pk
+    )
 
-    def get_object(self, pk):
-
-        return get_object_or_404(
-            Department,
-            pk=pk
-        )
-
-    def get(self, request, pk):
-
-        department = self.get_object(pk)
-
-        serializer = DepartmentSerializer(
-            department
-        )
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def put(self, request, pk):
-
-        department = self.get_object(pk)
-
-        serializer = DepartmentSerializer(
-            department,
-            data=request.data
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def patch(self, request, pk):
-
-        department = self.get_object(pk)
-
-        serializer = DepartmentSerializer(
-            department,
-            data=request.data,
-            partial=True
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def delete(self, request, pk):
-
-        department = self.get_object(pk)
+    if request.method == "POST":
 
         department.delete()
 
-        return Response(
-            status=status.HTTP_204_NO_CONTENT
+        messages.success(
+            request,
+            "Department deleted successfully."
         )
+
+        return redirect("department-list")
+
+    return render(
+        request,
+        "departments/department_confirm_delete.html",
+        {
+            "department": department
+        }
+    )

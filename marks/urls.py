@@ -1,16 +1,36 @@
 from django.urls import path
-from .views import (
-    AddMarks,
-    MarksList,
-    MarksDetail,
-    EditMarks,
-    DeleteMarks,
-)
+from . import views
 
 urlpatterns = [
-    path("create/", AddMarks.as_view(), name="add_marks"),
-    path("list/", MarksList.as_view(), name="marks_list"),
-    path("<int:pk>/", MarksDetail.as_view(), name="marks_detail"),
-    path("update/<int:pk>/", EditMarks.as_view(), name="edit_marks"),
-    path("delete/<int:pk>/", DeleteMarks.as_view(), name="delete_marks"),
+
+    path(
+        "",
+        views.marks_list,
+        name="marks-list"
+    ),
+
+    path(
+        "create/",
+        views.marks_create,
+        name="marks-create"
+    ),
+
+    path(
+        "<int:pk>/",
+        views.marks_detail,
+        name="marks-detail"
+    ),
+
+    path(
+        "<int:pk>/edit/",
+        views.marks_update,
+        name="marks-update"
+    ),
+
+    path(
+        "<int:pk>/delete/",
+        views.marks_delete,
+        name="marks-delete"
+    ),
+
 ]

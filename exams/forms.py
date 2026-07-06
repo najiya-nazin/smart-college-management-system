@@ -1,12 +1,12 @@
-from rest_framework import serializers
+from django import forms
 from .models import Exam
 
 
-class ExamSerializer(serializers.ModelSerializer):
+class ExamForm(forms.ModelForm):
+
     class Meta:
         model = Exam
         fields = [
-            "id",
             "name",
             "course",
             "exam_date",

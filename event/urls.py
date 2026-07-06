@@ -1,18 +1,36 @@
 from django.urls import path
-from .views import (
-    EventCreateAPIView,
-    EventListAPIView,
-    EventDetailAPIView,
-    EventUpdateAPIView,
-    EventDeleteAPIView,
-    EventPatchAPIView,
-)
+from . import views
 
 urlpatterns = [
-    path('event_create/', EventCreateAPIView.as_view(), name='event-create'),
-    path('event_list/', EventListAPIView.as_view(), name='event-list'),
-    path('event_detail/<int:pk>/', EventDetailAPIView.as_view(), name='event-detail'),
-    path('event_update/<int:pk>/', EventUpdateAPIView.as_view(), name='event-update'),
-    path('event_delete/<int:pk>/', EventDeleteAPIView.as_view(), name='event-delete'),
-    path('event_patch/<int:pk>/', EventPatchAPIView.as_view()),
+
+    path(
+        "",
+        views.event_list,
+        name="event-list"
+    ),
+
+    path(
+        "create/",
+        views.event_create,
+        name="event-create"
+    ),
+
+    path(
+        "<int:pk>/",
+        views.event_detail,
+        name="event-detail"
+    ),
+
+    path(
+        "<int:pk>/edit/",
+        views.event_update,
+        name="event-update"
+    ),
+
+    path(
+        "<int:pk>/delete/",
+        views.event_delete,
+        name="event-delete"
+    ),
+
 ]

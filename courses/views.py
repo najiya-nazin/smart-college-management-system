@@ -1,133 +1,127 @@
-from django.shortcuts import get_object_or_404
-
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework import status
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 
 from .models import Course
-from .serializers import CourseSerializer
+from .forms import CourseForm
 
 
-class CourseListCreateAPIView(APIView):
+# List all courses
+def course_list(request):
 
-    permission_classes = [IsAuthenticated]
+    courses = Course.objects.select_related(
+        "department"
+    ).all().order_by("name")
 
-    def get(self, request):
+    return render(
+        request,
+        "courses/course_list.html",
+        {
+            "courses": courses
+        }
+    )
 
-        courses = Course.objects.select_related(
-            "department"
-        ).all().order_by("name")
 
-        serializer = CourseSerializer(
-            courses,
-            many=True
+# Create a new course
+def course_create(request):
+
+    if request.method == "POST":
+
+        form = CourseForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(request, "Course added successfully.")
+
+            return redirect("course-list")
+
+    else:
+
+        form = CourseForm()
+
+    return render(
+        request,
+        "courses/course_form.html",
+        {
+            "form": form
+        }
+    )
+
+
+# View course details
+def course_detail(request, pk):
+
+    course = get_object_or_404(
+        Course.objects.select_related("department"),
+        pk=pk
+    )
+
+    return render(
+        request,
+        "courses/course_detail.html",
+        {
+            "course": course
+        }
+    )
+
+
+# Update course
+def course_update(request, pk):
+
+    course = get_object_or_404(
+        Course,
+        pk=pk
+    )
+
+    if request.method == "POST":
+
+        form = CourseForm(
+            request.POST,
+            instance=course
         )
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
+        if form.is_valid():
 
-    def post(self, request):
+            form.save()
 
-        serializer = CourseSerializer(
-            data=request.data
-        )
+            messages.success(request, "Course updated successfully.")
 
-        if serializer.is_valid():
+            return redirect("course-list")
 
-            serializer.save()
+    else:
 
-            return Response(
-                serializer.data,
-                status=status.HTTP_201_CREATED
-            )
+        form = CourseForm(instance=course)
 
-        return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
-        )
+    return render(
+        request,
+        "courses/course_form.html",
+        {
+            "form": form
+        }
+    )
 
 
-class CourseDetailAPIView(APIView):
+# Delete course
+def course_delete(request, pk):
 
-    permission_classes = [IsAuthenticated]
+    course = get_object_or_404(
+        Course,
+        pk=pk
+    )
 
-    def get_object(self, pk):
-
-        return get_object_or_404(
-            Course.objects.select_related("department"),
-            pk=pk
-        )
-
-    def get(self, request, pk):
-
-        course = self.get_object(pk)
-
-        serializer = CourseSerializer(course)
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def put(self, request, pk):
-
-        course = self.get_object(pk)
-
-        serializer = CourseSerializer(
-            course,
-            data=request.data
-        )
-
-        if serializer.is_valid():
-
-            serializer.save()
-
-            return Response(
-                serializer.data,
-                status=status.HTTP_200_OK
-            )
-
-        return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
-        )
-
-    def patch(self, request, pk):
-
-        course = self.get_object(pk)
-
-        serializer = CourseSerializer(
-            course,
-            data=request.data,
-            partial=True
-        )
-
-        if serializer.is_valid():
-
-            serializer.save()
-
-            return Response(
-                serializer.data,
-                status=status.HTTP_200_OK
-            )
-
-        return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
-        )
-
-    def delete(self, request, pk):
-
-        course = self.get_object(pk)
+    if request.method == "POST":
 
         course.delete()
 
-        return Response(
-            {
-                "message": "Course deleted successfully."
-            },
-            status=status.HTTP_204_NO_CONTENT
-        )
+        messages.success(request, "Course deleted successfully.")
+
+        return redirect("course-list")
+
+    return render(
+        request,
+        "courses/course_confirm_delete.html",
+        {
+            "course": course
+        }
+    )

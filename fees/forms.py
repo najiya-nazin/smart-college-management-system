@@ -1,19 +1,13 @@
-from rest_framework import serializers
+from django import forms
 from .models import Fee
 
 
-class FeeSerializer(serializers.ModelSerializer):
-
-    student_name = serializers.ReadOnlyField(
-        source="student.user.name"
-    )
+class FeeForm(forms.ModelForm):
 
     class Meta:
         model = Fee
         fields = [
-            "id",
             "student",
-            "student_name",
             "semester",
             "fee_type",
             "amount",

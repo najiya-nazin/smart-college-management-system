@@ -1,135 +1,142 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 
 from .models import Marks
-from .serializers import MarksSerializer
+from .forms import MarksForm
 
 
+# List Marks
+def marks_list(request):
 
-class AddMarks(APIView):
+    marks = Marks.objects.select_related(
+        "student",
+        "course"
+    ).all()
 
-    def post(self, request):
-        serializer = MarksSerializer(data=request.data)
+    return render(
+        request,
+        "marks/marks_list.html",
+        {
+            "marks": marks
+        }
+    )
 
-        if serializer.is_valid():
-            serializer.save()
 
-            return Response(
-                {
-                    "message": "Marks Added Successfully",
-                    "data": serializer.data
-                },
-                status=status.HTTP_201_CREATED
+# Create Marks
+def marks_create(request):
+
+    if request.method == "POST":
+
+        form = MarksForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                "Marks added successfully."
             )
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return redirect("marks-list")
+
+    else:
+
+        form = MarksForm()
+
+    return render(
+        request,
+        "marks/marks_form.html",
+        {
+            "form": form
+        }
+    )
 
 
+# Marks Detail
+def marks_detail(request, pk):
 
-class MarksList(APIView):
+    marks = get_object_or_404(
+        Marks.objects.select_related(
+            "student",
+            "course"
+        ),
+        pk=pk
+    )
 
-    def get(self, request):
-        marks = Marks.objects.all()
-        serializer = MarksSerializer(marks, many=True)
+    return render(
+        request,
+        "marks/marks_detail.html",
+        {
+            "marks": marks
+        }
+    )
 
-        return Response(
-            {
-                "data": serializer.data
-            },
-            status=status.HTTP_200_OK
+
+# Update Marks
+def marks_update(request, pk):
+
+    marks = get_object_or_404(
+        Marks,
+        pk=pk
+    )
+
+    if request.method == "POST":
+
+        form = MarksForm(
+            request.POST,
+            instance=marks
         )
 
+        if form.is_valid():
 
+            form.save()
 
-class MarksDetail(APIView):
-
-    def get(self, request, pk):
-        try:
-            marks = Marks.objects.get(pk=pk)
-        except Marks.DoesNotExist:
-            return Response(
-                {"message": "Marks Not Found"},
-                status=status.HTTP_404_NOT_FOUND
+            messages.success(
+                request,
+                "Marks updated successfully."
             )
 
-        serializer = MarksSerializer(marks)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+            return redirect("marks-list")
 
+    else:
 
-
-class EditMarks(APIView):
-
-    def put(self, request, pk):
-        try:
-            marks = Marks.objects.get(pk=pk)
-        except Marks.DoesNotExist:
-            return Response(
-                {"message": "Marks Not Found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        serializer = MarksSerializer(marks, data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-
-            return Response(
-                {
-                    "message": "Marks Updated Successfully",
-                    "data": serializer.data
-                },
-                status=status.HTTP_200_OK
-            )
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def patch(self, request, pk):
-        try:
-            marks = Marks.objects.get(pk=pk)
-        except Marks.DoesNotExist:
-            return Response(
-                {"message": "Marks Not Found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        serializer = MarksSerializer(
-            marks,
-            data=request.data,
-            partial=True
+        form = MarksForm(
+            instance=marks
         )
 
-        if serializer.is_valid():
-            serializer.save()
-
-            return Response(
-                {
-                    "message": "Marks Partially Updated Successfully",
-                    "data": serializer.data
-                },
-                status=status.HTTP_200_OK
-            )
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return render(
+        request,
+        "marks/marks_form.html",
+        {
+            "form": form
+        }
+    )
 
 
+# Delete Marks
+def marks_delete(request, pk):
 
-class DeleteMarks(APIView):
+    marks = get_object_or_404(
+        Marks,
+        pk=pk
+    )
 
-    def delete(self, request, pk):
-        try:
-            marks = Marks.objects.get(pk=pk)
-        except Marks.DoesNotExist:
-            return Response(
-                {"message": "Marks Not Found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
+    if request.method == "POST":
 
         marks.delete()
 
-        return Response(
-            {
-                "message": "Marks Deleted Successfully"
-            },
-            status=status.HTTP_200_OK
+        messages.success(
+            request,
+            "Marks deleted successfully."
         )
+
+        return redirect("marks-list")
+
+    return render(
+        request,
+        "marks/marks_confirm_delete.html",
+        {
+            "marks": marks
+        }
+    )

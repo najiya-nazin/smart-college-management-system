@@ -1,127 +1,138 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 
 from .models import Event
-from .serializers import EventSerializer
-from rest_framework.permissions import IsAuthenticated
+from .forms import EventForm
+
+
+# List Events
+def event_list(request):
+
+    events = Event.objects.select_related(
+        "organized_by"
+    ).all()
+
+    return render(
+        request,
+        "events/event_list.html",
+        {
+            "events": events
+        }
+    )
 
 
 # Create Event
-class EventCreateAPIView(APIView):
+def event_create(request):
 
-    permission_classes = [IsAuthenticated]
+    if request.method == "POST":
 
-    def post(self, request):
-        serializer = EventSerializer(data=request.data)
+        form = EventForm(request.POST)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        if form.is_valid():
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            form.save()
 
-
-# List All Events
-class EventListAPIView(APIView):
-
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        events = Event.objects.all()
-        serializer = EventSerializer(events, many=True)
-        return Response(serializer.data)
-
-
-# Get Single Event
-class EventDetailAPIView(APIView):
-
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, pk):
-        try:
-            event = Event.objects.get(id=pk)
-        except Event.DoesNotExist:
-            return Response(
-                {"message": "Event not found"},
-                status=status.HTTP_404_NOT_FOUND
+            messages.success(
+                request,
+                "Event created successfully."
             )
 
-        serializer = EventSerializer(event)
-        return Response(serializer.data)
+            return redirect("event-list")
+
+    else:
+
+        form = EventForm()
+
+    return render(
+        request,
+        "events/event_form.html",
+        {
+            "form": form
+        }
+    )
+
+
+# Event Detail
+def event_detail(request, pk):
+
+    event = get_object_or_404(
+        Event.objects.select_related("organized_by"),
+        pk=pk
+    )
+
+    return render(
+        request,
+        "events/event_detail.html",
+        {
+            "event": event
+        }
+    )
 
 
 # Update Event
-class EventUpdateAPIView(APIView):
+def event_update(request, pk):
 
-    permission_classes = [IsAuthenticated]
+    event = get_object_or_404(
+        Event,
+        pk=pk
+    )
 
-    def put(self, request, pk):
-        try:
-            event = Event.objects.get(id=pk)
-        except Event.DoesNotExist:
-            return Response(
-                {"message": "Event not found"},
-                status=status.HTTP_404_NOT_FOUND
+    if request.method == "POST":
+
+        form = EventForm(
+            request.POST,
+            instance=event
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                "Event updated successfully."
             )
 
-        serializer = EventSerializer(event, data=request.data)
+            return redirect("event-list")
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
+    else:
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        form = EventForm(
+            instance=event
+        )
+
+    return render(
+        request,
+        "events/event_form.html",
+        {
+            "form": form
+        }
+    )
 
 
 # Delete Event
-class EventDeleteAPIView(APIView):
+def event_delete(request, pk):
 
-    permission_classes = [IsAuthenticated]
+    event = get_object_or_404(
+        Event,
+        pk=pk
+    )
 
-    def delete(self, request, pk):
-        try:
-            event = Event.objects.get(id=pk)
-        except Event.DoesNotExist:
-            return Response(
-                {"message": "Event not found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
+    if request.method == "POST":
 
         event.delete()
-        return Response(
-            {"message": "Event deleted successfully"},
-            status=status.HTTP_204_NO_CONTENT
+
+        messages.success(
+            request,
+            "Event deleted successfully."
         )
 
+        return redirect("event-list")
 
-class EventPatchAPIView(APIView):
-
-    permission_classes = [IsAuthenticated]
-
-    def patch(self, request, pk):
-        try:
-            event = Event.objects.get(id=pk)
-        except Event.DoesNotExist:
-            return Response(
-                {"message": "Event not found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        serializer = EventSerializer(
-            event,
-            data=request.data,
-            partial=True
-        )
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "message": "Event updated successfully",
-                    "data": serializer.data
-                },
-                status=status.HTTP_200_OK
-            )
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return render(
+        request,
+        "events/event_confirm_delete.html",
+        {
+            "event": event
+        }
+    )

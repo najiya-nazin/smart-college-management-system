@@ -1,35 +1,68 @@
 from django.urls import path
-
-from .views import (
-    BookListCreateAPIView,
-    BookDetailAPIView,
-    LibraryListCreateAPIView,
-    LibraryDetailAPIView,
-)
+from . import views
 
 urlpatterns = [
 
+
     path(
         "books/",
-        BookListCreateAPIView.as_view(),
-        name="book-list-create"
+        views.book_list,
+        name="book-list"
+    ),
+
+    path(
+        "books/create/",
+        views.book_create,
+        name="book-create"
     ),
 
     path(
         "books/<int:pk>/",
-        BookDetailAPIView.as_view(),
+        views.book_detail,
         name="book-detail"
     ),
 
     path(
-        "library/",
-        LibraryListCreateAPIView.as_view(),
-        name="library-list-create"
+        "books/<int:pk>/edit/",
+        views.book_update,
+        name="book-update"
     ),
 
     path(
-        "library/<int:pk>/",
-        LibraryDetailAPIView.as_view(),
+        "books/<int:pk>/delete/",
+        views.book_delete,
+        name="book-delete"
+    ),
+
+
+    path(
+        "",
+        views.library_list,
+        name="library-list"
+    ),
+
+    path(
+        "create/",
+        views.library_create,
+        name="library-create"
+    ),
+
+    path(
+        "<int:pk>/",
+        views.library_detail,
         name="library-detail"
     ),
+
+    path(
+        "<int:pk>/edit/",
+        views.library_update,
+        name="library-update"
+    ),
+
+    path(
+        "<int:pk>/delete/",
+        views.library_delete,
+        name="library-delete"
+    ),
+
 ]

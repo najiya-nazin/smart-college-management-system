@@ -1,227 +1,240 @@
-from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework import status
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+
 from .models import Book, Library
-from .serializers import BookSerializer, LibrarySerializer
+from .forms import BookForm, LibraryForm
 
 
-class BookListCreateAPIView(APIView):
+# =====================================
+# Book CRUD
+# =====================================
 
-    permission_classes = [IsAuthenticated]
+def book_list(request):
 
-    def get(self, request):
+    books = Book.objects.all().order_by("title")
 
-        books = Book.objects.all().order_by("title")
+    return render(
+        request,
+        "library/book_list.html",
+        {
+            "books": books
+        }
+    )
 
-        serializer = BookSerializer(
-            books,
-            many=True
+
+def book_create(request):
+
+    if request.method == "POST":
+
+        form = BookForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(request, "Book added successfully.")
+
+            return redirect("book-list")
+
+    else:
+
+        form = BookForm()
+
+    return render(
+        request,
+        "library/book_form.html",
+        {
+            "form": form
+        }
+    )
+
+
+def book_detail(request, pk):
+
+    book = get_object_or_404(Book, pk=pk)
+
+    return render(
+        request,
+        "library/book_detail.html",
+        {
+            "book": book
+        }
+    )
+
+
+def book_update(request, pk):
+
+    book = get_object_or_404(Book, pk=pk)
+
+    if request.method == "POST":
+
+        form = BookForm(
+            request.POST,
+            instance=book
         )
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
+        if form.is_valid():
 
-    def post(self, request):
+            form.save()
 
-        serializer = BookSerializer(
-            data=request.data
-        )
+            messages.success(request, "Book updated successfully.")
 
-        serializer.is_valid(raise_exception=True)
+            return redirect("book-list")
 
-        serializer.save()
+    else:
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED
-        )
+        form = BookForm(instance=book)
+
+    return render(
+        request,
+        "library/book_form.html",
+        {
+            "form": form
+        }
+    )
 
 
-class BookDetailAPIView(APIView):
+def book_delete(request, pk):
 
-    permission_classes = [IsAuthenticated]
+    book = get_object_or_404(Book, pk=pk)
 
-    def get_object(self, pk):
-
-        return get_object_or_404(
-            Book,
-            pk=pk
-        )
-
-    def get(self, request, pk):
-
-        book = self.get_object(pk)
-
-        serializer = BookSerializer(book)
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def put(self, request, pk):
-
-        book = self.get_object(pk)
-
-        serializer = BookSerializer(
-            book,
-            data=request.data
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def patch(self, request, pk):
-
-        book = self.get_object(pk)
-
-        serializer = BookSerializer(
-            book,
-            data=request.data,
-            partial=True
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def delete(self, request, pk):
-
-        book = self.get_object(pk)
+    if request.method == "POST":
 
         book.delete()
 
-        return Response(
-            {
-                "message": "Book deleted successfully."
-            },
-            status=status.HTTP_204_NO_CONTENT
-        )
+        messages.success(request, "Book deleted successfully.")
+
+        return redirect("book-list")
+
+    return render(
+        request,
+        "library/book_confirm_delete.html",
+        {
+            "book": book
+        }
+    )
 
 
-class LibraryListCreateAPIView(APIView):
+# =====================================
+# Library CRUD
+# =====================================
 
-    permission_classes = [IsAuthenticated]
+def library_list(request):
 
-    def get(self, request):
+    library = Library.objects.select_related(
+        "student",
+        "book"
+    ).all().order_by("-issue_date")
 
-        library = Library.objects.select_related(
+    return render(
+        request,
+        "library/library_list.html",
+        {
+            "library": library
+        }
+    )
+
+
+def library_create(request):
+
+    if request.method == "POST":
+
+        form = LibraryForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(request, "Book issued successfully.")
+
+            return redirect("library-list")
+
+    else:
+
+        form = LibraryForm()
+
+    return render(
+        request,
+        "library/library_form.html",
+        {
+            "form": form
+        }
+    )
+
+
+def library_detail(request, pk):
+
+    library = get_object_or_404(
+        Library.objects.select_related(
             "student",
             "book"
-        ).all().order_by("-issue_date")
+        ),
+        pk=pk
+    )
 
-        serializer = LibrarySerializer(
-            library,
-            many=True
+    return render(
+        request,
+        "library/library_detail.html",
+        {
+            "library": library
+        }
+    )
+
+
+def library_update(request, pk):
+
+    library = get_object_or_404(
+        Library,
+        pk=pk
+    )
+
+    if request.method == "POST":
+
+        form = LibraryForm(
+            request.POST,
+            instance=library
         )
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
+        if form.is_valid():
 
-    def post(self, request):
+            form.save()
 
-        serializer = LibrarySerializer(
-            data=request.data
-        )
+            messages.success(request, "Library record updated successfully.")
 
-        serializer.is_valid(raise_exception=True)
+            return redirect("library-list")
 
-        serializer.save()
+    else:
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED
-        )
+        form = LibraryForm(instance=library)
+
+    return render(
+        request,
+        "library/library_form.html",
+        {
+            "form": form
+        }
+    )
 
 
-class LibraryDetailAPIView(APIView):
+def library_delete(request, pk):
 
-    permission_classes = [IsAuthenticated]
+    library = get_object_or_404(
+        Library,
+        pk=pk
+    )
 
-    def get_object(self, pk):
-
-        return get_object_or_404(
-            Library.objects.select_related(
-                "student",
-                "book"
-            ),
-            pk=pk
-        )
-
-    def get(self, request, pk):
-
-        library = self.get_object(pk)
-
-        serializer = LibrarySerializer(library)
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def put(self, request, pk):
-
-        library = self.get_object(pk)
-
-        serializer = LibrarySerializer(
-            library,
-            data=request.data
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def patch(self, request, pk):
-
-        library = self.get_object(pk)
-
-        serializer = LibrarySerializer(
-            library,
-            data=request.data,
-            partial=True
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def delete(self, request, pk):
-
-        library = self.get_object(pk)
+    if request.method == "POST":
 
         library.delete()
 
-        return Response(
-            {
-                "message": "Library record deleted successfully."
-            },
-            status=status.HTTP_204_NO_CONTENT
-        )
+        messages.success(request, "Library record deleted successfully.")
+
+        return redirect("library-list")
+
+    return render(
+        request,
+        "library/library_confirm_delete.html",
+        {
+            "library": library
+        }
+    )

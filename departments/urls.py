@@ -1,21 +1,36 @@
 from django.urls import path
-from .views import (
-    DepartmentListCreateAPIView,
-    DepartmentDetailAPIView
-)
+from . import views
 
 urlpatterns = [
 
     path(
         "",
-        DepartmentListCreateAPIView.as_view(),
-        name="department-list-create"
+        views.department_list,
+        name="department-list"
+    ),
+
+    path(
+        "create/",
+        views.department_create,
+        name="department-create"
     ),
 
     path(
         "<int:pk>/",
-        DepartmentDetailAPIView.as_view(),
+        views.department_detail,
         name="department-detail"
+    ),
+
+    path(
+        "<int:pk>/edit/",
+        views.department_update,
+        name="department-update"
+    ),
+
+    path(
+        "<int:pk>/delete/",
+        views.department_delete,
+        name="department-delete"
     ),
 
 ]

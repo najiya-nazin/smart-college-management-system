@@ -1,35 +1,18 @@
 from django.urls import path
-from .views import (
-    HostelCreateAPIView,
-    HostelListAPIView,
-    HostelDetailAPIView,
-    HostelUpdateAPIView,
-    HostelPatchAPIView,
-    HostelDeleteAPIView,
-
-    HostelRoomCreateAPIView,
-    HostelRoomListAPIView,
-    HostelRoomDetailAPIView,
-    HostelRoomUpdateAPIView,
-    HostelRoomPatchAPIView,
-    HostelRoomDeleteAPIView,
-)
+from . import views
 
 urlpatterns = [
 
+    path("", views.hostel_list, name="hostel-list"),
+    path("create/", views.hostel_create, name="hostel-create"),
+    path("<int:pk>/", views.hostel_detail, name="hostel-detail"),
+    path("<int:pk>/edit/", views.hostel_update, name="hostel-update"),
+    path("<int:pk>/delete/", views.hostel_delete, name="hostel-delete"),
 
-    path("hostel_create/", HostelCreateAPIView.as_view(), name="hostel-create"),
-    path("hostel_list/", HostelListAPIView.as_view(), name="hostel-list"),
-    path("hostel_detail/<int:pk>/", HostelDetailAPIView.as_view(), name="hostel-detail"),
-    path("hostel_update/<int:pk>/", HostelUpdateAPIView.as_view(), name="hostel-update"),
-    path("hostel_patch/<int:pk>/", HostelPatchAPIView.as_view(), name="hostel-patch"),
-    path("hostel_delete/<int:pk>/", HostelDeleteAPIView.as_view(), name="hostel-delete"),
+    path("rooms/", views.room_list, name="room-list"),
+    path("rooms/create/", views.room_create, name="room-create"),
+    path("rooms/<int:pk>/", views.room_detail, name="room-detail"),
+    path("rooms/<int:pk>/edit/", views.room_update, name="room-update"),
+    path("rooms/<int:pk>/delete/", views.room_delete, name="room-delete"),
 
-
-    path("hostel_room_create/", HostelRoomCreateAPIView.as_view(), name="hostel-room-create"),
-    path("hostel_room_list/", HostelRoomListAPIView.as_view(), name="hostel-room-list"),
-    path("hostel_room_detail/<int:pk>/", HostelRoomDetailAPIView.as_view(), name="hostel-room-detail"),
-    path("hostel_room_update/<int:pk>/", HostelRoomUpdateAPIView.as_view(), name="hostel-room-update"),
-    path("hostel_room_patch/<int:pk>/", HostelRoomPatchAPIView.as_view(), name="hostel-room-patch"),
-    path("hostel_room_delete/<int:pk>/", HostelRoomDeleteAPIView.as_view(), name="hostel-room-delete"),
 ]
