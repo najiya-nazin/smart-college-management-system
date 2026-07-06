@@ -1,205 +1,218 @@
 import random
-
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import update_last_login
 from django.core.cache import cache
 from django.core.mail import send_mail
-
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth.models import update_last_login
-
 from .models import User
-from .serializers import (
-    RegisterSerializer,
-    LoginSerializer,
-    LogoutSerializer,
-    ForgotPasswordSerializer,
-    VerifyOTPSerializer,
-    ResetPasswordSerializer
+from .forms import (
+    RegisterForm,
+    LoginForm,
+    ForgotPasswordForm,
+    VerifyOTPForm,
+    ResetPasswordForm,
 )
 
 
-class RegisterView(APIView):
+def register(request):
 
-    permission_classes = [AllowAny]
+    if request.method == "POST":
 
-    def post(self, request):
-        serializer = RegisterSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        form = RegisterForm(request.POST)
 
-        return Response(
-            {
-                "message": "Registration Successful"
-            },
-            status=status.HTTP_201_CREATED
-        )
+        if form.is_valid():
 
+            form.save()
 
-class LoginView(APIView):
+            messages.success(request, "Registration Successful")
 
-    permission_classes = [AllowAny]
+            return redirect("login")
 
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+    else:
 
-        user = serializer.validated_data["user"]
+        form = RegisterForm()
 
-        update_last_login(None, user)
-
-        refresh = RefreshToken.for_user(user)
-
-        return Response(
-            {
-                "refresh": str(refresh),
-                "access": str(refresh.access_token),
-                "user": {
-                    "id": user.id,
-                    "name": user.name,
-                    "email": user.email,
-                    "role": user.role,
-                }
-            },
-            status=status.HTTP_200_OK
-        )
+    return render(
+        request,
+        "accounts/register.html",
+        {"form": form},
+    )
 
 
-class LogoutView(APIView):
+def login_view(request):
 
-    permission_classes = [IsAuthenticated]
+    if request.method == "POST":
 
-    def post(self, request):
+        form = LoginForm(request.POST)
 
-        serializer = LogoutSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        if form.is_valid():
 
-        try:
-            refresh_token = serializer.validated_data["refresh"]
+            user = form.get_user()
 
-            token = RefreshToken(refresh_token)
-            token.blacklist()
+            login(request, user)
 
-            return Response(
-                {
-                    "message": "Logout Successful"
-                },
-                status=status.HTTP_200_OK
+            update_last_login(None, user)
+
+            messages.success(request, "Login Successful")
+
+            return redirect("dashboard")
+
+    else:
+
+        form = LoginForm()
+
+    return render(
+        request,
+        "accounts/login.html",
+        {"form": form},
+    )
+
+
+@login_required
+def dashboard(request):
+
+    return render(
+        request,
+        "accounts/dashboard.html",
+    )
+
+
+@login_required
+def logout_view(request):
+
+    logout(request)
+
+    messages.success(request, "Logout Successful")
+
+    return redirect("login")
+
+
+def forgot_password(request):
+
+    if request.method == "POST":
+
+        form = ForgotPasswordForm(request.POST)
+
+        if form.is_valid():
+
+            email = form.cleaned_data["email"]
+
+            try:
+                User.objects.get(email=email)
+
+            except User.DoesNotExist:
+
+                messages.error(request, "User not found")
+
+                return redirect("forgot-password")
+
+            otp = str(random.randint(100000, 999999))
+
+            cache.set(email, otp, timeout=300)
+
+            send_mail(
+                subject="Password Reset OTP",
+                message=f"Your OTP is {otp}",
+                from_email=None,
+                recipient_list=[email],
+                fail_silently=False,
             )
 
-        except Exception:
-            return Response(
-                {
-                    "error": "Invalid or Expired Refresh Token"
-                },
-                status=status.HTTP_400_BAD_REQUEST
+            messages.success(request, "OTP Sent Successfully")
+
+            return redirect("verify-otp")
+
+    else:
+
+        form = ForgotPasswordForm()
+
+    return render(
+        request,
+        "accounts/forgot_password.html",
+        {"form": form},
+    )
+
+
+def verify_otp(request):
+
+    if request.method == "POST":
+
+        form = VerifyOTPForm(request.POST)
+
+        if form.is_valid():
+
+            email = form.cleaned_data["email"]
+
+            otp = form.cleaned_data["otp"]
+
+            saved_otp = cache.get(email)
+
+            if saved_otp != otp:
+
+                messages.error(request, "Invalid OTP")
+
+                return redirect("verify-otp")
+
+            messages.success(request, "OTP Verified Successfully")
+
+            return redirect("reset-password")
+
+    else:
+
+        form = VerifyOTPForm()
+
+    return render(
+        request,
+        "accounts/verify_otp.html",
+        {"form": form},
+    )
+
+
+def reset_password(request):
+
+    if request.method == "POST":
+
+        form = ResetPasswordForm(request.POST)
+
+        if form.is_valid():
+
+            email = form.cleaned_data["email"]
+
+            otp = form.cleaned_data["otp"]
+
+            saved_otp = cache.get(email)
+
+            if saved_otp != otp:
+
+                messages.error(request, "Invalid OTP")
+
+                return redirect("reset-password")
+
+            user = User.objects.get(email=email)
+
+            user.set_password(
+                form.cleaned_data["password"]
             )
 
+            user.save()
 
-class ForgotPasswordView(APIView):
+            cache.delete(email)
 
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-
-        serializer = ForgotPasswordSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        email = serializer.validated_data["email"]
-
-        try:
-            User.objects.get(email=email)
-        except User.DoesNotExist:
-            return Response(
-                {
-                    "error": "User not found"
-                },
-                status=status.HTTP_404_NOT_FOUND
+            messages.success(
+                request,
+                "Password Reset Successfully"
             )
 
-        otp = str(random.randint(100000, 999999))
+            return redirect("login")
 
-        cache.set(email, otp, timeout=300)
+    else:
 
-        send_mail(
-            subject="Password Reset OTP",
-            message=f"Your OTP is {otp}",
-            from_email=None,
-            recipient_list=[email],
-            fail_silently=False
-        )
+        form = ResetPasswordForm()
 
-        return Response(
-            {
-                "message": "OTP sent successfully"
-            },
-            status=status.HTTP_200_OK
-        )
-
-
-class VerifyOTPView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-
-        serializer = VerifyOTPSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        email = serializer.validated_data["email"]
-        otp = serializer.validated_data["otp"]
-
-        saved_otp = cache.get(email)
-
-        if saved_otp != otp:
-            return Response(
-                {
-                    "error": "Invalid OTP"
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        return Response(
-            {
-                "message": "OTP Verified Successfully"
-            },
-            status=status.HTTP_200_OK
-        )
-
-
-class ResetPasswordView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-
-        serializer = ResetPasswordSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        email = serializer.validated_data["email"]
-        otp = serializer.validated_data["otp"]
-
-        saved_otp = cache.get(email)
-
-        if saved_otp != otp:
-            return Response(
-                {
-                    "error": "Invalid OTP"
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        user = User.objects.get(email=email)
-
-        user.set_password(serializer.validated_data["password"])
-        user.save()
-
-        cache.delete(email)
-
-        return Response(
-            {
-                "message": "Password Reset Successfully"
-            },
-            status=status.HTTP_200_OK
-        )
+    return render(
+        request,
+        "accounts/reset_password.html",
+        {"form": form},
+    )
