@@ -129,12 +129,4 @@ def fee_delete(request, pk):
             "Fee record deleted successfully."
         )
 
-        return redirect("fee-list")
-
-    return render(
-        request,
-        "fees/fee_confirm_delete.html",
-        {
-            "fee": fee
-        }
-    )
+    return redirect("fee-list")

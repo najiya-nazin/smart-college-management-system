@@ -1,10 +1,449 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Fee Management</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+}
+
+.container{
+    width:95%;
+    margin:40px auto;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.header h2{
+    color:#0d6efd;
+    font-weight:700;
+}
+
+.add-btn{
+    background:#0d6efd;
+    color:white;
+    text-decoration:none;
+    padding:10px 20px;
+    border-radius:8px;
+    transition:.3s;
+}
+
+.add-btn:hover{
+    background:#084fc7;
+    color:white;
+}
+
+.search-box{
+    margin-bottom:20px;
+}
+
+.search-box input{
+    width:350px;
+    max-width:100%;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+.table-card{
+    background:white;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+    overflow:hidden;
+}
+
+table{
+    margin-bottom:0;
+}
+
+thead{
+    background:#0d6efd;
+    color:white;
+}
+
+tbody tr:hover{
+    background:#f2f8ff;
+}
+
+th,
+td{
+    text-align:center;
+    vertical-align:middle;
+}
+
+.action{
+    padding:6px 12px;
+    text-decoration:none;
+    border-radius:5px;
+    color:white;
+    font-size:14px;
+    margin:2px;
+    display:inline-block;
+}
+
+.view{
+    background:#198754;
+}
+
+.edit{
+    background:#ffc107;
+    color:black;
+}
+
+.delete{
+    background:#dc3545;
+    border:none;
+    cursor:pointer;
+}
+
+.delete:hover{
+    background:#bb2d3b;
+}
+
+.status-paid{
+    color:#198754;
+    font-weight:bold;
+}
+
+.status-pending{
+    color:#dc3545;
+    font-weight:bold;
+}
+
+.status-partial{
+    color:#fd7e14;
+    font-weight:bold;
+}
+
+.no-data{
+    text-align:center;
+    padding:20px;
+    font-weight:600;
+}
+
+</style>
+
 </head>
+
 <body>
 
+<div class="container">
+
+<div class="header">
+
+<h2>Fee Management</h2>
+
+<a
+href="{% url 'fee-create' %}"
+class="add-btn">
+
++ Add Fee
+
+</a>
+
+</div>
+
+<div class="search-box">
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search Student..."
+onkeyup="searchFee()">
+
+</div>
+
+<div class="table-card">
+
+<table class="table table-hover table-bordered">
+
+<thead>
+
+<tr>
+
+<th>Student</th>
+<th>Semester</th>
+<th>Fee Type</th>
+<th>Amount</th>
+<th>Paid</th>
+<th>Status</th>
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody id="feeTable">
+
+{% for fee in fees %}
+
+<tr>
+
+<td>{{ fee.student.user.name }}</td>
+
+<td>{{ fee.semester }}</td>
+
+<td>{{ fee.fee_type }}</td>
+
+<td>₹ {{ fee.amount }}</td>
+
+<td>₹ {{ fee.paid_amount }}</td>
+
+<td>
+
+{% if fee.status == "Paid" %}
+
+<span class="status-paid">
+
+{{ fee.status }}
+
+</span>
+
+{% elif fee.status == "Pending" %}
+
+<span class="status-pending">
+
+{{ fee.status }}
+
+</span>
+
+{% else %}
+
+<span class="status-partial">
+
+{{ fee.status }}
+
+</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+<a
+href="{% url 'fee-detail' fee.id %}"
+class="action view">
+
+View
+
+</a>
+
+<a
+href="{% url 'fee-update' fee.id %}"
+class="action edit">
+
+Edit
+
+</a>
+
+<button
+type="button"
+class="action delete"
+data-bs-toggle="modal"
+data-bs-target="#deleteModal{{ fee.id }}">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+<!-- Delete Modal -->
+
+<div
+class="modal fade"
+id="deleteModal{{ fee.id }}"
+tabindex="-1">
+
+<div class="modal-dialog modal-dialog-centered">
+
+<div class="modal-content">
+
+<div class="modal-header bg-danger text-white">
+
+<h5 class="modal-title">
+
+Delete Fee Record
+
+</h5>
+
+<button
+type="button"
+class="btn-close btn-close-white"
+data-bs-dismiss="modal">
+
+</button>
+
+</div>
+
+<div class="modal-body text-center">
+
+<div style="font-size:55px;">
+
+⚠️
+
+</div>
+
+<h5 class="mt-3">
+
+Are you sure?
+
+</h5>
+
+<p>
+
+Delete fee record of
+
+<strong>
+
+{{ fee.student.user.name }}
+
+</strong>
+
+?
+
+</p>
+
+<p>
+
+Fee Type :
+
+<strong>
+
+{{ fee.fee_type }}
+
+</strong>
+
+</p>
+
+<p>
+
+Amount :
+
+<strong>
+
+₹ {{ fee.amount }}
+
+</strong>
+
+</p>
+
+<small class="text-danger">
+
+This action cannot be undone.
+
+</small>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+type="button"
+class="btn btn-secondary"
+data-bs-dismiss="modal">
+
+Cancel
+
+</button>
+
+<form
+method="POST"
+action="{% url 'fee-delete' fee.id %}">
+
+{% csrf_token %}
+
+<button
+type="submit"
+class="btn btn-danger">
+
+Delete
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% empty %}
+
+<tr>
+
+<td
+colspan="7"
+class="no-data">
+
+No Fee Records Found
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+function searchFee(){
+
+let input=document.getElementById("searchInput").value.toLowerCase();
+
+let rows=document.querySelectorAll("#feeTable tr");
+
+rows.forEach(function(row){
+
+let text=row.innerText.toLowerCase();
+
+row.style.display=text.includes(input) ? "" : "none";
+
+});
+
+}
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
+
 </html>

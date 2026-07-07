@@ -123,12 +123,4 @@ def exam_delete(request, pk):
             "Exam deleted successfully."
         )
 
-        return redirect("exam-list")
-
-    return render(
-        request,
-        "exams/exam_confirm_delete.html",
-        {
-            "exam": exam
-        }
-    )
+    return redirect("exam-list")

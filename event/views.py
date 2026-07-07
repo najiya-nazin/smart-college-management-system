@@ -113,10 +113,7 @@ def event_update(request, pk):
 # Delete Event
 def event_delete(request, pk):
 
-    event = get_object_or_404(
-        Event,
-        pk=pk
-    )
+    event = get_object_or_404(Event, pk=pk)
 
     if request.method == "POST":
 
@@ -127,12 +124,4 @@ def event_delete(request, pk):
             "Event deleted successfully."
         )
 
-        return redirect("event-list")
-
-    return render(
-        request,
-        "events/event_confirm_delete.html",
-        {
-            "event": event
-        }
-    )
+    return redirect("event-list")
