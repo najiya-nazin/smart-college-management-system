@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-
+from django.shortcuts import get_object_or_404, redirect
 from .models import Course
 from .forms import CourseForm
 
@@ -103,9 +103,6 @@ def course_update(request, pk):
 
 
 # Delete course
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib import messages
-from .models import Course
 
 
 def course_delete(request, pk):
