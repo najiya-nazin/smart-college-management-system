@@ -2,10 +2,12 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
+
+
 class Role(models.TextChoices):
-    ADMIN = "admin", "Admin"
-    TEACHER = "teacher", "Teacher"
-    STUDENT = "student", "Student"
+    ADMIN = "ADMIN", "Admin"
+    TEACHER = "TEACHER", "Teacher"
+    STUDENT = "STUDENT", "Student"
 
 
 class UserManager(BaseUserManager):
