@@ -57,7 +57,7 @@ def login_view(request):
 
             messages.success(request, "Login Successful")
 
-            return redirect("dashboard")
+            return redirect("admin_dashboard")
 
     else:
 
@@ -71,11 +71,11 @@ def login_view(request):
 
 
 @login_required
-def dashboard(request):
+def admin_dashboard(request):
 
     return render(
         request,
-        "accounts/dashboard.html",
+        "accounts/admin_dashboard.html",
     )
 
 
