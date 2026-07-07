@@ -1,121 +1,84 @@
-from django.shortcuts import get_object_or_404
-
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework import status
-
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Student
-from .serializers import StudentSerializer
+from .forms import StudentForm
 
 
-class StudentListCreateAPIView(APIView):
+# Create Student
+def student_create(request):
 
-    permission_classes = [IsAuthenticated]
+    form = StudentForm()
 
-    def get(self, request):
+    if request.method == "POST":
+        form = StudentForm(request.POST)
 
-        students = Student.objects.select_related(
+        if form.is_valid():
+            form.save()
+            return redirect("student_list")
+
+    return render(request, "students/student_create.html", {
+        "form": form
+    })
+
+
+# List Students
+def student_list(request):
+
+    students = Student.objects.select_related(
+        "user",
+        "department",
+        "course"
+    ).all().order_by("student_id")
+
+    return render(request, "students/student_list.html", {
+        "students": students
+    })
+
+
+# Student Detail
+def student_detail(request, pk):
+
+    student = get_object_or_404(
+        Student.objects.select_related(
             "user",
             "department",
             "course"
-        ).all().order_by("student_id")
+        ),
+        pk=pk
+    )
 
-        serializer = StudentSerializer(
-            students,
-            many=True
-        )
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def post(self, request):
-
-        serializer = StudentSerializer(
-            data=request.data
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED
-        )
+    return render(request, "students/student_detail.html", {
+        "student": student
+    })
 
 
-class StudentDetailAPIView(APIView):
+# Update Student
+def student_update(request, pk):
 
-    permission_classes = [IsAuthenticated]
+    student = get_object_or_404(Student, pk=pk)
 
-    def get_object(self, pk):
+    form = StudentForm(instance=student)
 
-        return get_object_or_404(
-            Student.objects.select_related(
-                "user",
-                "department",
-                "course"
-            ),
-            pk=pk
-        )
+    if request.method == "POST":
+        form = StudentForm(request.POST, instance=student)
 
-    def get(self, request, pk):
+        if form.is_valid():
+            form.save()
+            return redirect("student_list")
 
-        student = self.get_object(pk)
+    return render(request, "students/student_update.html", {
+        "form": form
+    })
 
-        serializer = StudentSerializer(student)
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
+# Delete Student
+def student_delete(request, pk):
 
-    def put(self, request, pk):
+    student = get_object_or_404(Student, pk=pk)
 
-        student = self.get_object(pk)
-
-        serializer = StudentSerializer(
-            student,
-            data=request.data
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def patch(self, request, pk):
-
-        student = self.get_object(pk)
-
-        serializer = StudentSerializer(
-            student,
-            data=request.data,
-            partial=True
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def delete(self, request, pk):
-
-        student = self.get_object(pk)
-
+    if request.method == "POST":
         student.delete()
+        return redirect("student_list")
 
-        return Response(
-            status=status.HTTP_204_NO_CONTENT
-        )
+    return render(request, "students/student_delete.html", {
+        "student": student
+    })

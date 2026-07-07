@@ -1,16 +1,10 @@
 from django.urls import path
-from .views import (
-    CreateTimetable,
-    TimetableList,
-    TimetableDetail,
-    UpdateTimetable,
-    DeleteTimetable,
-)
+from . import views
 
 urlpatterns = [
-    path('create/', CreateTimetable.as_view()),
-    path('list/', TimetableList.as_view()),
-    path('<int:pk>/', TimetableDetail.as_view()),
-    path('update/<int:pk>/', UpdateTimetable.as_view()),
-    path('delete/<int:pk>/', DeleteTimetable.as_view()),
+    path("create/", views.create_timetable, name="create_timetable"),
+    path("list/", views.timetable_list, name="timetable_list"),
+    path("detail/<int:pk>/", views.timetable_detail, name="timetable_detail"),
+    path("update/<int:pk>/", views.update_timetable, name="update_timetable"),
+    path("delete/<int:pk>/", views.delete_timetable, name="delete_timetable"),
 ]

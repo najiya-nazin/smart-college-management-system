@@ -1,14 +1,12 @@
-from rest_framework import serializers
-
+from django import forms
 from .models import Company, Placement
 
 
-class CompanySerializer(serializers.ModelSerializer):
+class CompanyForm(forms.ModelForm):
 
     class Meta:
         model = Company
         fields = [
-            "id",
             "name",
             "location",
             "website",
@@ -17,24 +15,13 @@ class CompanySerializer(serializers.ModelSerializer):
         ]
 
 
-class PlacementSerializer(serializers.ModelSerializer):
-
-    student_name = serializers.ReadOnlyField(
-        source="student.user.name"
-    )
-
-    company_name = serializers.ReadOnlyField(
-        source="company.name"
-    )
+class PlacementForm(forms.ModelForm):
 
     class Meta:
         model = Placement
         fields = [
-            "id",
             "student",
-            "student_name",
             "company",
-            "company_name",
             "job_role",
             "package",
             "placement_date",

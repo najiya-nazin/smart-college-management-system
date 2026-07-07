@@ -1,189 +1,73 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Timetable
-from .serializers import TimetableSerializer
-from rest_framework.permissions import IsAuthenticated
+from .forms import TimetableForm
 
 
 # Create Timetable
-class CreateTimetable(APIView):
+def create_timetable(request):
 
-    permission_classes = [IsAuthenticated]
+    form = TimetableForm()
 
-    def post(self, request):
-        serializer = TimetableSerializer(data=request.data)
+    if request.method == "POST":
+        form = TimetableForm(request.POST)
 
-        if serializer.is_valid():
-            serializer.save()
+        if form.is_valid():
+            form.save()
+            return redirect("timetable_list")
 
-            return Response(
-                {
-                    "message": "Timetable Created Successfully",
-                    "data": serializer.data
-                },
-                status=status.HTTP_201_CREATED
-            )
-
-        return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
-        )
+    return render(request, "timetables/create_timetable.html", {
+        "form": form
+    })
 
 
-# View All Timetables
-class TimetableList(APIView):
+# List Timetables
+def timetable_list(request):
 
-    permission_classes = [IsAuthenticated]
+    timetables = Timetable.objects.all()
 
-    def get(self, request):
-        timetable = Timetable.objects.all()
-        serializer = TimetableSerializer(
-            timetable,
-            many=True
-        )
-
-        return Response(
-            {
-                "data": serializer.data
-            },
-            status=status.HTTP_200_OK
-        )
+    return render(request, "timetables/timetable_list.html", {
+        "timetables": timetables
+    })
 
 
-# View Single Timetable
-class TimetableDetail(APIView):
+# Timetable Detail
+def timetable_detail(request, pk):
 
-    permission_classes = [IsAuthenticated]
+    timetable = get_object_or_404(Timetable, pk=pk)
 
-    def get(self, request, pk):
-
-        try:
-            timetable = Timetable.objects.get(pk=pk)
-
-        except Timetable.DoesNotExist:
-
-            return Response(
-                {
-                    "message": "Timetable Not Found"
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        serializer = TimetableSerializer(timetable)
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
+    return render(request, "timetables/timetable_detail.html", {
+        "timetable": timetable
+    })
 
 
 # Update Timetable
-class UpdateTimetable(APIView):
+def update_timetable(request, pk):
 
-    permission_classes = [IsAuthenticated]
+    timetable = get_object_or_404(Timetable, pk=pk)
 
-    def put(self, request, pk):
+    form = TimetableForm(instance=timetable)
 
-        try:
-            timetable = Timetable.objects.get(pk=pk)
+    if request.method == "POST":
+        form = TimetableForm(request.POST, instance=timetable)
 
-        except Timetable.DoesNotExist:
+        if form.is_valid():
+            form.save()
+            return redirect("timetable_list")
 
-            return Response(
-                {
-                    "message": "Timetable Not Found"
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        serializer = TimetableSerializer(
-            timetable,
-            data=request.data
-        )
-
-        if serializer.is_valid():
-
-            serializer.save()
-
-            return Response(
-                {
-                    "message": "Timetable Updated Successfully",
-                    "data": serializer.data
-                },
-                status=status.HTTP_200_OK
-            )
-
-        return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
-        )
-
-    def patch(self, request, pk):
-
-        permission_classes = [IsAuthenticated]
-
-        try:
-            timetable = Timetable.objects.get(pk=pk)
-
-        except Timetable.DoesNotExist:
-
-            return Response(
-                {
-                    "message": "Timetable Not Found"
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        serializer = TimetableSerializer(
-            timetable,
-            data=request.data,
-            partial=True
-        )
-
-        if serializer.is_valid():
-
-            serializer.save()
-
-            return Response(
-                {
-                    "message": "Timetable Partially Updated Successfully",
-                    "data": serializer.data
-                },
-                status=status.HTTP_200_OK
-            )
-
-        return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
-        )
+    return render(request, "timetables/update_timetable.html", {
+        "form": form
+    })
 
 
 # Delete Timetable
-class DeleteTimetable(APIView):
+def delete_timetable(request, pk):
 
-    permission_classes = [IsAuthenticated]
+    timetable = get_object_or_404(Timetable, pk=pk)
 
-    def delete(self, request, pk):
-
-        try:
-            timetable = Timetable.objects.get(pk=pk)
-
-        except Timetable.DoesNotExist:
-
-            return Response(
-                {
-                    "message": "Timetable Not Found"
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
-
+    if request.method == "POST":
         timetable.delete()
+        return redirect("timetable_list")
 
-        return Response(
-            {
-                "message": "Timetable Deleted Successfully"
-            },
-            status=status.HTTP_200_OK
-        )
+    return render(request, "timetables/delete_timetable.html", {
+        "timetable": timetable
+    })

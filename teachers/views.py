@@ -1,140 +1,68 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Teacher
-from .serializers import TeacherSerializer
+from .forms import TeacherForm
 
 
+# Create Teacher
+def add_teacher(request):
+    form = TeacherForm()
 
-class AddTeacher(APIView):
+    if request.method == "POST":
+        form = TeacherForm(request.POST)
 
-    def post(self, request):
-        serializer = TeacherSerializer(data=request.data)
+        if form.is_valid():
+            form.save()
+            return redirect("teacher_list")
 
-        if serializer.is_valid():
-            serializer.save()
-
-            return Response(
-                {
-                    "message": "Teacher Added Successfully",
-                    "data": serializer.data
-                },
-                status=status.HTTP_201_CREATED
-            )
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return render(request, "teacher/add_teacher.html", {
+        "form": form
+    })
 
 
+# List Teachers
+def teacher_list(request):
+    teachers = Teacher.objects.all()
 
-class TeacherList(APIView):
-
-    def get(self, request):
-        teachers = Teacher.objects.all()
-        serializer = TeacherSerializer(teachers, many=True)
-
-        return Response(
-            {
-                "data": serializer.data
-            },
-            status=status.HTTP_200_OK
-        )
+    return render(request, "teacher/teacher_list.html", {
+        "teachers": teachers
+    })
 
 
-class TeacherDetail(APIView):
+# Teacher Detail
+def teacher_detail(request, pk):
+    teacher = get_object_or_404(Teacher, pk=pk)
 
-    def get(self, request, pk):
-        try:
-            teacher = Teacher.objects.get(pk=pk)
-        except Teacher.DoesNotExist:
-            return Response(
-                {
-                    "message": "Teacher Not Found"
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        serializer = TeacherSerializer(teacher)
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
+    return render(request, "teacher/teacher_detail.html", {
+        "teacher": teacher
+    })
 
 
+# Update Teacher
+def edit_teacher(request, pk):
+    teacher = get_object_or_404(Teacher, pk=pk)
 
-class EditTeacher(APIView):
+    form = TeacherForm(instance=teacher)
 
-    def put(self, request, pk):
-        try:
-            teacher = Teacher.objects.get(pk=pk)
-        except Teacher.DoesNotExist:
-            return Response(
-                {"message": "Teacher Not Found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
+    if request.method == "POST":
+        form = TeacherForm(request.POST, instance=teacher)
 
-        serializer = TeacherSerializer(teacher, data=request.data)
+        if form.is_valid():
+            form.save()
+            return redirect("teacher_list")
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "message": "Teacher Updated Successfully",
-                    "data": serializer.data
-                },
-                status=status.HTTP_200_OK
-            )
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def patch(self, request, pk):
-        try:
-            teacher = Teacher.objects.get(pk=pk)
-        except Teacher.DoesNotExist:
-            return Response(
-                {"message": "Teacher Not Found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        serializer = TeacherSerializer(
-            teacher,
-            data=request.data,
-            partial=True
-        )
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "message": "Teacher Partially Updated Successfully",
-                    "data": serializer.data
-                },
-                status=status.HTTP_200_OK
-            )
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return render(request, "teacher/edit_teacher.html", {
+        "form": form
+    })
 
 
+# Delete Teacher
+def delete_teacher(request, pk):
+    teacher = get_object_or_404(Teacher, pk=pk)
 
-class DeleteTeacher(APIView):
-
-    def delete(self, request, pk):
-        try:
-            teacher = Teacher.objects.get(pk=pk)
-        except Teacher.DoesNotExist:
-            return Response(
-                {
-                    "message": "Teacher Not Found"
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
-
+    if request.method == "POST":
         teacher.delete()
+        return redirect("teacher_list")
 
-        return Response(
-            {
-                "message": "Teacher Deleted Successfully"
-            },
-            status=status.HTTP_200_OK
-        )
+    return render(request, "teacher/delete_teacher.html", {
+        "teacher": teacher
+    })

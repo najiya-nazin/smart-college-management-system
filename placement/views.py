@@ -1,229 +1,148 @@
-from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework import status
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Company, Placement
-from .serializers import CompanySerializer, PlacementSerializer
+from .forms import CompanyForm, PlacementForm
 
 
-class CompanyListCreateAPIView(APIView):
-
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-
-        companies = Company.objects.all().order_by("name")
-
-        serializer = CompanySerializer(
-            companies,
-            many=True
-        )
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def post(self, request):
-
-        serializer = CompanySerializer(
-            data=request.data
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED
-        )
 
 
-class CompanyDetailAPIView(APIView):
+def company_create(request):
 
-    permission_classes = [IsAuthenticated]
+    form = CompanyForm()
 
-    def get_object(self, pk):
+    if request.method == "POST":
+        form = CompanyForm(request.POST)
 
-        return get_object_or_404(
-            Company,
-            pk=pk
-        )
+        if form.is_valid():
+            form.save()
+            return redirect("company_list")
 
-    def get(self, request, pk):
+    return render(request, "company/company_create.html", {
+        "form": form
+    })
 
-        company = self.get_object(pk)
 
-        serializer = CompanySerializer(company)
+def company_list(request):
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
+    companies = Company.objects.all().order_by("name")
 
-    def put(self, request, pk):
+    return render(request, "company/company_list.html", {
+        "companies": companies
+    })
 
-        company = self.get_object(pk)
 
-        serializer = CompanySerializer(
-            company,
-            data=request.data
-        )
+def company_detail(request, pk):
 
-        serializer.is_valid(raise_exception=True)
+    company = get_object_or_404(Company, pk=pk)
 
-        serializer.save()
+    return render(request, "company/company_detail.html", {
+        "company": company
+    })
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
 
-    def patch(self, request, pk):
+def company_update(request, pk):
 
-        company = self.get_object(pk)
+    company = get_object_or_404(Company, pk=pk)
 
-        serializer = CompanySerializer(
-            company,
-            data=request.data,
-            partial=True
-        )
+    form = CompanyForm(instance=company)
 
-        serializer.is_valid(raise_exception=True)
+    if request.method == "POST":
+        form = CompanyForm(request.POST, instance=company)
 
-        serializer.save()
+        if form.is_valid():
+            form.save()
+            return redirect("company_list")
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
+    return render(request, "company/company_update.html", {
+        "form": form
+    })
 
-    def delete(self, request, pk):
 
-        company = self.get_object(pk)
+def company_delete(request, pk):
 
+    company = get_object_or_404(Company, pk=pk)
+
+    if request.method == "POST":
         company.delete()
+        return redirect("company_list")
 
-        return Response(
-            {
-                "message": "Company deleted successfully."
-            },
-            status=status.HTTP_204_NO_CONTENT
-        )
+    return render(request, "company/company_delete.html", {
+        "company": company
+    })
 
 
-class PlacementListCreateAPIView(APIView):
 
-    permission_classes = [IsAuthenticated]
 
-    def get(self, request):
+def placement_create(request):
 
-        placements = Placement.objects.select_related(
+    form = PlacementForm()
+
+    if request.method == "POST":
+        form = PlacementForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect("placement_list")
+
+    return render(request, "company/placement_create.html", {
+        "form": form
+    })
+
+
+def placement_list(request):
+
+    placements = Placement.objects.select_related(
+        "student",
+        "student__user",
+        "company"
+    ).all().order_by("-placement_date")
+
+    return render(request, "company/placement_list.html", {
+        "placements": placements
+    })
+
+
+def placement_detail(request, pk):
+
+    placement = get_object_or_404(
+        Placement.objects.select_related(
             "student",
             "student__user",
             "company"
-        ).all().order_by("-placement_date")
+        ),
+        pk=pk
+    )
 
-        serializer = PlacementSerializer(
-            placements,
-            many=True
-        )
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def post(self, request):
-
-        serializer = PlacementSerializer(
-            data=request.data
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED
-        )
+    return render(request, "company/placement_detail.html", {
+        "placement": placement
+    })
 
 
-class PlacementDetailAPIView(APIView):
+def placement_update(request, pk):
 
-    permission_classes = [IsAuthenticated]
+    placement = get_object_or_404(Placement, pk=pk)
 
-    def get_object(self, pk):
+    form = PlacementForm(instance=placement)
 
-        return get_object_or_404(
-            Placement.objects.select_related(
-                "student",
-                "student__user",
-                "company"
-            ),
-            pk=pk
-        )
+    if request.method == "POST":
+        form = PlacementForm(request.POST, instance=placement)
 
-    def get(self, request, pk):
+        if form.is_valid():
+            form.save()
+            return redirect("placement_list")
 
-        placement = self.get_object(pk)
+    return render(request, "company/placement_update.html", {
+        "form": form
+    })
 
-        serializer = PlacementSerializer(placement)
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
+def placement_delete(request, pk):
 
-    def put(self, request, pk):
+    placement = get_object_or_404(Placement, pk=pk)
 
-        placement = self.get_object(pk)
-
-        serializer = PlacementSerializer(
-            placement,
-            data=request.data
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def patch(self, request, pk):
-
-        placement = self.get_object(pk)
-
-        serializer = PlacementSerializer(
-            placement,
-            data=request.data,
-            partial=True
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
-
-    def delete(self, request, pk):
-
-        placement = self.get_object(pk)
-
+    if request.method == "POST":
         placement.delete()
+        return redirect("placement_list")
 
-        return Response(
-            {
-                "message": "Placement record deleted successfully."
-            },
-            status=status.HTTP_204_NO_CONTENT
-        )
+    return render(request, "company/placement_delete.html", {
+        "placement": placement
+    })
