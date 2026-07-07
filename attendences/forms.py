@@ -8,7 +8,6 @@ class AttendanceForm(forms.ModelForm):
         model = Attendance
         fields = [
             "student",
-            "course",
             "date",
             "status",
         ]

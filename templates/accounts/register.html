@@ -2,9 +2,63 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
 </head>
 <body>
+
+    <h2>User Registration</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <p style="color:red;">{{ error }}</p>
+            {% endfor %}
+        {% endfor %}
+
+        {% for error in form.non_field_errors %}
+            <p style="color:red;">{{ error }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label>Name</label><br>
+        <input type="text" name="name" placeholder="Enter your name" required><br><br>
+
+        <label>Email</label><br>
+        <input type="email" name="email" placeholder="Enter your email" required><br><br>
+
+        <label>Phone</label><br>
+        <input type="text" name="phone" placeholder="Enter your phone number" required><br><br>
+
+        <label>Role</label><br>
+        <select name="role" required>
+            <option value="">Select Role</option>
+            <option value="ADMIN">Admin</option>
+            <option value="TEACHER">Teacher</option>
+            <option value="STUDENT">Student</option>
+        </select><br><br>
+
+        <label>Password</label><br>
+        <input type="password" name="password" placeholder="Enter password" required><br><br>
+
+        <label>Confirm Password</label><br>
+        <input type="password" name="confirm_password" placeholder="Confirm password" required><br><br>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <br>
+
+    <a href="">Already have an account? Login</a>
 
 </body>
 </html>
