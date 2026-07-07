@@ -15,7 +15,7 @@ def attendance_create(request):
             form.save()
             return redirect("attendance_list")
 
-    return render(request, "attendance_create.html", {
+    return render(request, "attendance/attendance_create.html", {
         "form": form
     })
 
@@ -27,7 +27,7 @@ def attendance_list(request):
         "student"
     ).all().order_by("-date")
 
-    return render(request, "attendance_list.html", {
+    return render(request, "attendance/attendance_list.html", {
         "attendance": attendance
     })
 
@@ -40,7 +40,7 @@ def attendance_detail(request, pk):
         pk=pk
     )
 
-    return render(request, "attendance_detail.html", {
+    return render(request, "attendance/attendance_detail.html", {
         "attendance": attendance
     })
 
@@ -62,7 +62,7 @@ def attendance_update(request, pk):
             form.save()
             return redirect("attendance_list")
 
-    return render(request, "attendance_update.html", {
+    return render(request, "attendance/attendance_update.html", {
         "form": form
     })
 
@@ -76,6 +76,6 @@ def attendance_delete(request, pk):
         attendance.delete()
         return redirect("attendance_list")
 
-    return render(request, "attendance_delete.html", {
+    return render(request, "attendance/attendance_delete.html", {
         "attendance": attendance
     })
