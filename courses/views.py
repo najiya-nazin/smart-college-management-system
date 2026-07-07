@@ -103,12 +103,14 @@ def course_update(request, pk):
 
 
 # Delete course
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from .models import Course
+
+
 def course_delete(request, pk):
 
-    course = get_object_or_404(
-        Course,
-        pk=pk
-    )
+    course = get_object_or_404(Course, pk=pk)
 
     if request.method == "POST":
 
@@ -118,10 +120,4 @@ def course_delete(request, pk):
 
         return redirect("course-list")
 
-    return render(
-        request,
-        "courses/course_confirm_delete.html",
-        {
-            "course": course
-        }
-    )
+    return redirect("course-list")

@@ -75,7 +75,7 @@ class Placement(models.Model):
     )
 
     class Meta:
-        db_table = "placement"
+        db_table = "placements"
         ordering = ["-placement_date"]
 
     def __str__(self):

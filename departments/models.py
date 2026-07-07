@@ -27,6 +27,7 @@ class Department(models.Model):
     )
 
     class Meta:
+        db_table = "departments"
         ordering = ["name"]
 
     def __str__(self):
