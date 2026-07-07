@@ -1,88 +1,81 @@
-from django.shortcuts import get_object_or_404
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Attendance
-from .serializers import AttendanceSerializer
+from .forms import AttendanceForm
 
 
-class AttendanceListCreateAPIView(APIView):
+# Create Attendance
+def attendance_create(request):
 
-    permission_classes = [IsAuthenticated]
+    form = AttendanceForm()
 
-    def get(self, request):
+    if request.method == "POST":
+        form = AttendanceForm(request.POST)
 
-        attendance = Attendance.objects.select_related(
-            "student"
-        ).all().order_by("-date")
+        if form.is_valid():
+            form.save()
+            return redirect("attendance_list")
 
-        serializer = AttendanceSerializer(attendance, many=True)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def post(self, request):
-
-        serializer = AttendanceSerializer(data=request.data)
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return render(request, "attendance_create.html", {
+        "form": form
+    })
 
 
-class AttendanceDetailAPIView(APIView):
+# List Attendance
+def attendance_list(request):
 
-    permission_classes = [IsAuthenticated]
+    attendance = Attendance.objects.select_related(
+        "student"
+    ).all().order_by("-date")
 
-    def get_object(self, pk):
+    return render(request, "attendance_list.html", {
+        "attendance": attendance
+    })
 
-        return get_object_or_404(
-            Attendance.objects.select_related("student"),
-            pk=pk
+
+# Attendance Detail
+def attendance_detail(request, pk):
+
+    attendance = get_object_or_404(
+        Attendance.objects.select_related("student"),
+        pk=pk
+    )
+
+    return render(request, "attendance_detail.html", {
+        "attendance": attendance
+    })
+
+
+# Update Attendance
+def attendance_update(request, pk):
+
+    attendance = get_object_or_404(Attendance, pk=pk)
+
+    form = AttendanceForm(instance=attendance)
+
+    if request.method == "POST":
+        form = AttendanceForm(
+            request.POST,
+            instance=attendance
         )
 
-    def get(self, request, pk):
+        if form.is_valid():
+            form.save()
+            return redirect("attendance_list")
 
-        attendance = self.get_object(pk)
+    return render(request, "attendance_update.html", {
+        "form": form
+    })
 
-        serializer = AttendanceSerializer(attendance)
 
-        return Response(serializer.data)
+# Delete Attendance
+def attendance_delete(request, pk):
 
-    def put(self, request, pk):
+    attendance = get_object_or_404(Attendance, pk=pk)
 
-        attendance = self.get_object(pk)
-
-        serializer = AttendanceSerializer(attendance, data=request.data)
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(serializer.data)
-
-    def patch(self, request, pk):
-
-        attendance = self.get_object(pk)
-
-        serializer = AttendanceSerializer(
-            attendance,
-            data=request.data,
-            partial=True
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
-        return Response(serializer.data)
-
-    def delete(self, request, pk):
-
-        attendance = self.get_object(pk)
-
+    if request.method == "POST":
         attendance.delete()
+        return redirect("attendance_list")
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    return render(request, "attendance_delete.html", {
+        "attendance": attendance
+    })

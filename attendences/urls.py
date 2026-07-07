@@ -1,21 +1,10 @@
 from django.urls import path
-from .views import (
-    AttendanceListCreateAPIView,
-    AttendanceDetailAPIView,
-)
+from . import views
 
 urlpatterns = [
-
-    path(
-        "",
-        AttendanceListCreateAPIView.as_view(),
-        name="attendance-list-create"
-    ),
-
-    path(
-        "<int:pk>/",
-        AttendanceDetailAPIView.as_view(),
-        name="attendance-detail"
-    ),
-
+    path("create/", views.attendance_create, name="attendance_create"),
+    path("list/", views.attendance_list, name="attendance_list"),
+    path("detail/<int:pk>/", views.attendance_detail, name="attendance_detail"),
+    path("update/<int:pk>/", views.attendance_update, name="attendance_update"),
+    path("delete/<int:pk>/", views.attendance_delete, name="attendance_delete"),
 ]
