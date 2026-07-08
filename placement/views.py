@@ -16,7 +16,7 @@ def company_create(request):
             form.save()
             return redirect("company_list")
 
-    return render(request, "company/company_create.html", {
+    return render(request, "company/company_form.html", {
         "form": form
     })
 
@@ -52,22 +52,23 @@ def company_update(request, pk):
             form.save()
             return redirect("company_list")
 
-    return render(request, "company/company_update.html", {
+    return render(request, "company/company_form.html", {
         "form": form
     })
 
 
 def company_delete(request, pk):
 
-    company = get_object_or_404(Company, pk=pk)
+    company = get_object_or_404(
+        Company,
+        pk=pk
+    )
 
     if request.method == "POST":
-        company.delete()
-        return redirect("company_list")
 
-    return render(request, "company/company_delete.html", {
-        "company": company
-    })
+        company.delete()
+
+    return redirect("company_list")
 
 
 
@@ -83,7 +84,7 @@ def placement_create(request):
             form.save()
             return redirect("placement_list")
 
-    return render(request, "company/placement_create.html", {
+    return render(request, "company/placement_form.html", {
         "form": form
     })
 
@@ -130,19 +131,20 @@ def placement_update(request, pk):
             form.save()
             return redirect("placement_list")
 
-    return render(request, "company/placement_update.html", {
+    return render(request, "company/placement_form.html", {
         "form": form
     })
 
 
 def placement_delete(request, pk):
 
-    placement = get_object_or_404(Placement, pk=pk)
+    placement = get_object_or_404(
+        Placement,
+        pk=pk
+    )
 
     if request.method == "POST":
-        placement.delete()
-        return redirect("placement_list")
 
-    return render(request, "company/placement_delete.html", {
-        "placement": placement
-    })
+        placement.delete()
+
+    return redirect("placement_list")

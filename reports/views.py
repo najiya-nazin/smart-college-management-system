@@ -15,7 +15,7 @@ def report_create(request):
             form.save()
             return redirect("report_list")
 
-    return render(request, "reports/report_create.html", {
+    return render(request, "reports/report_form.html", {
         "form": form
     })
 
@@ -63,7 +63,7 @@ def report_update(request, pk):
             form.save()
             return redirect("report_list")
 
-    return render(request, "reports/report_update.html", {
+    return render(request, "reports/report_form.html", {
         "form": form
     })
 
@@ -71,12 +71,13 @@ def report_update(request, pk):
 # Delete Report
 def report_delete(request, pk):
 
-    report = get_object_or_404(Report, pk=pk)
+    report = get_object_or_404(
+        Report,
+        pk=pk
+    )
 
     if request.method == "POST":
-        report.delete()
-        return redirect("report_list")
 
-    return render(request, "reports/report_delete.html", {
-        "report": report
-    })
+        report.delete()
+
+    return redirect("report_list")
