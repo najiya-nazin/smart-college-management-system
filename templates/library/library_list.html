@@ -8,7 +8,7 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>Book Management</title>
+<title>Library Management</title>
 
 <link
 href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -46,7 +46,7 @@ font-weight:700;
 
 .add-btn{
 background:#0d6efd;
-color:white;
+color:#fff;
 padding:10px 20px;
 text-decoration:none;
 border-radius:8px;
@@ -55,7 +55,7 @@ transition:.3s;
 
 .add-btn:hover{
 background:#084fc7;
-color:white;
+color:#fff;
 }
 
 .search-box{
@@ -71,7 +71,7 @@ border:1px solid #ccc;
 }
 
 .table-card{
-background:white;
+background:#fff;
 border-radius:12px;
 overflow:hidden;
 box-shadow:0 5px 15px rgba(0,0,0,.08);
@@ -83,7 +83,7 @@ margin-bottom:0;
 
 thead{
 background:#0d6efd;
-color:white;
+color:#fff;
 }
 
 tbody tr:hover{
@@ -102,7 +102,7 @@ padding:6px 12px;
 margin:2px;
 border-radius:5px;
 text-decoration:none;
-color:white;
+color:#fff;
 font-size:14px;
 }
 
@@ -112,7 +112,7 @@ background:#198754;
 
 .edit{
 background:#ffc107;
-color:black;
+color:#000;
 }
 
 .delete{
@@ -123,6 +123,16 @@ cursor:pointer;
 
 .delete:hover{
 background:#bb2d3b;
+}
+
+.issued{
+color:#198754;
+font-weight:bold;
+}
+
+.returned{
+color:#0d6efd;
+font-weight:bold;
 }
 
 .no-data{
@@ -141,13 +151,13 @@ font-weight:600;
 
 <div class="header">
 
-<h2>Book Management</h2>
+<h2>Library Management</h2>
 
 <a
-href="{% url 'book-create' %}"
+href="{% url 'library-create' %}"
 class="add-btn">
 
-+ Add Book
++ Issue Book
 
 </a>
 
@@ -158,8 +168,8 @@ class="add-btn">
 <input
 type="text"
 id="searchInput"
-placeholder="Search Book..."
-onkeyup="searchBook()">
+placeholder="Search Student / Book..."
+onkeyup="searchLibrary()">
 
 </div>
 
@@ -171,13 +181,17 @@ onkeyup="searchBook()">
 
 <tr>
 
-<th>Title</th>
+<th>Student</th>
 
-<th>Author</th>
+<th>Book</th>
 
-<th>Publisher</th>
+<th>Issue Date</th>
 
-<th>ISBN</th>
+<th>Due Date</th>
+
+<th>Status</th>
+
+<th>Fine</th>
 
 <th>Actions</th>
 
@@ -185,24 +199,52 @@ onkeyup="searchBook()">
 
 </thead>
 
-<tbody id="bookTable">
+<tbody id="libraryTable">
 
-{% for book in books %}
+{% for item in library %}
 
 <tr>
 
-<td>{{ book.title }}</td>
+<td>{{ item.student.user.name }}</td>
 
-<td>{{ book.author }}</td>
+<td>{{ item.book.title }}</td>
 
-<td>{{ book.publisher }}</td>
+<td>{{ item.issue_date }}</td>
 
-<td>{{ book.isbn }}</td>
+<td>{{ item.due_date }}</td>
+
+<td>
+
+{% if item.status == "Issued" %}
+
+<span class="issued">
+
+{{ item.status }}
+
+</span>
+
+{% else %}
+
+<span class="returned">
+
+{{ item.status }}
+
+</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+₹ {{ item.fine }}
+
+</td>
 
 <td>
 
 <a
-href="{% url 'book-detail' book.id %}"
+href="{% url 'library-detail' item.id %}"
 class="action view">
 
 View
@@ -210,7 +252,7 @@ View
 </a>
 
 <a
-href="{% url 'book-update' book.id %}"
+href="{% url 'library-update' item.id %}"
 class="action edit">
 
 Edit
@@ -221,7 +263,7 @@ Edit
 type="button"
 class="action delete"
 data-bs-toggle="modal"
-data-bs-target="#deleteModal{{ book.id }}">
+data-bs-target="#deleteModal{{ item.id }}">
 
 Delete
 
@@ -235,7 +277,7 @@ Delete
 
 <div
 class="modal fade"
-id="deleteModal{{ book.id }}"
+id="deleteModal{{ item.id }}"
 tabindex="-1">
 
 <div class="modal-dialog modal-dialog-centered">
@@ -246,7 +288,7 @@ tabindex="-1">
 
 <h5 class="modal-title">
 
-Delete Book
+Delete Library Record
 
 </h5>
 
@@ -275,11 +317,11 @@ Are you sure?
 
 <p>
 
-Do you want to delete
+Delete library record of
 
 <strong>
 
-{{ book.title }}
+{{ item.student.user.name }}
 
 </strong>
 
@@ -289,11 +331,11 @@ Do you want to delete
 
 <p>
 
-Author:
+Book :
 
 <strong>
 
-{{ book.author }}
+{{ item.book.title }}
 
 </strong>
 
@@ -320,7 +362,7 @@ Cancel
 
 <form
 method="POST"
-action="{% url 'book-delete' book.id %}">
+action="{% url 'library-delete' item.id %}">
 
 {% csrf_token %}
 
@@ -347,10 +389,10 @@ Delete
 <tr>
 
 <td
-colspan="5"
+colspan="7"
 class="no-data">
 
-No Books Found
+No Library Records Found
 
 </td>
 
@@ -368,11 +410,11 @@ No Books Found
 
 <script>
 
-function searchBook(){
+function searchLibrary(){
 
 let input=document.getElementById("searchInput").value.toLowerCase();
 
-let rows=document.querySelectorAll("#bookTable tr");
+let rows=document.querySelectorAll("#libraryTable tr");
 
 rows.forEach(function(row){
 

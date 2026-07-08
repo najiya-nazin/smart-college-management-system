@@ -107,18 +107,7 @@ def hostel_delete(request, pk):
 
         hostel.delete()
 
-        messages.success(request, "Hostel deleted successfully.")
-
-        return redirect("hostel-list")
-
-    return render(
-        request,
-        "hostel/hostel_confirm_delete.html",
-        {
-            "hostel": hostel
-        }
-    )
-
+    return redirect("hostel-list")
 
 
 def room_list(request):
@@ -223,14 +212,4 @@ def room_delete(request, pk):
 
         room.delete()
 
-        messages.success(request, "Room deleted successfully.")
-
-        return redirect("room-list")
-
-    return render(
-        request,
-        "hostel/room_confirm_delete.html",
-        {
-            "room": room
-        }
-    )
+    return redirect("room-list")

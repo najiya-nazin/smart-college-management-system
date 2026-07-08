@@ -5,10 +5,6 @@ from .models import Book, Library
 from .forms import BookForm, LibraryForm
 
 
-# =====================================
-# Book CRUD
-# =====================================
-
 def book_list(request):
 
     books = Book.objects.all().order_by("title")
@@ -32,7 +28,10 @@ def book_create(request):
 
             form.save()
 
-            messages.success(request, "Book added successfully.")
+            messages.success(
+                request,
+                "Book added successfully."
+            )
 
             return redirect("book-list")
 
@@ -64,7 +63,10 @@ def book_detail(request, pk):
 
 def book_update(request, pk):
 
-    book = get_object_or_404(Book, pk=pk)
+    book = get_object_or_404(
+        Book,
+        pk=pk
+    )
 
     if request.method == "POST":
 
@@ -77,13 +79,18 @@ def book_update(request, pk):
 
             form.save()
 
-            messages.success(request, "Book updated successfully.")
+            messages.success(
+                request,
+                "Book updated successfully."
+            )
 
             return redirect("book-list")
 
     else:
 
-        form = BookForm(instance=book)
+        form = BookForm(
+            instance=book
+        )
 
     return render(
         request,
@@ -96,28 +103,17 @@ def book_update(request, pk):
 
 def book_delete(request, pk):
 
-    book = get_object_or_404(Book, pk=pk)
+    book = get_object_or_404(
+        Book,
+        pk=pk
+    )
 
     if request.method == "POST":
 
         book.delete()
 
-        messages.success(request, "Book deleted successfully.")
+    return redirect("book-list")
 
-        return redirect("book-list")
-
-    return render(
-        request,
-        "library/book_confirm_delete.html",
-        {
-            "book": book
-        }
-    )
-
-
-# =====================================
-# Library CRUD
-# =====================================
 
 def library_list(request):
 
@@ -145,7 +141,10 @@ def library_create(request):
 
             form.save()
 
-            messages.success(request, "Book issued successfully.")
+            messages.success(
+                request,
+                "Book issued successfully."
+            )
 
             return redirect("library-list")
 
@@ -199,13 +198,18 @@ def library_update(request, pk):
 
             form.save()
 
-            messages.success(request, "Library record updated successfully.")
+            messages.success(
+                request,
+                "Library record updated successfully."
+            )
 
             return redirect("library-list")
 
     else:
 
-        form = LibraryForm(instance=library)
+        form = LibraryForm(
+            instance=library
+        )
 
     return render(
         request,
@@ -227,14 +231,4 @@ def library_delete(request, pk):
 
         library.delete()
 
-        messages.success(request, "Library record deleted successfully.")
-
-        return redirect("library-list")
-
-    return render(
-        request,
-        "library/library_confirm_delete.html",
-        {
-            "library": library
-        }
-    )
+    return redirect("library-list")
