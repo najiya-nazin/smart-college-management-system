@@ -1,12 +1,20 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Student
+from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
+
 from .forms import StudentForm
+from .models import Student
+from departments.models import Department
+from courses.models import Course
+
+User = get_user_model()
 
 
-# Create Student
 def student_create(request):
 
-    form = StudentForm()
+    users = User.objects.filter(role="STUDENT")
+    departments = Department.objects.all()
+    courses = Course.objects.all()
 
     if request.method == "POST":
         form = StudentForm(request.POST)
@@ -14,9 +22,14 @@ def student_create(request):
         if form.is_valid():
             form.save()
             return redirect("student_list")
+    else:
+        form = StudentForm()
 
     return render(request, "students/student_create.html", {
-        "form": form
+        "form": form,
+        "users": users,
+        "departments": departments,
+        "courses": courses,
     })
 
 

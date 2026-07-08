@@ -13,7 +13,11 @@ from .forms import (
     ForgotPasswordForm,
     VerifyOTPForm,
     ResetPasswordForm,
+    
 )
+
+from students.forms import StudentForm   
+from students.models import Student
 
 
 def register(request):
@@ -24,21 +28,17 @@ def register(request):
 
         if form.is_valid():
 
-            form.save()
+            user = form.save()
 
             messages.success(request, "Registration Successful")
 
-            return redirect("login")
-
     else:
-
         form = RegisterForm()
 
-    return render(
-        request,
-        "accounts/register.html",
-        {"form": form},
-    )
+    return render(request, "accounts/register.html", {
+        "form": form,
+    })
+
 
 
 def login_view(request):
@@ -57,10 +57,19 @@ def login_view(request):
 
             messages.success(request, "Login Successful")
 
-            return redirect("admin_dashboard")
+            if user.role == "ADMIN":
+                return redirect("admin_dashboard")
+
+            elif user.role == "TEACHER":
+                return redirect("teacher_dashboard")
+
+            elif user.role == "STUDENT":
+                return redirect("student_dashboard")
+
+            else:
+                return redirect("login")
 
     else:
-
         form = LoginForm()
 
     return render(
@@ -69,14 +78,50 @@ def login_view(request):
         {"form": form},
     )
 
-
 @login_required
 def admin_dashboard(request):
+
+    student_count = User.objects.filter(role='STUDENT').count()
+
+    teacher_count = User.objects.filter(role='TEACHER').count()
+
+    students = Student.objects.all()
+
+    
 
     return render(
         request,
         "accounts/admin_dashboard.html",
+        {
+            "students_count":student_count,
+            "students":students,
+            "teacher_count":teacher_count,
+            
+        }
     )
+
+
+
+# @login_required
+# def admin_dashboard(request):
+
+#     student_count = User.objects.filter(role="STUDENT").count()
+#     students = Student.objects.all()
+
+#     form = StudentForm()
+
+#     if request.method == "POST":
+#         form = StudentForm(request.POST)
+
+#         if form.is_valid():
+#             form.save()
+#             return redirect("admin_dashboard")
+
+#     return render(request, "accounts/admin_dashboard.html", {
+#         "students_count": student_count,
+#         "students": students,
+#         "form": form,
+#     })
 
 
 @login_required

@@ -1,12 +1,319 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Dashboard</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#f4f7fc;
+}
+
+/* =======================
+Sidebar
+======================= */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:260px;
+    height:100%;
+    background:#0f172a;
+    color:#fff;
+    overflow-y:auto;
+}
+
+.logo{
+    padding:25px;
+    text-align:center;
+    font-size:24px;
+    font-weight:600;
+    border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar ul li{
+    margin:5px 0;
+}
+
+.sidebar ul li a{
+    color:#cbd5e1;
+    text-decoration:none;
+    display:block;
+    padding:15px 25px;
+    transition:.3s;
+    font-size:15px;
+}
+
+.sidebar ul li a i{
+    width:28px;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a.active{
+    background:#2563eb;
+    color:#fff;
+}
+
+/* =======================
+Main
+======================= */
+
+.main{
+    margin-left:260px;
+}
+
+/* =======================
+Navbar
+======================= */
+
+.navbar{
+    height:70px;
+    background:#fff;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 30px;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.navbar h2{
+    color:#1e293b;
+}
+
+.profile{
+    font-weight:600;
+    color:#334155;
+}
+
+/* =======================
+Content
+======================= */
+
+.content{
+    padding:30px;
+}
+
+/* =======================
+Cards
+======================= */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:#fff;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card i{
+    font-size:35px;
+    color:#2563eb;
+    margin-bottom:15px;
+}
+
+.card h3{
+    color:#64748b;
+    font-size:15px;
+    margin-bottom:10px;
+}
+
+.card h1{
+    color:#1e293b;
+}
+
+/* =======================
+Responsive
+======================= */
+
+@media(max-width:900px){
+
+.sidebar{
+    width:220px;
+}
+
+.main{
+    margin-left:220px;
+}
+
+}
+
+@media(max-width:768px){
+
+.sidebar{
+    position:relative;
+    width:100%;
+    height:auto;
+}
+
+.main{
+    margin-left:0;
+}
+
+.navbar{
+    flex-direction:column;
+    height:auto;
+    padding:20px;
+}
+
+}
+
+</style>
+
 </head>
+
 <body>
-    <h1>Admin:{{ user.name }}</h1>
-    <a href="#">Course</a>
+
+<!-- Sidebar -->
+
+<div class="sidebar">
+
+<div class="logo">
+Smart College
+</div>
+
+<ul>
+
+<li><a href="#" class="active"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+
+<li><a href="#"><i class="fa-solid fa-users"></i> Users</a></li>
+
+<li><a href="{% url 'student_list' %}"><i class="fa-solid fa-user-graduate"></i> Students</a></li> 
+
+<li><a href="{% url 'teacher_list' %}"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a></li>
+
+<li><a href="#"><i class="fa-solid fa-building-columns"></i> Departments</a></li>
+
+<li><a href="#"><i class="fa-solid fa-book-open"></i> Courses</a></li>
+
+<li><a href="#"><i class="fa-solid fa-calendar-days"></i> Timetable</a></li>
+
+<li><a href="#"><i class="fa-solid fa-calendar-check"></i> Attendance</a></li>
+
+<li><a href="#"><i class="fa-solid fa-file-pen"></i> Exams</a></li>
+
+<li><a href="#"><i class="fa-solid fa-chart-line"></i> Results</a></li>
+
+<li><a href="#"><i class="fa-solid fa-briefcase"></i> Placements</a></li>
+
+<li><a href="#"><i class="fa-solid fa-building"></i> Companies</a></li>
+
+<li><a href="#"><i class="fa-solid fa-file-lines"></i> Reports</a></li>
+
+<li><a href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+
+
+
+</ul>
+
+</div>
+
+<!-- Main -->
+
+<div class="main">
+
+<div class="navbar">
+
+<h2>Admin Dashboard</h2>
+
+<div class="profile">
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+</div>
+
+</div>
+
+<div class="content">
+
+
+<div class="cards">
+
+<div class="card">
+<i class="fa-solid fa-user-graduate"></i>
+<h3>Total Students</h3>
+<h1>{{ students_count }}</h1>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-chalkboard-user"></i>
+<h3>Total Teachers</h3>
+<h1>{{ teacher_count }}</h1>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-book-open"></i>
+<h3>Total Courses</h3>
+<h1>18</h1>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-building-columns"></i>
+<h3>Total Departments</h3>
+<h1>8</h1>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-calendar-check"></i>
+<h3>Today's Attendance</h3>
+<h1>228</h1>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-briefcase"></i>
+<h3>Total Placements</h3>
+<h1>120</h1>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-building"></i>
+<h3>Total Companies</h3>
+<h1>32</h1>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-file-lines"></i>
+<h3>Total Reports</h3>
+<h1>15</h1>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </body>
 </html>
