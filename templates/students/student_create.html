@@ -113,7 +113,7 @@
 Student Information
 </div>
 
-<form method="POST">
+<form method="POST" class="needs-validation" novalidate>
 
 {% csrf_token %}
 
@@ -132,6 +132,10 @@ Student Information
 
 </select>
 
+<div class="invalid-feedback">
+    Please select a user.
+</div>
+
 </div>
 
 
@@ -143,7 +147,14 @@ type="text"
 name="student_id"
 class="form-control"
 placeholder="Enter Student ID"
-required>
+required
+minlength="4"
+maxlength="20">
+
+<div class="invalid-feedback">
+    Please enter a valid Student ID.
+</div>
+
 
 </div>
 
@@ -154,7 +165,12 @@ required>
 <input
 type="date"
 name="dob"
-class="form-control">
+class="form-control"
+required>
+
+<div class="invalid-feedback">
+    Please select Date of Birth.
+</div>
 
 </div>
 
@@ -162,7 +178,7 @@ class="form-control">
 <div class="col-md-6 mb-3">
 <label class="form-label">Gender</label>
 
-<select name="gender" class="form-select">
+<select name="gender" class="form-select" required>
 
 <option value="">Select Gender</option>
 <option value="Male">Male</option>
@@ -170,6 +186,10 @@ class="form-control">
 <option value="Other">Other</option>
 
 </select>
+
+<div class="invalid-feedback">
+    Please select gender.
+</div>
 
 </div>
 
@@ -180,22 +200,37 @@ class="form-control">
 <textarea
 name="address"
 class="form-control"
+required
+minlength="10"
 placeholder="Enter Address"></textarea>
 
+<div class="invalid-feedback">
+    Address should contain at least 10 characters.
+</div>
+
 </div>
 
 
 <div class="col-md-6 mb-3">
-<label class="form-label">Department</label>
+    <label class="form-label">Department</label>
 
-<select name="department" class="form-select">
+    <select name="department" class="form-select" required>
 
-<option value="">Select Department</option>
+        <option value="">Select Department</option>
 
+        {% for department in departments %}
+            <option value="{{ department.id }}">
+                {{ department.name }}
+            </option>
+        {% endfor %}
 
-<option value="{{ department.id }}">
-{{ department.name }}
-</option>
+    </select>
+
+    <div class="invalid-feedback">
+    Please select department.
+</div>
+
+</div>
 
 
 </select>
@@ -204,19 +239,24 @@ placeholder="Enter Address"></textarea>
 
 
 <div class="col-md-6 mb-3">
-<label class="form-label">Course</label>
+    <label class="form-label">Course</label>
 
-<select name="course" class="form-select">
+    <select name="course" class="form-select" required>
 
-<option value="">Select Course</option>
+        <option value="">Select Course</option>
 
+        {% for course in courses %}
+            <option value="{{ course.id }}">
+                {{ course.name }}
+            </option>
+        {% endfor %}
 
-<option value="{{ course.id }}">
-{{ course.name }}
-</option>
+    </select>
 
+    <div class="invalid-feedback">
+    Please select course.
+</div>
 
-</select>
 
 </div>
 
@@ -228,7 +268,14 @@ placeholder="Enter Address"></textarea>
 type="number"
 name="semester"
 class="form-control"
+min="1"
+max="8"
+required
 placeholder="Enter Semester">
+
+<div class="invalid-feedback">
+    Semester must be between 1 and 8.
+</div>
 
 </div>
 
@@ -239,7 +286,12 @@ placeholder="Enter Semester">
 <input
 type="date"
 name="admission_date"
-class="form-control">
+class="form-control"
+required>
+
+<div class="invalid-feedback">
+    Please select admission date.
+</div>
 
 </div>
 
@@ -251,7 +303,13 @@ class="form-control">
 type="text"
 name="guardian_name"
 class="form-control"
+required
+minlength="3"
 placeholder="Guardian Name">
+
+<div class="invalid-feedback">
+    Enter guardian name.
+</div>
 
 </div>
 
@@ -263,7 +321,14 @@ placeholder="Guardian Name">
 type="text"
 name="guardian_phone"
 class="form-control"
-placeholder="Guardian Phone">
+required
+pattern="[0-9]{10}"
+maxlength="10"
+placeholder="9876543210">
+
+<div class="invalid-feedback">
+    Enter a valid 10-digit phone number.
+</div>
 
 </div>
 
@@ -298,5 +363,29 @@ Save Student
 </div>
 
 </body>
+
+<script>
+(() => {
+    'use strict';
+
+    const forms = document.querySelectorAll('.needs-validation');
+
+    Array.from(forms).forEach(form => {
+
+        form.addEventListener('submit', event => {
+
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+
+        }, false);
+
+    });
+
+})();
+</script>
 
 </html>

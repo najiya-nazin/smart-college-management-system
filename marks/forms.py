@@ -13,3 +13,25 @@ class MarksForm(forms.ModelForm):
             "max_marks",
             "grade",
         ]
+
+
+        widgets = {
+            "student": forms.Select(attrs={
+                "class": "form-select"
+            }),
+            "course": forms.Select(attrs={
+                "class": "form-select"
+            }),
+            "marks_obtained": forms.NumberInput(attrs={
+                "class": "form-control",
+                "placeholder": "Enter Marks Obtained"
+            }),
+            "max_marks": forms.NumberInput(attrs={
+                "class": "form-control",
+                "placeholder": "Enter Maximum Marks"
+            }),
+            "grade": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Example: A+, A, B+, B"
+            }),
+        }

@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Timetable
 from .forms import TimetableForm
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 # Create Timetable
 def create_timetable(request):
+
+    users = User.objects.filter(role="TEACHER")
+    print(users)
 
     form = TimetableForm()
 
@@ -16,7 +21,9 @@ def create_timetable(request):
             return redirect("timetable_list")
 
     return render(request, "timetables/create_timetable.html", {
-        "form": form
+        "form": form,
+        "users":users,
+
     })
 
 

@@ -191,6 +191,278 @@ Responsive
 
 }
 
+
+/* ==========================
+   Section Title
+========================== */
+
+.content h2{
+    font-size:32px;
+    font-weight:700;
+    color:#1e293b;
+    margin-bottom:25px;
+}
+
+/* ==========================
+   Table
+========================== */
+
+.table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.table thead{
+    background:#2563eb;
+    color:#fff;
+}
+
+.table thead th{
+    padding:15px;
+    font-size:15px;
+    font-weight:600;
+    border:none;
+    text-align:center;
+}
+
+.table tbody td{
+    padding:15px;
+    font-size:14px;
+    color:#334155;
+    vertical-align:middle;
+    text-align:center;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.table tbody tr:hover{
+    background:#f8fafc;
+}
+
+/* ==========================
+   Buttons
+========================== */
+
+.btn-action{
+    width:36px;
+    height:36px;
+    border-radius:8px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 2px;
+    transition:.3s;
+}
+
+.btn-info{
+    background:#0ea5e9;
+    border:none;
+    color:#fff;
+}
+
+.btn-warning{
+    background:#f59e0b;
+    border:none;
+    color:#fff;
+}
+
+.btn-danger{
+    background:#ef4444;
+    border:none;
+    color:#fff;
+}
+
+.btn-action:hover{
+    transform:translateY(-2px);
+    opacity:.9;
+}
+
+/* ==========================
+   Alert
+========================== */
+
+.alert{
+    border-radius:10px;
+    padding:15px;
+    text-align:center;
+    font-weight:600;
+}
+
+/* ==========================
+   Responsive
+========================== */
+
+.table-responsive{
+    overflow-x:auto;
+}
+
+@media(max-width:768px){
+
+.table{
+    min-width:900px;
+}
+
+.content h2{
+    font-size:24px;
+}
+
+}
+
+
+
+
+
+.btn-primary {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(124, 58, 237, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #6d28d9, #5b21b6);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.btn-primary:focus {
+    color: #fff;
+    box-shadow: 0 0 0 0.25rem rgba(124, 58, 237, 0.25);
+}
+
+.btn-primary i {
+    font-size: 16px;
+}
+
+
+
+
+.button-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+
+
+
+
+.student-card{
+    max-width:900px;
+    margin:30px auto;
+    border:none;
+    border-radius:16px;
+    background:#fff;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.card-body{
+    padding:35px;
+}
+
+.form-label{
+    font-size:15px;
+    font-weight:600;
+    color:#444;
+    margin-bottom:8px;
+}
+
+.form-control,
+.form-select{
+    width:100%;
+    height:48px;
+    border:1px solid #dcdcdc;
+    border-radius:10px;
+    padding:10px 14px;
+    transition:all .3s ease;
+    box-shadow:none;
+}
+
+.form-control:focus,
+.form-select:focus{
+    border-color:#6f42c1;
+    box-shadow:0 0 0 .2rem rgba(111,66,193,.15);
+}
+
+textarea.form-control{
+    min-height:120px;
+    resize:vertical;
+}
+
+
+
+.row.g-4{
+    --bs-gutter-y:1.25rem;
+}
+
+@media (max-width:768px){
+
+    .student-card{
+        max-width:100%;
+        margin:15px;
+    }
+
+    .card-body{
+        padding:20px;
+    }
+
+}
+
+
+.btn-primary {
+    text-decoration: none !important;
+}
+
+.btn-primary:hover {
+    text-decoration: none !important;
+}
+
+
+.button-group{
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+
+
+.btn-cancel{
+    background-color:#6f42c1;
+    border-color:#6f42c1;
+    color:#fff;
+    padding:10px 20px;
+    border-radius:8px;
+    font-weight:500;
+    text-decoration:none;
+}
+
+.btn-cancel:hover{
+    background-color:#5a32a3;
+    border-color:#5a32a3;
+    color:#fff;
+    text-decoration:none;
+}
+
+
 </style>
 
 </head>
@@ -204,38 +476,105 @@ Responsive
 <div class="logo">
 Smart College
 </div>
-
 <ul>
 
-<li><a href="#" class="active"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+    <li>
+        <a href="?section=dashboard"
+           class="{% if section == 'dashboard' or not section %}active{% endif %}">
+            <i class="fa-solid fa-house"></i> Dashboard
+        </a>
+    </li>
 
-<li><a href="#"><i class="fa-solid fa-users"></i> Users</a></li>
+    <li>
+        <a href="?section=users"
+           class="{% if section == 'users' %}active{% endif %}">
+            <i class="fa-solid fa-users"></i> Users
+        </a>
+    </li>
 
-<li><a href="{% url 'student_list' %}"><i class="fa-solid fa-user-graduate"></i> Students</a></li> 
+    <li>
+        <a href="?section=students"
+           class="{% if section == 'students' %}active{% endif %}">
+            <i class="fa-solid fa-user-graduate"></i> Students
+        </a>
+    </li>
 
-<li><a href="{% url 'teacher_list' %}"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a></li>
+    <li>
+        <a href="?section=teachers"
+           class="{% if section == 'teachers' %}active{% endif %}">
+            <i class="fa-solid fa-chalkboard-user"></i> Teachers
+        </a>
+    </li>
 
-<li><a href="#"><i class="fa-solid fa-building-columns"></i> Departments</a></li>
+    <li>
+        <a href="?section=departments"
+           class="{% if section == 'departments' %}active{% endif %}">
+            <i class="fa-solid fa-building-columns"></i> Departments
+        </a>
+    </li>
 
-<li><a href="#"><i class="fa-solid fa-book-open"></i> Courses</a></li>
+    <li>
+        <a href="?section=courses"
+           class="{% if section == 'courses' %}active{% endif %}">
+            <i class="fa-solid fa-book-open"></i> Courses
+        </a>
+    </li>
 
-<li><a href="#"><i class="fa-solid fa-calendar-days"></i> Timetable</a></li>
+    <li>
+        <a href="?section=timetable"
+           class="{% if section == 'timetable' %}active{% endif %}">
+            <i class="fa-solid fa-calendar-days"></i> Timetable
+        </a>
+    </li>
 
-<li><a href="#"><i class="fa-solid fa-calendar-check"></i> Attendance</a></li>
+    <li>
+        <a href="?section=attendance"
+           class="{% if section == 'attendance' %}active{% endif %}">
+            <i class="fa-solid fa-calendar-check"></i> Attendance
+        </a>
+    </li>
 
-<li><a href="#"><i class="fa-solid fa-file-pen"></i> Exams</a></li>
+    <li>
+        <a href="?section=exams"
+           class="{% if section == 'exams' %}active{% endif %}">
+            <i class="fa-solid fa-file-pen"></i> Exams
+        </a>
+    </li>
 
-<li><a href="#"><i class="fa-solid fa-chart-line"></i> Results</a></li>
+    <li>
+        <a href="?section=results"
+           class="{% if section == 'results' %}active{% endif %}">
+            <i class="fa-solid fa-chart-line"></i> Results
+        </a>
+    </li>
 
-<li><a href="#"><i class="fa-solid fa-briefcase"></i> Placements</a></li>
+    <li>
+        <a href="?section=placements"
+           class="{% if section == 'placements' %}active{% endif %}">
+            <i class="fa-solid fa-briefcase"></i> Placements
+        </a>
+    </li>
 
-<li><a href="#"><i class="fa-solid fa-building"></i> Companies</a></li>
+    <li>
+    <a href="?section=company"
+       class="{% if section == 'company' %}active{% endif %}">
+        <i class="fa-solid fa-building"></i> Companies
+    </a>
+</li>
 
-<li><a href="#"><i class="fa-solid fa-file-lines"></i> Reports</a></li>
+    <li>
+        <a href="?section=reports"
+           class="{% if section == 'reports' %}active{% endif %}">
+            <i class="fa-solid fa-file-lines"></i> Reports
+        </a>
+    </li>
 
-<li><a href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
-
-
+    <li>
+        <a href="?section=settings"
+           class="{% if section == 'settings' %}active{% endif %}">
+            <i class="fa-solid fa-gear"></i> Settings
+        </a>
+    </li>
 
 </ul>
 
@@ -258,6 +597,8 @@ Logout
 
 <div class="content">
 
+{% if section == "dashboard" %}    
+
 
 <div class="cards">
 
@@ -276,25 +617,25 @@ Logout
 <div class="card">
 <i class="fa-solid fa-book-open"></i>
 <h3>Total Courses</h3>
-<h1>18</h1>
+<h1>{{ course_count }}</h1>
 </div>
 
 <div class="card">
 <i class="fa-solid fa-building-columns"></i>
 <h3>Total Departments</h3>
-<h1>8</h1>
+<h1>{{ department_count }}</h1>
 </div>
 
 <div class="card">
 <i class="fa-solid fa-calendar-check"></i>
 <h3>Today's Attendance</h3>
-<h1>228</h1>
+<h1>{{ attendance_count }}</h1>
 </div>
 
 <div class="card">
 <i class="fa-solid fa-briefcase"></i>
 <h3>Total Placements</h3>
-<h1>120</h1>
+<h1>4</h1>
 </div>
 
 <div class="card">
@@ -306,8 +647,1334 @@ Logout
 <div class="card">
 <i class="fa-solid fa-file-lines"></i>
 <h3>Total Reports</h3>
-<h1>15</h1>
+<h1>{{ report_count }}</h1>
 </div>
+
+
+
+{% elif section == "students" %}
+
+<div class="d-flex justify-content-end mb-4">
+
+    <a href="?section=student_create"
+       class="btn btn-primary">
+        <i class="fa-solid fa-user-plus"></i>
+        Add Student
+    </a>
+
+</div>
+
+
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Course</th>
+            <th>Semester</th>
+            <th>Phone</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in students %}
+        <tr>
+            <td>{{ student.student_id }}</td>
+            <td>{{ student.user.name }}</td>
+            <td>{{ student.user.email }}</td>
+            <td>{{ student.department.name }}</td>
+            <td>{{ student.course.name }}</td>
+            <td>{{ student.semester }}</td>
+            <td>{{ student.user.phone }}</td>
+
+            <td>
+
+                                
+
+                                <a href="" class="btn btn-info btn-sm btn-action" title="View">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+
+                                <a href="" class="btn btn-warning btn-sm btn-action" title="Edit">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+
+                                <a href="" class="btn btn-danger btn-sm btn-action" title="Delete">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                    
+
+                        <tr>
+
+                            
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% elif section == "student_create" %}
+
+<div class="card shadow border-0 student-card">
+
+    
+
+    <div class="card-body">
+
+        <form method="POST"  action="{% url 'student_create' %}">
+            {% csrf_token %}
+
+            <div class="row g-4">
+
+                <div class="col-lg-6">
+                    <label class="form-label">User</label>
+                    {{ form.user }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Student ID</label>
+                    {{ form.student_id }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Date of Birth</label>
+                    {{ form.dob }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Gender</label>
+                    {{ form.gender }}
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Address</label>
+                    {{ form.address }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Department</label>
+                    {{ form.department }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Course</label>
+                    {{ form.course }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Semester</label>
+                    {{ form.semester }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Admission Date</label>
+                    {{ form.admission_date }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Guardian Name</label>
+                    {{ form.guardian_name }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Guardian Phone</label>
+                    {{ form.guardian_phone }}
+                </div>
+
+            </div>
+
+           <div class="button-group">
+   <a href="?section=students" class="btn btn-cancel">
+    Cancel
+</a>
+
+    <button type="submit" class="btn btn-primary">
+        Save Student
+    </button>
+</div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+
+{% elif section == "teachers" %}
+
+<h2>Teachers</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Qualification</th>
+            <th>Experience</th>
+            <th>Salary</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for teacher in teachers %}
+
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ teacher.user.name }}</td>
+            <td>{{ teacher.department.name }}</td>
+            <td>{{ teacher.user.email }}</td>
+            <td>{{ teacher.user.phone }}</td>
+            <td>{{ teacher.qualification }}</td>
+            <td>{{ teacher.experience }} Years</td>
+            <td>₹ {{ teacher.salary }}</td>
+
+            <td>
+
+                <a href=""
+                   class="btn btn-info btn-sm btn-action"
+                   title="View">
+                    <i class="fa-solid fa-eye"></i>
+                </a>
+
+                <a href=""
+                   class="btn btn-warning btn-sm btn-action"
+                   title="Edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+
+                <a href=""
+                   class="btn btn-danger btn-sm btn-action"
+                   title="Delete">
+                    <i class="fa-solid fa-trash"></i>
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="9" class="text-center">
+                No Teachers Found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+</table>
+
+{% elif section == "departments" %}
+
+<h2>Departments</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Department Name</th>
+            <th>Code</th>
+            <th>Description</th>
+            <th>Created On</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for department in departments %}
+
+        <tr>
+
+            <td>{{ forloop.counter }}</td>
+
+            <td>{{ department.name }}</td>
+
+            <td>{{ department.code }}</td>
+
+            <td>{{ department.description }}</td>
+
+            <td>{{ department.created_at|date:"d M Y" }}</td>
+
+            <td>
+
+                <a href=""
+                   class="btn btn-info btn-sm btn-action"
+                   title="View">
+                    <i class="fa-solid fa-eye"></i>
+                </a>
+
+                <a href=""
+                   class="btn btn-warning btn-sm btn-action"
+                   title="Edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+
+                <a href=""
+                   class="btn btn-danger btn-sm btn-action"
+                   title="Delete">
+                    <i class="fa-solid fa-trash"></i>
+                </a>
+
+            </td>
+
+        </tr>
+
+    {% empty %}
+
+        <tr>
+            <td colspan="6" class="text-center">
+                No Departments Found.
+            </td>
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+</table>
+
+{% elif section == "courses" %}
+
+<h2>Courses</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Course Name</th>
+            <th>Course Code</th>
+            <th>Department</th>
+            <th>Duration</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for course in courses %}
+
+        <tr>
+
+            <td>{{ forloop.counter }}</td>
+
+            <td>{{ course.name }}</td>
+
+            <td>{{ course.code }}</td>
+
+            <td>{{ course.department.name }}</td>
+
+            <td>{{ course.duration }}</td>
+
+            <td>{{ course.description }}</td>
+
+            <td>
+
+                <a href=""
+                   class="btn btn-info btn-sm btn-action"
+                   title="View">
+                    <i class="fa-solid fa-eye"></i>
+                </a>
+
+                <a href=""
+                   class="btn btn-warning btn-sm btn-action"
+                   title="Edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+
+                <a href=""
+                   class="btn btn-danger btn-sm btn-action"
+                   title="Delete">
+                    <i class="fa-solid fa-trash"></i>
+                </a>
+
+            </td>
+
+        </tr>
+
+    {% empty %}
+
+        <tr>
+            <td colspan="7" class="text-center">
+                No Courses Found.
+            </td>
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+{% elif section == "timetable" %}
+
+<h2>Timetable</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Course</th>
+            <th>Teacher</th>
+            <th>Class</th>
+            <th>Room No</th>
+            <th>Day</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for timetable in timetables %}
+
+        <tr>
+
+            <td>{{ forloop.counter }}</td>
+
+            <td>{{ timetable.course.name }}</td>
+
+            <td>{{ timetable.teacher.user.name }}</td>
+
+            <td>{{ timetable.class_name }}</td>
+
+            <td>{{ timetable.room_no }}</td>
+
+            <td>{{ timetable.day }}</td>
+
+            <td>{{ timetable.start_time }}</td>
+
+            <td>{{ timetable.end_time }}</td>
+
+            <td>
+
+                <a href=""
+                   class="btn btn-info btn-sm btn-action"
+                   title="View">
+                    <i class="fa-solid fa-eye"></i>
+                </a>
+
+                <a href=""
+                   class="btn btn-warning btn-sm btn-action"
+                   title="Edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+
+                <a href=""
+                   class="btn btn-danger btn-sm btn-action"
+                   title="Delete">
+                    <i class="fa-solid fa-trash"></i>
+                </a>
+
+            </td>
+
+        </tr>
+
+    {% empty %}
+
+        <tr>
+            <td colspan="9" class="text-center">
+                No Timetable Records Found.
+            </td>
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+{% elif section == "attendance" %}
+
+<h2>Attendance</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for item in attendance %}
+
+        <tr>
+
+            <td>{{ forloop.counter }}</td>
+
+            <td>{{ item.student.student_id }}</td>
+
+            <td>{{ item.student.user.name }}</td>
+
+            <td>{{ item.date }}</td>
+
+            <td>
+                {% if item.status == "Present" %}
+
+                    <span class="badge bg-success">
+                        {{ item.status }}
+                    </span>
+
+                {% elif item.status == "Absent" %}
+
+                    <span class="badge bg-danger">
+                        {{ item.status }}
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-warning text-dark">
+                        {{ item.status }}
+                    </span>
+
+                {% endif %}
+            </td>
+
+            <td>
+
+                <a href=""
+                   class="btn btn-info btn-sm btn-action"
+                   title="View">
+                    <i class="fa-solid fa-eye"></i>
+                </a>
+
+                <a href=""
+                   class="btn btn-warning btn-sm btn-action"
+                   title="Edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+
+                <a href=""
+                   class="btn btn-danger btn-sm btn-action"
+                   title="Delete">
+                    <i class="fa-solid fa-trash"></i>
+                </a>
+
+            </td>
+
+        </tr>
+
+    {% empty %}
+
+        <tr>
+            <td colspan="6" class="text-center">
+                No Attendance Records Found.
+            </td>
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+
+{% elif section == "exams" %}
+
+<h2>Exams</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for item in attendance %}
+
+        <tr>
+
+            <td>{{ forloop.counter }}</td>
+
+            <td>{{ item.student.student_id }}</td>
+
+            <td>{{ item.student.user.name }}</td>
+
+            <td>{{ item.date }}</td>
+
+            <td>
+                {% if item.status == "Present" %}
+
+                    <span class="badge bg-success">
+                        {{ item.status }}
+                    </span>
+
+                {% elif item.status == "Absent" %}
+
+                    <span class="badge bg-danger">
+                        {{ item.status }}
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-warning text-dark">
+                        {{ item.status }}
+                    </span>
+
+                {% endif %}
+            </td>
+
+            <td>
+
+                <a href=""
+                   class="btn btn-info btn-sm btn-action"
+                   title="View">
+                    <i class="fa-solid fa-eye"></i>
+                </a>
+
+                <a href=""
+                   class="btn btn-warning btn-sm btn-action"
+                   title="Edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+
+                <a href=""
+                   class="btn btn-danger btn-sm btn-action"
+                   title="Delete">
+                    <i class="fa-solid fa-trash"></i>
+                </a>
+
+            </td>
+
+        </tr>
+
+    {% empty %}
+
+        <tr>
+            <td colspan="6" class="text-center">
+                No Attendance Records Found.
+            </td>
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+{% elif section == "exams" %}
+
+<h2>Exams</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Exam Name</th>
+            <th>Course</th>
+            <th>Exam Date</th>
+            <th>Total Marks</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for exam in exams %}
+
+    <tr>
+
+        <td>{{ forloop.counter }}</td>
+
+        <td>{{ exam.name }}</td>
+
+        <td>{{ exam.course.name }}</td>
+
+        <td>{{ exam.exam_date }}</td>
+
+        <td>{{ exam.total_marks }}</td>
+
+        <td>
+
+            <a href=""
+               class="btn btn-info btn-sm btn-action"
+               title="View">
+                <i class="fa-solid fa-eye"></i>
+            </a>
+
+            <a href=""
+               class="btn btn-warning btn-sm btn-action"
+               title="Edit">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+
+            <a href=""
+               class="btn btn-danger btn-sm btn-action"
+               title="Delete">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+        <td colspan="6" class="text-center">
+            No Exams Found.
+        </td>
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+
+{% elif section == "exams" %}
+
+<h2>Result</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Exam Name</th>
+            <th>Course</th>
+            <th>Exam Date</th>
+            <th>Total Marks</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for exam in exams %}
+
+    <tr>
+
+        <td>{{ forloop.counter }}</td>
+
+        <td>{{ exam.name }}</td>
+
+        <td>{{ exam.course.name }}</td>
+
+        <td>{{ exam.exam_date }}</td>
+
+        <td>{{ exam.total_marks }}</td>
+
+        <td>
+
+            <a href=""
+               class="btn btn-info btn-sm btn-action"
+               title="View">
+                <i class="fa-solid fa-eye"></i>
+            </a>
+
+            <a href=""
+               class="btn btn-warning btn-sm btn-action"
+               title="Edit">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+
+            <a href=""
+               class="btn btn-danger btn-sm btn-action"
+               title="Delete">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+        <td colspan="6" class="text-center">
+            No Exams Found.
+        </td>
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+{% elif section == "results" %}
+
+<h2>Results</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Course</th>
+            <th>Marks Obtained</th>
+            <th>Maximum Marks</th>
+            <th>Grade</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for mark in marks %}
+
+    <tr>
+
+        <td>{{ forloop.counter }}</td>
+
+        <td>{{ mark.student.student_id }}</td>
+
+        <td>{{ mark.student.user.name }}</td>
+
+        <td>{{ mark.course.name }}</td>
+
+        <td>{{ mark.marks_obtained }}</td>
+
+        <td>{{ mark.max_marks }}</td>
+
+        <td>
+            <span class="badge bg-success">
+                {{ mark.grade }}
+            </span>
+        </td>
+
+        <td>
+
+            <a href=""
+               class="btn btn-info btn-sm btn-action"
+               title="View">
+                <i class="fa-solid fa-eye"></i>
+            </a>
+
+            <a href=""
+               class="btn btn-warning btn-sm btn-action"
+               title="Edit">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+
+            <a href=""
+               class="btn btn-danger btn-sm btn-action"
+               title="Delete">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+        <td colspan="8" class="text-center">
+            No Results Found.
+        </td>
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+
+{% elif section == "marks" %}
+
+<h2>Results</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Course</th>
+            <th>Marks Obtained</th>
+            <th>Maximum Marks</th>
+            <th>Grade</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for mark in marks %}
+
+    <tr>
+
+        <td>{{ forloop.counter }}</td>
+
+        <td>{{ mark.student.student_id }}</td>
+
+        <td>{{ mark.student.user.name }}</td>
+
+        <td>{{ mark.course.name }}</td>
+
+        <td>{{ mark.marks_obtained }}</td>
+
+        <td>{{ mark.max_marks }}</td>
+
+        <td>
+            <span class="badge bg-success">
+                {{ mark.grade }}
+            </span>
+        </td>
+
+        <td>
+
+            <a href=""
+               class="btn btn-info btn-sm btn-action"
+               title="View">
+                <i class="fa-solid fa-eye"></i>
+            </a>
+
+            <a href=""
+               class="btn btn-warning btn-sm btn-action"
+               title="Edit">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+
+            <a href=""
+               class="btn btn-danger btn-sm btn-action"
+               title="Delete">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+        <td colspan="8" class="text-center">
+            No Results Found.
+        </td>
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+
+{% elif section == "placements" %}
+
+<h2>Placements</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Student</th>
+            <th>Company</th>
+            <th>Job Role</th>
+            <th>Package</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for placement in placements %}
+
+    <tr>
+
+        <td>{{ forloop.counter }}</td>
+
+        <td>{{ placement.student.user.name }}</td>
+
+        <td>{{ placement.company.name }}</td>
+
+        <td>{{ placement.job_role }}</td>
+
+        <td>₹ {{ placement.package }}</td>
+
+        <td>
+
+            {% if placement.status == "Placed" %}
+                <span class="badge bg-success">
+                    {{ placement.status }}
+                </span>
+
+            {% elif placement.status == "Pending" %}
+                <span class="badge bg-warning text-dark">
+                    {{ placement.status }}
+                </span>
+
+            {% else %}
+                <span class="badge bg-danger">
+                    {{ placement.status }}
+                </span>
+            {% endif %}
+
+        </td>
+
+        <td>
+
+            <a href=""
+               class="btn btn-info btn-sm btn-action"
+               title="View">
+                <i class="fa-solid fa-eye"></i>
+            </a>
+
+            <a href=""
+               class="btn btn-warning btn-sm btn-action"
+               title="Edit">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+
+            <a href=""
+               class="btn btn-danger btn-sm btn-action"
+               title="Delete">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+        <td colspan="7" class="text-center">
+            No Placements Found.
+        </td>
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+
+{% elif section == "company" %}
+
+<h2>Companies</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Company Name</th>
+            <th>Location</th>
+            <th>Website</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for company in companies %}
+
+    <tr>
+
+        <td>{{ forloop.counter }}</td>
+
+        <td>{{ company.name }}</td>
+
+        <td>{{ company.location }}</td>
+
+        <td>{{ company.website }}</td>
+
+        <td>{{ company.email }}</td>
+
+        <td>{{ company.phone }}</td>
+
+        <td>
+
+            <a href=""
+               class="btn btn-info btn-sm btn-action"
+               title="View">
+                <i class="fa-solid fa-eye"></i>
+            </a>
+
+            <a href=""
+               class="btn btn-warning btn-sm btn-action"
+               title="Edit">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+
+            <a href=""
+               class="btn btn-danger btn-sm btn-action"
+               title="Delete">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+        <td colspan="7" class="text-center">
+            No Companies Found.
+        </td>
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+
+
+{% elif section == "reports" %}
+
+<h2>Reports</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Report Type</th>
+            <th>Generated By</th>
+            <th>Generated On</th>
+            <th>File</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for report in reports %}
+
+    <tr>
+
+        <td>{{ forloop.counter }}</td>
+
+        <td>{{ report.report_type }}</td>
+
+        <td>{{ report.generated_by.name }}</td>
+
+        <td>{{ report.generated_on|date:"d M Y H:i" }}</td>
+
+        <td>
+            {% if report.file %}
+                <a href="{{ report.file.url }}"
+                   target="_blank"
+                   class="btn btn-primary btn-sm">
+                    Download
+                </a>
+            {% else %}
+                <span class="badge bg-secondary">
+                    No File
+                </span>
+            {% endif %}
+        </td>
+
+        <td>
+
+            <a href=""
+               class="btn btn-info btn-sm btn-action"
+               title="View">
+                <i class="fa-solid fa-eye"></i>
+            </a>
+
+            <a href=""
+               class="btn btn-warning btn-sm btn-action"
+               title="Edit">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+
+            <a href=""
+               class="btn btn-danger btn-sm btn-action"
+               title="Delete">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+        <td colspan="6" class="text-center">
+            No Reports Found.
+        </td>
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+</table>
+
+
+
+{% elif section == "users" %}
+
+<h2>Users</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for user in users %}
+
+    <tr>
+
+        <td>{{ forloop.counter }}</td>
+
+        <td>{{ user.name }}</td>
+
+        <td>{{ user.email }}</td>
+
+        <td>{{ user.phone }}</td>
+
+        <td>
+            {% if user.role == "ADMIN" %}
+                <span class="badge bg-danger">Admin</span>
+
+            {% elif user.role == "TEACHER" %}
+                <span class="badge bg-primary">Teacher</span>
+
+            {% elif user.role == "STUDENT" %}
+                <span class="badge bg-success">Student</span>
+
+            {% else %}
+                <span class="badge bg-secondary">
+                    {{ user.role }}
+                </span>
+            {% endif %}
+        </td>
+
+        <td>
+
+            <a href=""
+               class="btn btn-info btn-sm btn-action"
+               title="View">
+                <i class="fa-solid fa-eye"></i>
+            </a>
+
+            <a href=""
+               class="btn btn-warning btn-sm btn-action"
+               title="Edit">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+
+            <a href=""
+               class="btn btn-danger btn-sm btn-action"
+               title="Delete">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+        <td colspan="6" class="text-center">
+            No Users Found.
+        </td>
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+
+
+
+
+{% endif %}
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </div>
 

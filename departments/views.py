@@ -87,7 +87,7 @@ def department_update(request, pk):
                 "Department updated successfully."
             )
 
-            return redirect("department-list")
+            return redirect("department_list")
 
     else:
 

@@ -3,11 +3,7 @@ from . import views
 
 urlpatterns = [
 
-    path(
-        "",
-        views.department_list,
-        name="department-list"
-    ),
+    path("", views.department_list, name="department_list"),
 
     path(
         "create/",

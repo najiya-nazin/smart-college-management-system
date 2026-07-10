@@ -16,8 +16,18 @@ from .forms import (
     
 )
 
+from courses.models import Course
+from departments.models import Department
+from attendences.models import Attendance
+from reports.models import Report
+
 from students.forms import StudentForm   
 from students.models import Student
+from teachers.models import Teacher
+from timetable.models import Timetable
+from exams.models import Exam
+from placement.models import Placement
+from placement.models import Company
 
 
 def register(request):
@@ -78,27 +88,162 @@ def login_view(request):
         {"form": form},
     )
 
-@login_required
-def admin_dashboard(request):
+# @login_required
+# def admin_dashboard(request):
 
-    student_count = User.objects.filter(role='STUDENT').count()
+#     student_count = User.objects.filter(role='STUDENT').count()
 
-    teacher_count = User.objects.filter(role='TEACHER').count()
+#     teacher_count = User.objects.filter(role='TEACHER').count()
 
-    students = Student.objects.all()
+#     students = Student.objects.all()
 
     
 
-    return render(
-        request,
-        "accounts/admin_dashboard.html",
-        {
-            "students_count":student_count,
-            "students":students,
-            "teacher_count":teacher_count,
+#     return render(
+#         request,
+#         "accounts/admin_dashboard.html",
+#         {
+#             "students_count":student_count,
+#             "students":students,
+#             "teacher_count":teacher_count,
             
-        }
-    )
+#         }
+#     )
+
+
+
+# @login_required
+# def admin_dashboard(request):
+
+#     student_count = User.objects.filter(role="STUDENT").count()
+#     teacher_count = User.objects.filter(role="TEACHER").count()
+
+#     course_count = Course.objects.count()
+#     department_count = Department.objects.count()
+#     attendance_count = Attendance.objects.count()
+#     report_count = Report.objects.count()
+
+#     students = Student.objects.select_related(
+#         "user",
+#         "department",
+#         "course"
+#     )
+
+#     return render(
+#         request,
+#         "accounts/admin_dashboard.html",
+#         {
+#             "students_count": student_count,
+#             "teacher_count": teacher_count,
+#             "course_count": course_count,
+#             "department_count": department_count,
+#             "attendance_count": attendance_count,
+#             "report_count": report_count,
+#             "students": students,
+#         }
+#     )
+
+
+
+
+@login_required
+def admin_dashboard(request):
+
+    section = request.GET.get("section", "dashboard")
+
+    context = {
+        "section": section,
+
+        "students_count": User.objects.filter(role="STUDENT").count(),
+        "teacher_count": User.objects.filter(role="TEACHER").count(),
+        "course_count": Course.objects.count(),
+        "department_count": Department.objects.count(),
+        "attendance_count": Attendance.objects.count(),
+        "report_count": Report.objects.count(),
+    }
+
+    if section == "students":
+        context["students"] = Student.objects.select_related(
+            "user",
+            "department",
+            "course"
+        )
+
+    elif section == "teachers":
+        context["teachers"] = Teacher.objects.select_related(
+            "user",
+            "department"
+        )
+
+    elif section == "departments":
+        context["departments"] = Department.objects.all()
+
+    elif section == "courses":
+        context["courses"] = Course.objects.select_related(
+            "department"
+        )
+
+    elif section == "timetable":
+
+        context["timetables"] = Timetable.objects.select_related(
+            "course",
+            "teacher__user"
+        ) 
+
+
+    elif section == "attendance":
+        context["attendance"] = Attendance.objects.select_related(
+            "student",
+            "student__user"
+        ).order_by("-date")   
+
+
+    elif section == "exams":
+        context["exams"] = Exam.objects.select_related(
+            "course"
+        ).order_by("-exam_date")    
+
+
+    elif section == "placements":
+
+        context["placements"] = Placement.objects.select_related(
+            "student",
+            "student__user",
+            "company"
+        ).order_by("-placement_date")   
+
+
+    elif section == "company":
+        context["companies"] = Company.objects.all().order_by("name")
+
+    elif section == "reports":
+        context["reports"] = Report.objects.select_related(
+            "generated_by"
+        ).order_by("-generated_on")
+
+
+    elif section == "student_create":
+
+
+        if request.method == "POST":
+
+            form = StudentForm(request.POST)
+
+
+            if form.is_valid():
+
+                form.save()
+
+                return redirect("/admin_dashboard/?section=students")
+
+        else:
+
+            form = StudentForm()
+
+
+            context["form"] = form
+
+    return render(request, "accounts/admin_dashboard.html", context)
 
 
 

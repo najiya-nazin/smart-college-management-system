@@ -1,10 +1,232 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Marks List</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+
+        body{
+            background:#f4f7fc;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        .card{
+            border:none;
+            border-radius:18px;
+            overflow:hidden;
+            box-shadow:0 10px 30px rgba(0,0,0,.08);
+        }
+
+        .card-header{
+            background:linear-gradient(135deg,#0d6efd,#3f7bff);
+            color:#fff;
+            padding:18px 25px;
+        }
+
+        .card-header h3{
+            margin:0;
+            font-weight:700;
+        }
+
+        .btn-add{
+            background:#198754;
+            color:#fff;
+            border:none;
+            border-radius:10px;
+            padding:10px 18px;
+            font-weight:600;
+        }
+
+        .btn-add:hover{
+            background:#157347;
+            color:#fff;
+        }
+
+        table th{
+            background:#0d6efd;
+            color:#fff;
+            text-align:center;
+            vertical-align:middle;
+        }
+
+        table td{
+            text-align:center;
+            vertical-align:middle;
+        }
+
+        .badge-course{
+            background:#6f42c1;
+            color:#fff;
+            padding:7px 12px;
+            border-radius:20px;
+        }
+
+        .badge-grade{
+            background:#198754;
+            color:#fff;
+            padding:7px 12px;
+            border-radius:20px;
+            font-size:14px;
+        }
+
+        .btn-action{
+            width:38px;
+            height:38px;
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+
+    </style>
+
 </head>
+
 <body>
 
+<div class="container py-5">
+
+    <div class="card">
+
+        <div class="card-header d-flex justify-content-between align-items-center">
+
+            <h3>
+                <i class="bi bi-journal-check"></i>
+                Student Marks List
+            </h3>
+
+            <a href="{% url 'marks-create' %}" class="btn btn-add">
+                <i class="bi bi-plus-circle-fill"></i>
+                Add Marks
+            </a>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>#</th>
+                        <th>Student ID</th>
+                        <th>Student Name</th>
+                        <th>Course</th>
+                        <th>Marks Obtained</th>
+                        <th>Maximum Marks</th>
+                        <th>Grade</th>
+                        <th width="180">Action</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for mark in marks %}
+
+                    <tr>
+
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>{{ mark.student.student_id }}</td>
+
+                        <td>{{ mark.student.user.name }}</td>
+
+                        <td>
+                            <span class="badge-course">
+                                {{ mark.course.name }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <strong>{{ mark.marks_obtained }}</strong>
+                        </td>
+
+                        <td>{{ mark.max_marks }}</td>
+
+                        <td>
+                            <span class="badge-grade">
+                                {{ mark.grade }}
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <div class="d-flex justify-content-center gap-2">
+
+                                <a href="{% url 'marks-detail' mark.id %}"
+                                   class="btn btn-info btn-sm btn-action"
+                                   title="View">
+                                    <i class="bi bi-eye-fill"></i>
+                                </a>
+
+                                <a href="{% url 'marks-update' mark.id %}"
+                                   class="btn btn-warning btn-sm btn-action"
+                                   title="Edit">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+
+                                <a href=""
+                                   class="btn btn-danger btn-sm btn-action"
+                                   title="Delete">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="8">
+
+                            <div class="alert alert-warning mb-0">
+
+                                <i class="bi bi-exclamation-circle"></i>
+
+                                No Marks Found.
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 </body>
+
 </html>

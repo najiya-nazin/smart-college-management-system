@@ -1,18 +1,41 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import get_user_model
 from .models import Teacher
 from .forms import TeacherForm
 from accounts.models import Role
 from django.contrib.auth.decorators import login_required
 
-User = get_user_model()
+# User = get_user_model()
 
-# Create Teacher
+# # Create Teacher
+# def add_teacher(request):
+#     form = TeacherForm()
+
+#     users = User.objects.filter(role="TEACHER")
+#     print(users)
+
+#     if request.method == "POST":
+#         form = TeacherForm(request.POST)
+
+#         if form.is_valid():
+#             form.save()
+#             return redirect("teacher_list")
+
+#     return render(request, "teacher/add_teacher.html", {
+#         "form": form,
+#         "users": users,
+#     })
+
+# # List Teachers
+# def teacher_list(request):
+#     teachers = Teacher.objects.all()
+
+#     return render(request, "teacher/teacher_list.html", {
+#         "teachers": teachers
+#     })
+
+
+
 def add_teacher(request):
-    form = TeacherForm()
-
-    users = User.objects.filter(role="TEACHER")
-    print(users)
 
     if request.method == "POST":
         form = TeacherForm(request.POST)
@@ -21,14 +44,20 @@ def add_teacher(request):
             form.save()
             return redirect("teacher_list")
 
+    else:
+        form = TeacherForm()
+
     return render(request, "teacher/add_teacher.html", {
         "form": form,
-        "users": users,
     })
 
-# List Teachers
+
 def teacher_list(request):
-    teachers = Teacher.objects.all()
+
+    teachers = Teacher.objects.select_related(
+        "user",
+        "department"
+    )
 
     return render(request, "teacher/teacher_list.html", {
         "teachers": teachers

@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Department</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        body{
+            background:#f4f7fc;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        .card{
+            border:none;
+            border-radius:18px;
+            box-shadow:0 15px 35px rgba(0,0,0,.08);
+            overflow:hidden;
+        }
+
+        .card-header{
+            background:linear-gradient(135deg,#0d6efd,#3f7bff);
+            color:#fff;
+            padding:20px;
+        }
+
+        .card-header h3{
+            margin:0;
+            font-weight:700;
+        }
+
+        .card-body{
+            padding:35px;
+        }
+
+        .section-title{
+            font-size:18px;
+            font-weight:700;
+            color:#0d6efd;
+            border-left:5px solid #0d6efd;
+            padding-left:10px;
+            margin-bottom:25px;
+        }
+
+        .form-label{
+            font-weight:600;
+            color:#495057;
+        }
+
+        .form-control{
+            border-radius:10px;
+            height:48px;
+        }
+
+        textarea.form-control{
+            height:120px;
+            resize:none;
+        }
+
+        .form-control:focus{
+            border-color:#0d6efd;
+            box-shadow:0 0 0 .2rem rgba(13,110,253,.15);
+        }
+
+        .btn-save{
+            background:#0d6efd;
+            color:#fff;
+            border:none;
+            border-radius:10px;
+            padding:10px 25px;
+            font-weight:600;
+        }
+
+        .btn-save:hover{
+            background:#0b5ed7;
+            color:#fff;
+        }
+
+        .btn-back{
+            border-radius:10px;
+            padding:10px 25px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card">
+
+                <div class="card-header">
+                    <h3>
+                        <i class="bi bi-building-fill-add"></i>
+                        Add Department
+                    </h3>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="section-title">
+                        Department Information
+                    </div>
+
+                    <form method="POST" class="needs-validation" novalidate>
+
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+    <label class="form-label">Department Name</label>
+    {{ form.name }}
+    {{ form.name.errors }}
+
+    <div class="invalid-feedback">
+        Please enter the department name.
+    </div>
+</div>
+
+                        <div class="mb-3">
+    <label class="form-label">Department Code</label>
+    {{ form.code }}
+    {{ form.code.errors }}
+
+    <div class="invalid-feedback">
+        Please enter the department code.
+    </div>
+</div>
+
+                        <div class="mb-3">
+    <label class="form-label">Description</label>
+    {{ form.description }}
+    {{ form.description.errors }}
+
+    <div class="invalid-feedback">
+        Please enter the description.
+    </div>
+
+</div>
+
+                        <hr>
+
+                        <div class="text-end">
+
+                            <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary btn-back">
+                                <i class="bi bi-arrow-left-circle"></i>
+                                Back
+                            </a>
+
+                            <button type="submit" class="btn btn-save">
+                                <i class="bi bi-check-circle-fill"></i>
+                                Save Department
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+<script>
+(() => {
+    'use strict';
+
+    const forms = document.querySelectorAll('.needs-validation');
+
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+
+        }, false);
+    });
+
+})();
+</script>
+</html>

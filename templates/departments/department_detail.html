@@ -1,0 +1,244 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department Details</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+
+        body{
+            background:#f4f7fc;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        .card{
+            border:none;
+            border-radius:18px;
+            overflow:hidden;
+            box-shadow:0 12px 35px rgba(0,0,0,.08);
+        }
+
+        .card-header{
+            background:linear-gradient(135deg,#0d6efd,#4b86ff);
+            color:#fff;
+            padding:22px 30px;
+        }
+
+        .card-header h3{
+            font-weight:700;
+            margin:0;
+        }
+
+        .card-body{
+            padding:35px;
+        }
+
+        .info-box{
+            background:#f8f9fa;
+            border:1px solid #dee2e6;
+            border-radius:12px;
+            padding:18px;
+            height:100%;
+        }
+
+        .info-title{
+            font-size:13px;
+            text-transform:uppercase;
+            color:#6c757d;
+            font-weight:700;
+            margin-bottom:8px;
+        }
+
+        .info-value{
+            font-size:18px;
+            font-weight:600;
+            color:#212529;
+        }
+
+        .description-box{
+            background:#f8f9fa;
+            border:1px solid #dee2e6;
+            border-radius:12px;
+            padding:18px;
+            min-height:120px;
+        }
+
+        .badge-code{
+            background:#0d6efd;
+            color:#fff;
+            font-size:15px;
+            padding:8px 15px;
+            border-radius:20px;
+        }
+
+        .btn{
+            border-radius:10px;
+            padding:10px 22px;
+            font-weight:600;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card">
+
+                <div class="card-header d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <h3>
+                            <i class="bi bi-building me-2"></i>
+                            Department Details
+                        </h3>
+
+                        <small class="opacity-75">
+                            View Department Information
+                        </small>
+
+                    </div>
+
+                    <i class="bi bi-bank2 fs-1 opacity-50"></i>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+
+                            <div class="info-box">
+
+                                <div class="info-title">
+                                    Department Name
+                                </div>
+
+                                <div class="info-value">
+                                    {{ department.name }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="info-box">
+
+                                <div class="info-title">
+                                    Department Code
+                                </div>
+
+                                <div class="info-value">
+
+                                    <span class="badge-code">
+                                        {{ department.code }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-12">
+
+                            <div class="info-title">
+                                Description
+                            </div>
+
+                            <div class="description-box">
+
+                                {% if department.description %}
+                                    {{ department.description }}
+                                {% else %}
+                                    <span class="text-muted">
+                                        No description available.
+                                    </span>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="info-box">
+
+                                <div class="info-title">
+                                    Created Date
+                                </div>
+
+                                <div class="info-value">
+                                    {{ department.created_at|date:"d M Y" }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="info-box">
+
+                                <div class="info-title">
+                                    Last Updated
+                                </div>
+
+                                <div class="info-value">
+                                    {{ department.updated_at|date:"d M Y" }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="d-flex justify-content-end gap-2">
+
+
+                        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left-circle me-1"></i>
+                            Back
+                        </a>
+
+                        
+
+                        <a href="" class="btn btn-danger">
+                            <i class="bi bi-trash-fill me-1"></i>
+                            Delete
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
