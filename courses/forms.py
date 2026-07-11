@@ -96,11 +96,11 @@ class CourseForm(forms.ModelForm):
     # ---------------- Duration Validation ----------------
 
     def clean_duration(self):
-        duration = self.cleaned_data.get("duration")
+        duration = int(self.cleaned_data.get("duration"))
 
         if duration <= 0:
             raise forms.ValidationError(
-                "Duration must be greater than 0."
+            "Duration must be greater than 0."
             )
 
         return duration

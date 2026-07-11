@@ -463,6 +463,39 @@ textarea.form-control{
 }
 
 
+
+
+.btn-back{
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 8px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all .3s ease;
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.25);
+}
+
+.btn-back:hover{
+    background: linear-gradient(135deg, #6d28d9, #5b21b6);
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.35);
+}
+
+.btn-back:active{
+    transform: scale(0.98);
+}
+
+.btn-back i{
+    font-size: 14px;
+}
 </style>
 
 </head>
@@ -695,11 +728,15 @@ Logout
 
                                 
 
-                                <a href="" class="btn btn-info btn-sm btn-action" title="View">
+                                <a href="?section=student_detail&id={{ student.id }}"
+                                    class="btn btn-info btn-sm btn-action"
+                                    title="View">
                                     <i class="fa-solid fa-eye"></i>
                                 </a>
 
-                                <a href="" class="btn btn-warning btn-sm btn-action" title="Edit">
+                                <a href="?section=student_update&id={{ student.id }}"
+                                    class="btn btn-warning btn-sm btn-action"
+                                    title="Edit">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
 
@@ -809,11 +846,197 @@ Logout
 </div>
 
 
+{% elif section == "student_detail" %}
+
+<div class="card shadow border-0">
+
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">
+            <i class="fa-solid fa-user-graduate me-2"></i>
+            Student Details
+        </h4>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-striped table-bordered align-middle mb-4">
+
+            <tr>
+                <th width="30%">Student ID</th>
+                <td>{{ student.student_id }}</td>
+            </tr>
+
+            <tr>
+                <th>Name</th>
+                <td>{{ student.user.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Email</th>
+                <td>{{ student.user.email }}</td>
+            </tr>
+
+            <tr>
+                <th>Phone</th>
+                <td>{{ student.user.phone }}</td>
+            </tr>
+
+            <tr>
+                <th>Department</th>
+                <td>{{ student.department.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Course</th>
+                <td>{{ student.course.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Semester</th>
+                <td>{{ student.semester }}</td>
+            </tr>
+
+            <tr>
+                <th>Date of Birth</th>
+                <td>{{ student.dob|date:"d M Y" }}</td>
+            </tr>
+
+            <tr>
+                <th>Gender</th>
+                <td>{{ student.gender }}</td>
+            </tr>
+
+            <tr>
+                <th>Address</th>
+                <td>{{ student.address }}</td>
+            </tr>
+
+            <tr>
+                <th>Guardian Name</th>
+                <td>{{ student.guardian_name }}</td>
+            </tr>
+
+            <tr>
+                <th>Guardian Phone</th>
+                <td>{{ student.guardian_phone }}</td>
+            </tr>
+
+        </table>
+
+        <div class="text-end">
+    <a href="?section=students" class="btn-back">
+        
+        Back to Students
+    </a>
+</div>
+
+    </div>
+
+</div>
+
+
+
+
+
+{% elif section == "student_update" %}
+
+<div class="card shadow border-0 student-card">
+
+    <div class="card-body">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="row g-4">
+
+                <div class="col-lg-6">
+                    <label class="form-label">User</label>
+                    {{ form.user }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Student ID</label>
+                    {{ form.student_id }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Date of Birth</label>
+                    {{ form.dob }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Gender</label>
+                    {{ form.gender }}
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Address</label>
+                    {{ form.address }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Department</label>
+                    {{ form.department }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Course</label>
+                    {{ form.course }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Semester</label>
+                    {{ form.semester }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Admission Date</label>
+                    {{ form.admission_date }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Guardian Name</label>
+                    {{ form.guardian_name }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Guardian Phone</label>
+                    {{ form.guardian_phone }}
+                </div>
+
+            </div>
+
+            <div class="button-group">
+                <a href="?section=students" class="btn-back">
+                    Cancel
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Update Student
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+
+
 
 
 {% elif section == "teachers" %}
 
 <h2>Teachers</h2>
+
+<a href="?section=teacher_create"
+   class="btn btn-primary mb-3">
+    <i class="fa-solid fa-user-plus"></i>
+    Add Teacher
+</a>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -846,17 +1069,17 @@ Logout
 
             <td>
 
-                <a href=""
-                   class="btn btn-info btn-sm btn-action"
-                   title="View">
+                <a href="?section=teacher_detail&id={{ teacher.id }}"
+                    class="btn btn-info btn-sm btn-action"
+                    title="View">
                     <i class="fa-solid fa-eye"></i>
                 </a>
 
-                <a href=""
-                   class="btn btn-warning btn-sm btn-action"
-                   title="Edit">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </a>
+                <a href="/admin_dashboard/?section=teacher_update&id={{ teacher.id }}"
+   class="btn btn-warning btn-sm btn-action"
+   title="Edit">
+    <i class="fa-solid fa-pen-to-square"></i>
+</a>
 
                 <a href=""
                    class="btn btn-danger btn-sm btn-action"
@@ -881,11 +1104,185 @@ Logout
     </tbody>
 
 </table>
-</table>
+
+
+
+{% elif section == "teacher_create" %}
+
+<div class="container py-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-primary text-white py-3">
+            <h4 class="mb-0">
+                <i class="fa-solid fa-user-plus me-2"></i>
+                Add Teacher
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+            {% endif %}
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">User</label>
+                        {{ form.user }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Department</label>
+                        {{ form.department }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Qualification</label>
+                        {{ form.qualification }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Experience</label>
+                        {{ form.experience }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Salary</label>
+                        {{ form.salary }}
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <button type="submit" class="btn btn-success">
+                    <i class="fa-solid fa-floppy-disk me-2"></i>
+                    Save
+                </button>
+
+                <a href="?section=teachers"
+                   class="btn btn-secondary ms-2">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+{% elif section == "teacher_detail" %}
+
+<div class="card shadow border-0">
+
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Teacher Details</h4>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Name</th>
+                <td>{{ teacher.user.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Email</th>
+                <td>{{ teacher.user.email }}</td>
+            </tr>
+
+            <tr>
+                <th>Phone</th>
+                <td>{{ teacher.user.phone }}</td>
+            </tr>
+
+            <tr>
+                <th>Department</th>
+                <td>{{ teacher.department.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Qualification</th>
+                <td>{{ teacher.qualification }}</td>
+            </tr>
+
+            <tr>
+                <th>Experience</th>
+                <td>{{ teacher.experience }} Years</td>
+            </tr>
+
+            <tr>
+                <th>Salary</th>
+                <td>₹ {{ teacher.salary }}</td>
+            </tr>
+
+        </table>
+
+        <div class="text-end">
+            <a href="?section=teachers" class="btn-back">
+                Back to Teachers
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+{% elif section == "teacher_update" %}
+
+<div class="card shadow">
+    <div class="card-header bg-warning text-dark">
+        <h4>Edit Teacher</h4>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-success">
+                Update Teacher
+            </button>
+
+            <a href="?section=teachers" class="btn btn-secondary">
+                Cancel
+            </a>
+        </form>
+
+    </div>
+</div>
+
 
 {% elif section == "departments" %}
 
 <h2>Departments</h2>
+
+<a href="?section=department_create"
+   class="btn btn-primary mb-3">
+    <i class="fa-solid fa-plus"></i>
+    Add Department
+</a>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -917,15 +1314,15 @@ Logout
 
             <td>
 
-                <a href=""
-                   class="btn btn-info btn-sm btn-action"
-                   title="View">
-                    <i class="fa-solid fa-eye"></i>
-                </a>
+                <a href="/admin_dashboard/?section=department_detail&id={{ department.id }}"
+   class="btn btn-info btn-sm btn-action"
+   title="View">
+    <i class="fa-solid fa-eye"></i>
+</a>
 
-                <a href=""
-                   class="btn btn-warning btn-sm btn-action"
-                   title="Edit">
+                <a href="/admin_dashboard/?section=department_update&id={{ department.id }}"
+                    class="btn btn-warning btn-sm btn-action"
+                    title="Edit">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </a>
 
@@ -952,9 +1349,165 @@ Logout
     </tbody>
 </table>
 
+
+
+{% elif section == "department_create" %}
+
+<div class="container py-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-primary text-white py-3">
+            <h4 class="mb-0">
+                <i class="fa-solid fa-building me-2"></i>
+                Add Department
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+            {% endif %}
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">
+                            Department Name
+                        </label>
+                        {{ form.name }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">
+                            Department Code
+                        </label>
+                        {{ form.code }}
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <button type="submit" class="btn btn-success">
+                    <i class="fa-solid fa-floppy-disk me-2"></i>
+                    Save
+                </button>
+
+                <a href="?section=departments"
+                   class="btn btn-secondary ms-2">
+                    <i class="fa-solid fa-arrow-left me-2"></i>
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+{% elif section == "department_detail" %}
+
+<div class="card shadow">
+    <div class="card-header bg-info text-white">
+        <h4>Department Details</h4>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>ID</th>
+                <td>{{ department.id }}</td>
+            </tr>
+
+            <tr>
+                <th>Name</th>
+                <td>{{ department.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Code</th>
+                <td>{{ department.code }}</td>
+            </tr>
+
+            <tr>
+                <th>Description</th>
+                <td>{{ department.description }}</td>
+            </tr>
+
+        </table>
+
+        <a href="?section=departments"
+           class="btn btn-secondary">
+            Back
+        </a>
+
+    </div>
+</div>
+
+
+
+
+
+{% elif section == "department_update" %}
+
+<div class="card shadow">
+    <div class="card-header bg-warning">
+        <h4>Edit Department</h4>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-success">
+                Update
+            </button>
+
+            <a href="?section=departments" class="btn btn-secondary">
+                Cancel
+            </a>
+
+        </form>
+
+    </div>
+</div>
+
+
+
+
+
+
+
 {% elif section == "courses" %}
 
 <h2>Courses</h2>
+
+
+<a href="?section=course_create"
+   class="btn btn-primary mb-3">
+    <i class="fa-solid fa-plus"></i>
+    Add Course
+</a>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -989,17 +1542,17 @@ Logout
 
             <td>
 
-                <a href=""
-                   class="btn btn-info btn-sm btn-action"
-                   title="View">
-                    <i class="fa-solid fa-eye"></i>
-                </a>
+                <a href="/admin_dashboard/?section=course_detail&id={{ course.id }}"
+   class="btn btn-info btn-sm btn-action"
+   title="View">
+    <i class="fa-solid fa-eye"></i>
+</a>
 
-                <a href=""
-                   class="btn btn-warning btn-sm btn-action"
-                   title="Edit">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </a>
+                <a href="/admin_dashboard/?section=course_update&id={{ course.id }}"
+   class="btn btn-warning btn-sm btn-action"
+   title="Edit">
+    <i class="fa-solid fa-pen-to-square"></i>
+</a>
 
                 <a href=""
                    class="btn btn-danger btn-sm btn-action"
@@ -1026,9 +1579,179 @@ Logout
 </table>
 
 
+
+
+{% elif section == "course_create" %}
+
+<div class="container py-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-primary text-white py-3">
+            <h4 class="mb-0">
+                <i class="fa-solid fa-book me-2"></i>
+                Add Course
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+            {% endif %}
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">
+                            Course Name
+                        </label>
+                        {{ form.name }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">
+                            Course Code
+                        </label>
+                        {{ form.code }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">
+                            Department
+                        </label>
+                        {{ form.department }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">
+                            Duration
+                        </label>
+                        {{ form.duration }}
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label class="form-label fw-bold">
+                            Description
+                        </label>
+                        {{ form.description }}
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <button type="submit" class="btn btn-success">
+                    <i class="fa-solid fa-floppy-disk me-2"></i>
+                    Save
+                </button>
+
+                <a href="?section=courses"
+                   class="btn btn-secondary ms-2">
+                    <i class="fa-solid fa-arrow-left me-2"></i>
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+{% elif section == "course_detail" %}
+
+<div class="card shadow">
+    <div class="card-header bg-info text-white">
+        <h4>Course Details</h4>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Course Name</th>
+                <td>{{ course.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Course Code</th>
+                <td>{{ course.code }}</td>
+            </tr>
+
+            <tr>
+                <th>Department</th>
+                <td>{{ course.department.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Duration</th>
+                <td>{{ course.duration }}</td>
+            </tr>
+
+            <tr>
+                <th>Description</th>
+                <td>{{ course.description }}</td>
+            </tr>
+
+        </table>
+
+        <a href="?section=courses" class="btn btn-secondary">
+            Back
+        </a>
+
+    </div>
+</div>
+
+
+
+{% elif section == "course_update" %}
+
+<div class="card shadow">
+    <div class="card-header bg-warning">
+        <h4>Edit Course</h4>
+    </div>
+
+    <div class="card-body">
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-success">
+                Update
+            </button>
+
+            <a href="?section=courses" class="btn btn-secondary">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
+
+
+
+
+
 {% elif section == "timetable" %}
 
-<h2>Timetable</h2>
+<div class="d-flex justify-content-end mb-4">
+    <a href="?section=timetable_create"
+       class="btn btn-primary">
+        <i class="fa-solid fa-user-plus"></i>
+        Add Timetable
+    </a>
+</div>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -1069,17 +1792,17 @@ Logout
 
             <td>
 
-                <a href=""
-                   class="btn btn-info btn-sm btn-action"
-                   title="View">
-                    <i class="fa-solid fa-eye"></i>
-                </a>
+                <a href="/admin_dashboard/?section=timetable_detail&id={{ timetable.id }}"
+   class="btn btn-info btn-sm btn-action"
+   title="View">
+    <i class="fa-solid fa-eye"></i>
+</a>
 
-                <a href=""
-                   class="btn btn-warning btn-sm btn-action"
-                   title="Edit">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </a>
+                <a href="/admin_dashboard/?section=timetable_update&id={{ timetable.id }}"
+   class="btn btn-warning btn-sm btn-action"
+   title="Edit">
+    <i class="fa-solid fa-pen-to-square"></i>
+</a>
 
                 <a href=""
                    class="btn btn-danger btn-sm btn-action"
@@ -1106,101 +1829,141 @@ Logout
 </table>
 
 
+
+
+{% elif section == "timetable_create" %}
+
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        <h4>Add Timetable</h4>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-success">
+                Save
+            </button>
+
+            <a href="?section=timetable"
+               class="btn btn-secondary">
+                Cancel
+            </a>
+
+        </form>
+
+    </div>
+</div>
+
+
+
+
+
+
+{% elif section == "timetable_detail" %}
+
+<div class="card shadow">
+    <div class="card-header bg-info text-white">
+        <h4>Timetable Details</h4>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Course</th>
+                <td>{{ timetable.course.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Teacher</th>
+                <td>{{ timetable.teacher.user.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Class Name</th>
+                <td>{{ timetable.class_name }}</td>
+            </tr>
+
+            <tr>
+                <th>Room No</th>
+                <td>{{ timetable.room_no }}</td>
+            </tr>
+
+            <tr>
+                <th>Day</th>
+                <td>{{ timetable.day }}</td>
+            </tr>
+
+            <tr>
+                <th>Start Time</th>
+                <td>{{ timetable.start_time }}</td>
+            </tr>
+
+            <tr>
+                <th>End Time</th>
+                <td>{{ timetable.end_time }}</td>
+            </tr>
+
+        </table>
+
+        <a href="?section=timetable" class="btn btn-secondary">
+            Back
+        </a>
+
+    </div>
+</div>
+
+
+
+
+
+{% elif section == "timetable_update" %}
+
+<div class="card shadow">
+    <div class="card-header bg-warning">
+        <h4>Edit Timetable</h4>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-success">
+                Update
+            </button>
+
+            <a href="?section=timetable" class="btn btn-secondary">
+                Cancel
+            </a>
+
+        </form>
+
+    </div>
+</div>
+
+
+
+
+
+
 {% elif section == "attendance" %}
 
 <h2>Attendance</h2>
 
-<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Student ID</th>
-            <th>Student Name</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-    {% for item in attendance %}
-
-        <tr>
-
-            <td>{{ forloop.counter }}</td>
-
-            <td>{{ item.student.student_id }}</td>
-
-            <td>{{ item.student.user.name }}</td>
-
-            <td>{{ item.date }}</td>
-
-            <td>
-                {% if item.status == "Present" %}
-
-                    <span class="badge bg-success">
-                        {{ item.status }}
-                    </span>
-
-                {% elif item.status == "Absent" %}
-
-                    <span class="badge bg-danger">
-                        {{ item.status }}
-                    </span>
-
-                {% else %}
-
-                    <span class="badge bg-warning text-dark">
-                        {{ item.status }}
-                    </span>
-
-                {% endif %}
-            </td>
-
-            <td>
-
-                <a href=""
-                   class="btn btn-info btn-sm btn-action"
-                   title="View">
-                    <i class="fa-solid fa-eye"></i>
-                </a>
-
-                <a href=""
-                   class="btn btn-warning btn-sm btn-action"
-                   title="Edit">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </a>
-
-                <a href=""
-                   class="btn btn-danger btn-sm btn-action"
-                   title="Delete">
-                    <i class="fa-solid fa-trash"></i>
-                </a>
-
-            </td>
-
-        </tr>
-
-    {% empty %}
-
-        <tr>
-            <td colspan="6" class="text-center">
-                No Attendance Records Found.
-            </td>
-        </tr>
-
-    {% endfor %}
-
-    </tbody>
-
-</table>
-
-
-
-{% elif section == "exams" %}
-
-<h2>Exams</h2>
+<a href="?section=attendance_create"
+       class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i>
+        Add Attendance
+    </a>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -1252,17 +2015,17 @@ Logout
 
             <td>
 
-                <a href=""
-                   class="btn btn-info btn-sm btn-action"
-                   title="View">
-                    <i class="fa-solid fa-eye"></i>
-                </a>
+<a href="{% url 'admin_dashboard' %}?section=attendance_detail&id={{ item.id }}"
+   class="btn btn-info btn-sm btn-action"
+   title="View">
+    <i class="fa-solid fa-eye"></i>
+</a>
 
-                <a href=""
-                   class="btn btn-warning btn-sm btn-action"
-                   title="Edit">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </a>
+                <a href="{% url 'admin_dashboard' %}?section=attendance_update&id={{ item.id }}"
+   class="btn btn-warning btn-sm btn-action"
+   title="Edit">
+    <i class="fa-solid fa-pen-to-square"></i>
+</a>
 
                 <a href=""
                    class="btn btn-danger btn-sm btn-action"
@@ -1289,9 +2052,206 @@ Logout
 </table>
 
 
+
+
+
+{% elif section == "attendance_create" %}
+
+<div class="container py-4">
+
+    <div class="card border-0 shadow rounded-4">
+
+        <div class="card-header bg-primary text-white py-3">
+            <h4 class="mb-0">
+                <i class="fa-solid fa-calendar-check me-2"></i>
+                Add Attendance
+            </h4>
+        </div>
+
+        <div class="card-body p-4">
+
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label fw-bold">
+                            Student
+                        </label>
+                        {{ form.student }}
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label fw-bold">
+                            Date
+                        </label>
+                        {{ form.date }}
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label fw-bold">
+                            Status
+                        </label>
+                        {{ form.status }}
+                    </div>
+
+                    <div class="col-12 mb-4">
+                        <label class="form-label fw-bold">
+                            Remarks
+                        </label>
+                        {{ form.remarks }}
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <button class="btn btn-success px-4" type="submit">
+                    <i class="fa-solid fa-floppy-disk me-2"></i>
+                    Save
+                </button>
+
+                <a href="?section=attendance"
+                   class="btn btn-secondary px-4 ms-2">
+                    <i class="fa-solid fa-arrow-left me-2"></i>
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+{% elif section == "attendance_detail" %}
+
+<div class="card shadow">
+    <div class="card-header bg-info text-white">
+        <h4>Attendance Details</h4>
+    </div>
+
+    <div class="card-body">
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Student</th>
+                <td>{{ attendance.student.user.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Date</th>
+                <td>{{ attendance.date }}</td>
+            </tr>
+
+            <tr>
+                <th>Status</th>
+                <td>{{ attendance.status }}</td>
+            </tr>
+
+            {% if attendance.remarks %}
+            <tr>
+                <th>Remarks</th>
+                <td>{{ attendance.remarks }}</td>
+            </tr>
+            {% endif %}
+
+        </table>
+
+        <a href="{% url 'admin_dashboard' %}?section=attendance"
+           class="btn btn-secondary">
+            Back
+        </a>
+    </div>
+</div>
+
+
+
+
+
+
+{% elif section == "attendance_update" %}
+
+<div class="container py-4">
+
+    <div class="card border-0 shadow-lg rounded-4">
+
+        <div class="card-header bg-warning text-dark rounded-top-4 py-3">
+            <h3 class="mb-0 fw-bold">
+                <i class="fa-solid fa-clipboard-check me-2"></i>
+                Edit Attendance
+            </h3>
+        </div>
+
+        <div class="card-body p-5">
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        Student
+                    </label>
+                    {{ form.student }}
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        Date
+                    </label>
+                    {{ form.date }}
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        Status
+                    </label>
+                    {{ form.status }}
+                </div>
+
+                <hr class="my-4">
+
+                <button type="submit" class="btn btn-success btn-lg px-5">
+                    
+                    Update
+                </button>
+
+                <a href="{% url 'admin_dashboard' %}?section=attendance"
+                   class="btn btn-secondary btn-lg px-5 ms-2">
+                    
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
 {% elif section == "exams" %}
 
+
 <h2>Exams</h2>
+
+<a href="?section=exam_create"
+       class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i>
+        Add Exam
+    </a>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -1361,162 +2321,82 @@ Logout
 
 
 
-{% elif section == "exams" %}
+{% elif section == "exam_create" %}
 
-<h2>Result</h2>
+<div class="container py-4">
 
-<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Exam Name</th>
-            <th>Course</th>
-            <th>Exam Date</th>
-            <th>Total Marks</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+    <div class="card shadow-lg border-0 rounded-4">
 
-    <tbody>
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+                <i class="fa-solid fa-file-circle-plus me-2"></i>
+                Add Exam
+            </h4>
+        </div>
 
-    {% for exam in exams %}
+        <div class="card-body p-4">
 
-    <tr>
+            <form method="POST">
 
-        <td>{{ forloop.counter }}</td>
+                {% csrf_token %}
 
-        <td>{{ exam.name }}</td>
+                <div class="row">
 
-        <td>{{ exam.course.name }}</td>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Exam Name</label>
+                        {{ form.name }}
+                    </div>
 
-        <td>{{ exam.exam_date }}</td>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Course</label>
+                        {{ form.course }}
+                    </div>
 
-        <td>{{ exam.total_marks }}</td>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Exam Date</label>
+                        {{ form.exam_date }}
+                    </div>
 
-        <td>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Total Marks</label>
+                        {{ form.total_marks }}
+                    </div>
 
-            <a href=""
-               class="btn btn-info btn-sm btn-action"
-               title="View">
-                <i class="fa-solid fa-eye"></i>
-            </a>
+                </div>
 
-            <a href=""
-               class="btn btn-warning btn-sm btn-action"
-               title="Edit">
-                <i class="fa-solid fa-pen-to-square"></i>
-            </a>
+                <hr>
 
-            <a href=""
-               class="btn btn-danger btn-sm btn-action"
-               title="Delete">
-                <i class="fa-solid fa-trash"></i>
-            </a>
+                <button class="btn btn-success" type="submit">
+                    <i class="fa-solid fa-floppy-disk me-2"></i>
+                    Save
+                </button>
 
-        </td>
+                <a href="?section=exams"
+                   class="btn btn-secondary ms-2">
+                    Cancel
+                </a>
 
-    </tr>
+            </form>
 
-    {% empty %}
+        </div>
 
-    <tr>
-        <td colspan="6" class="text-center">
-            No Exams Found.
-        </td>
-    </tr>
+    </div>
 
-    {% endfor %}
+</div>
 
-    </tbody>
 
-</table>
+
 
 
 {% elif section == "results" %}
 
 <h2>Results</h2>
 
-<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Student ID</th>
-            <th>Student Name</th>
-            <th>Course</th>
-            <th>Marks Obtained</th>
-            <th>Maximum Marks</th>
-            <th>Grade</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-    {% for mark in marks %}
-
-    <tr>
-
-        <td>{{ forloop.counter }}</td>
-
-        <td>{{ mark.student.student_id }}</td>
-
-        <td>{{ mark.student.user.name }}</td>
-
-        <td>{{ mark.course.name }}</td>
-
-        <td>{{ mark.marks_obtained }}</td>
-
-        <td>{{ mark.max_marks }}</td>
-
-        <td>
-            <span class="badge bg-success">
-                {{ mark.grade }}
-            </span>
-        </td>
-
-        <td>
-
-            <a href=""
-               class="btn btn-info btn-sm btn-action"
-               title="View">
-                <i class="fa-solid fa-eye"></i>
-            </a>
-
-            <a href=""
-               class="btn btn-warning btn-sm btn-action"
-               title="Edit">
-                <i class="fa-solid fa-pen-to-square"></i>
-            </a>
-
-            <a href=""
-               class="btn btn-danger btn-sm btn-action"
-               title="Delete">
-                <i class="fa-solid fa-trash"></i>
-            </a>
-
-        </td>
-
-    </tr>
-
-    {% empty %}
-
-    <tr>
-        <td colspan="8" class="text-center">
-            No Results Found.
-        </td>
-    </tr>
-
-    {% endfor %}
-
-    </tbody>
-
-</table>
-
-
-
-{% elif section == "marks" %}
-
-<h2>Results</h2>
+<a href="?section=result_create"
+   class="btn btn-primary mb-3">
+    <i class="fa-solid fa-plus"></i>
+    Add Result
+</a>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -1593,12 +2473,87 @@ Logout
     </tbody>
 
 </table>
+
+
+
+
+{% elif section == "result_create" %}
+
+<div class="container py-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-primary text-white">
+            <h4>
+                <i class="fa-solid fa-file-circle-plus me-2"></i>
+                Add Result
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label>Student</label>
+                        {{ form.student }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Course</label>
+                        {{ form.course }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Marks Obtained</label>
+                        {{ form.marks_obtained }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Maximum Marks</label>
+                        {{ form.max_marks }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Grade</label>
+                        {{ form.grade }}
+                    </div>
+
+                </div>
+
+                <button type="submit" class="btn btn-success">
+    <i class="fa-solid fa-floppy-disk"></i>
+    Save
+</button>
+
+                <a href="?section=results"
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
 
 
 
 {% elif section == "placements" %}
 
 <h2>Placements</h2>
+
+<a href="?section=placement_create"
+   class="btn btn-primary mb-3">
+    <i class="fa-solid fa-plus"></i>
+    Add Placement
+</a>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -1689,9 +2644,103 @@ Logout
 
 
 
+
+{% elif section == "placement_create" %}
+
+<div class="container py-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-primary text-white">
+            <h4>
+                <i class="fa-solid fa-briefcase me-2"></i>
+                Add Placement
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+            {% endif %}
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Student</label>
+                        {{ form.student }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Company</label>
+                        {{ form.company }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Job Role</label>
+                        {{ form.job_role }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Package</label>
+                        {{ form.package }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Placement Date</label>
+                        {{ form.placement_date }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Status</label>
+                        {{ form.status }}
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label class="form-label fw-bold">Remarks</label>
+                        {{ form.remarks }}
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <button type="submit" class="btn btn-success">
+                    <i class="fa-solid fa-floppy-disk me-2"></i>
+                    Save
+                </button>
+
+                <a href="?section=placements"
+                   class="btn btn-secondary ms-2">
+                    <i class="fa-solid fa-arrow-left me-2"></i>
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
 {% elif section == "company" %}
 
 <h2>Companies</h2>
+
+<a href="?section=company_create"
+   class="btn btn-primary mb-3">
+    <i class="fa-solid fa-plus"></i>
+    Add Company
+</a>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -1765,9 +2814,91 @@ Logout
 
 
 
+
+{% elif section == "company_create" %}
+
+<div class="container py-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-primary text-white">
+            <h4>
+                <i class="fa-solid fa-building me-2"></i>
+                Add Company
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+            {% endif %}
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Company Name</label>
+                        {{ form.name }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Location</label>
+                        {{ form.location }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Website</label>
+                        {{ form.website }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Email</label>
+                        {{ form.email }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Phone</label>
+                        {{ form.phone }}
+                    </div>
+
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    <i class="fa-solid fa-floppy-disk me-2"></i>
+                    Save
+                </button>
+
+                <a href="?section=company"
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
 {% elif section == "reports" %}
 
 <h2>Reports</h2>
+
+<a href="?section=report_create"
+   class="btn btn-primary mb-3">
+    <i class="fa-solid fa-plus"></i>
+    Add Report
+</a>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -1845,6 +2976,81 @@ Logout
 
     </tbody>
 </table>
+
+
+
+
+{% elif section == "report_create" %}
+
+<div class="container py-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-primary text-white">
+            <h4>
+                <i class="fa-solid fa-file-arrow-up me-2"></i>
+                Add Report
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">
+                            Report Type
+                        </label>
+                        {{ form.report_type }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">
+                            Generated By
+                        </label>
+                        {{ form.generated_by }}
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label fw-bold">
+                            Upload File
+                        </label>
+                        {{ form.file }}
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <button type="submit"
+                        class="btn btn-success">
+                    <i class="fa-solid fa-floppy-disk me-2"></i>
+                    Save
+                </button>
+
+                <a href="?section=reports"
+                   class="btn btn-secondary ms-2">
+                    <i class="fa-solid fa-arrow-left me-2"></i>
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
 
 
 

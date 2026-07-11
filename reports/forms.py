@@ -13,6 +13,23 @@ class ReportForm(forms.ModelForm):
             "file",
         ]
 
+
+
+        widgets = {
+            "report_type": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Enter Report Type"
+            }),
+
+            "generated_by": forms.Select(attrs={
+                "class": "form-select"
+            }),
+
+            "file": forms.ClearableFileInput(attrs={
+                "class": "form-control"
+            }),
+        }
+
     def clean_report_type(self):
         report_type = self.cleaned_data.get("report_type")
 

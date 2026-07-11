@@ -28,6 +28,17 @@ from timetable.models import Timetable
 from exams.models import Exam
 from placement.models import Placement
 from placement.models import Company
+from teachers.forms import TeacherForm
+from departments.forms import DepartmentForm
+from courses.forms import CourseForm
+from timetable.forms import TimetableForm
+from attendences.forms import AttendanceForm
+from exams.forms import ExamForm
+from marks.models import Marks
+from marks.forms import MarksForm
+from placement.forms import CompanyForm
+from placement.forms import PlacementForm
+from reports.forms import ReportForm
 
 
 def register(request):
@@ -87,63 +98,6 @@ def login_view(request):
         "accounts/login.html",
         {"form": form},
     )
-
-# @login_required
-# def admin_dashboard(request):
-
-#     student_count = User.objects.filter(role='STUDENT').count()
-
-#     teacher_count = User.objects.filter(role='TEACHER').count()
-
-#     students = Student.objects.all()
-
-    
-
-#     return render(
-#         request,
-#         "accounts/admin_dashboard.html",
-#         {
-#             "students_count":student_count,
-#             "students":students,
-#             "teacher_count":teacher_count,
-            
-#         }
-#     )
-
-
-
-# @login_required
-# def admin_dashboard(request):
-
-#     student_count = User.objects.filter(role="STUDENT").count()
-#     teacher_count = User.objects.filter(role="TEACHER").count()
-
-#     course_count = Course.objects.count()
-#     department_count = Department.objects.count()
-#     attendance_count = Attendance.objects.count()
-#     report_count = Report.objects.count()
-
-#     students = Student.objects.select_related(
-#         "user",
-#         "department",
-#         "course"
-#     )
-
-#     return render(
-#         request,
-#         "accounts/admin_dashboard.html",
-#         {
-#             "students_count": student_count,
-#             "teacher_count": teacher_count,
-#             "course_count": course_count,
-#             "department_count": department_count,
-#             "attendance_count": attendance_count,
-#             "report_count": report_count,
-#             "students": students,
-#         }
-#     )
-
-
 
 
 @login_required
@@ -222,6 +176,444 @@ def admin_dashboard(request):
         ).order_by("-generated_on")
 
 
+    elif section == "users":
+        context["users"] = User.objects.all().order_by("name") 
+
+
+
+    elif section == "student_detail":
+
+        student_id = request.GET.get("id")
+
+
+        context["student"] = Student.objects.select_related(
+
+            "user",
+            "department",
+            "course"
+        ).get(id=student_id)  
+
+    elif section == "student_update":
+
+        student = Student.objects.select_related(
+            "user",
+            "department",
+            "course"
+        ).get(id=request.GET.get("id"))
+
+
+        if request.method == "POST":
+
+            form = StudentForm(request.POST, instance=student)
+
+
+            if form.is_valid():
+
+                form.save()
+
+                return redirect("/admin_dashboard/?section=students")
+
+        else:
+
+            form = StudentForm(instance=student)
+
+        context["form"] = form
+        context["student"] = student 
+
+
+    elif section == "teacher_create":
+
+        if request.method == "POST":
+
+            form = TeacherForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+                return redirect("/admin_dashboard/?section=teachers")
+
+        else:
+            form = TeacherForm()
+
+        context["form"] = form     
+
+
+    elif section == "teacher_detail":
+
+
+        teacher = Teacher.objects.select_related(
+            "user",
+            "department"
+        ).get(id=request.GET.get("id"))
+
+        context["teacher"] = teacher  
+
+
+    elif section == "department_create":
+
+        if request.method == "POST":
+
+            form = DepartmentForm(request.POST)
+
+            if form.is_valid():
+
+                form.save()
+
+                return redirect("/admin_dashboard/?section=departments")
+
+        else:
+
+            form = DepartmentForm()
+
+        context["form"] = form    
+
+
+
+    elif section == "department_detail":
+
+        department = Department.objects.get(
+
+            id=request.GET.get("id")
+        )
+
+
+        context["department"] = department 
+
+
+
+    elif section == "department_update":
+
+        department = Department.objects.get(
+
+            id=request.GET.get("id")
+        )
+
+
+        if request.method == "POST":
+
+
+            form = DepartmentForm(
+
+                request.POST,
+                instance=department
+            )
+
+
+            if form.is_valid():
+
+                form.save()
+
+                return redirect("/admin_dashboard/?section=departments")
+
+        else:
+
+            form = DepartmentForm(instance=department)
+
+        context["form"] = form
+        context["department"] = department
+
+
+
+    elif section == "course_create":
+
+        if request.method == "POST":
+
+            form = CourseForm(request.POST)
+
+            if form.is_valid():
+
+                form.save()
+
+                return redirect("/admin_dashboard/?section=courses")
+
+        else:
+
+            form = CourseForm()
+
+        context["form"] = form      
+
+
+    elif section == "course_detail":
+
+        course = Course.objects.select_related(
+            "department"
+        ).get(id=request.GET.get("id"))
+
+        context["course"] = course
+
+
+    elif section == "course_update":
+
+        course = Course.objects.select_related(
+
+            "department"
+        ).get(id=request.GET.get("id"))
+
+        if request.method == "POST":
+
+            form = CourseForm(
+                request.POST,
+                instance=course
+            )
+
+            if form.is_valid():
+                form.save()
+                return redirect("/admin_dashboard/?section=courses")
+
+        else:
+            form = CourseForm(instance=course)
+
+        context["form"] = form
+        context["course"] = course       
+
+    
+           
+
+
+    elif section == "teacher_update":
+
+        teacher = Teacher.objects.select_related(
+            "user",
+            "department"
+        ).get(id=request.GET.get("id"))
+
+
+        if request.method == "POST":
+
+
+            form = TeacherForm(request.POST, instance=teacher)
+
+
+            if form.is_valid():
+
+                form.save()
+
+                return redirect("/admin_dashboard/?section=teachers")
+
+        else:
+
+            form = TeacherForm(instance=teacher)
+
+        context["form"] = form
+        context["teacher"] = teacher 
+
+    elif section == "timetable_create":
+
+        if request.method == "POST":
+
+            form = TimetableForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+                return redirect("/admin_dashboard/?section=timetable")
+
+        else:
+            form = TimetableForm()
+
+        context["form"] = form
+
+
+
+    elif section == "timetable_detail":
+
+        timetable = Timetable.objects.select_related(
+            "course",
+            "teacher__user"
+        ).get(id=request.GET.get("id"))
+
+        context["timetable"] = timetable 
+
+
+    elif section == "timetable_update":
+
+        timetable = Timetable.objects.select_related(
+            "course",
+            "teacher"
+        ).get(id=request.GET.get("id"))
+
+        if request.method == "POST":
+
+            form = TimetableForm(
+                request.POST,
+                instance=timetable
+            )
+
+            if form.is_valid():
+                form.save()
+                return redirect("/admin_dashboard/?section=timetable")
+
+        else:
+            form = TimetableForm(instance=timetable)
+
+        context["form"] = form
+        context["timetable"] = timetable 
+
+
+    elif section == "attendance_create":
+
+        if request.method == "POST":
+
+            form = AttendanceForm(request.POST)
+
+            if form.is_valid():
+
+                form.save()
+
+                return redirect("/admin_dashboard/?section=attendance")
+
+        else:
+
+            form = AttendanceForm()
+
+        context["form"] = form    
+
+
+
+
+    elif section == "attendance_detail":
+
+        print(request.GET)
+
+        attendance = Attendance.objects.select_related(
+            "student",
+            "student__user"
+
+        ).get(id=request.GET.get("id"))
+
+        context["attendance"] = attendance
+
+
+    elif section == "attendance_update":
+
+        attendance = Attendance.objects.select_related(
+            "student",
+            "student__user"
+        ).get(id=request.GET.get("id"))
+
+        if request.method == "POST":
+
+            form = AttendanceForm(
+                request.POST,
+                instance=attendance
+            )
+
+            if form.is_valid():
+                form.save()
+                return redirect("/admin_dashboard/?section=attendance")
+
+        else:
+            form = AttendanceForm(instance=attendance)
+
+        context["form"] = form
+        context["attendance"] = attendance
+
+
+    elif section == "exam_create":
+
+
+        if request.method == "POST":
+
+
+            form = ExamForm(request.POST)
+
+
+            if form.is_valid():
+
+
+                form.save()
+
+
+                return redirect("/admin_dashboard/?section=exams")
+
+        else:
+
+            form = ExamForm()
+
+
+            context["form"] = form  
+
+
+    elif section == "results":
+            
+
+            context["marks"] = Marks.objects.select_related(
+                "student",
+                "student__user",
+                "course"
+            ).order_by("-id")  
+
+
+    elif section == "result_create":
+
+        if request.method == "POST":
+
+            form = MarksForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+                return redirect("/admin_dashboard/?section=results")
+            else:
+
+                print(form.errors)  
+
+        else:
+            form = MarksForm()
+
+        context["form"] = form  
+
+
+    elif section == "company_create":
+
+        if request.method == "POST":
+
+            form = CompanyForm(request.POST)
+
+            if form.is_valid():
+
+                form.save()
+
+                return redirect("/admin_dashboard/?section=company")
+
+        else:
+
+            form = CompanyForm()
+
+        context["form"] = form  
+
+
+    elif section == "placement_create":
+
+        if request.method == "POST":
+
+            form = PlacementForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+                return redirect("/admin_dashboard/?section=placements")
+
+        else:
+            form = PlacementForm()
+
+        context["form"] = form
+
+
+    elif section == "report_create":
+
+        if request.method == "POST":
+
+            form = ReportForm(request.POST, request.FILES)
+
+            if form.is_valid():
+                form.save()
+                return redirect("/admin_dashboard/?section=reports")
+
+        else:
+
+            form = ReportForm()
+
+        context["form"] = form                   
+                               
+
+
     elif section == "student_create":
 
 
@@ -243,6 +635,8 @@ def admin_dashboard(request):
 
             context["form"] = form
 
+
+      
     return render(request, "accounts/admin_dashboard.html", context)
 
 

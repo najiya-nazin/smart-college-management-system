@@ -78,3 +78,5 @@ class DepartmentForm(forms.ModelForm):
             )
 
         return description
+
+    

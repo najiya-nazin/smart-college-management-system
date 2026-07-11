@@ -11,3 +11,20 @@ class AttendanceForm(forms.ModelForm):
             "date",
             "status",
         ]
+
+
+        widgets = {
+
+            "student": forms.Select(attrs={
+                "class": "form-select form-select-lg"
+            }),
+
+            "date": forms.DateInput(attrs={
+                "class": "form-control form-control-lg",
+                "type": "date"
+            }),
+
+            "status": forms.Select(attrs={
+                "class": "form-select form-select-lg"
+            }),
+        }
