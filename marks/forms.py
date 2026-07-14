@@ -14,7 +14,6 @@ class MarksForm(forms.ModelForm):
             "grade",
         ]
 
-
         widgets = {
             "student": forms.Select(attrs={
                 "class": "form-select"

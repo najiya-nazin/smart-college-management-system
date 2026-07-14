@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-
+from django.urls import reverse
 from .forms import StudentForm
 from .models import Student
 from departments.models import Department
 from courses.models import Course
-from django.contrib.auth.decorators import login_required
+
 
 User = get_user_model()
 
@@ -39,7 +39,8 @@ def student_list(request):
 
     students = Student.objects.select_related(
         "user",
-        "department",
+        "department"
+    ).prefetch_related(
         "course"
     ).all().order_by("student_id")
 
@@ -54,8 +55,9 @@ def student_detail(request, pk):
     student = get_object_or_404(
         Student.objects.select_related(
             "user",
-            "department",
-            "course"
+            "department"
+        ).prefetch_related(
+            "courses"
         ),
         pk=pk
     )
@@ -63,25 +65,6 @@ def student_detail(request, pk):
     return render(request, "students/student_detail.html", {
         "student": student
     })
-
-
-# Update Student
-# def student_update(request, pk):
-
-#     student = get_object_or_404(Student, pk=pk)
-
-#     form = StudentForm(instance=student)
-
-#     if request.method == "POST":
-#         form = StudentForm(request.POST, instance=student)
-
-#         if form.is_valid():
-#             form.save()
-#             return redirect("student_list")
-
-#     return render(request, "students/student_update.html", {
-#         "form": form
-#     })
 
 
 def student_update(request, pk):
@@ -102,19 +85,6 @@ def student_update(request, pk):
     })
 
 
-# Delete Student
-# def student_delete(request, pk):
-
-#     student = get_object_or_404(Student, pk=pk)
-
-#     if request.method == "POST":
-#         student.delete()
-#         return redirect("student_list")
-
-#     return render(request, "students/student_delete.html", {
-#         "student": student
-#     })
-
 def student_delete(request, pk):
     student = get_object_or_404(Student, pk=pk)
 
@@ -127,14 +97,3 @@ def student_delete(request, pk):
         "student": student
     })
 
-
-@login_required
-def student_dashboard(request):
-
-
-
-    return render(
-        request,
-        "students/student_dashboard.html",
-        
-    )

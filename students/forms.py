@@ -80,6 +80,68 @@ class StudentForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         self.fields["user"].queryset = User.objects.filter(role="STUDENT").order_by("name")
-
     
         self.fields["user"].label_from_instance = lambda obj: f"{obj.name} ({obj.email})"
+
+
+class StudentProfileForm(forms.ModelForm):
+    class Meta:
+        model = Student
+        fields = [
+            "address",
+            "guardian_name",
+            "guardian_phone",
+        ]
+
+        widgets = {
+
+                "address": forms.Textarea(attrs={
+                    "class": "form-control",
+                    "rows": 4,
+                }),
+
+                "guardian_name": forms.TextInput(attrs={
+                    "class": "form-control",
+                }),
+
+                "guardian_phone": forms.TextInput(attrs={
+                    "class": "form-control",
+                }),
+
+        }
+
+        def clean_guardian_phone(self):
+            phone = self.cleaned_data["guardian_phone"]
+
+            if len(phone) != 10 or not phone.isdigit():
+                raise forms.ValidationError(
+                    "Guardian phone must contain exactly 10 digits."
+                )
+
+            return phone
+
+
+class UserProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = [
+                "phone",
+        ]
+
+        widgets = {
+
+                "phone": forms.TextInput(attrs={
+                    "class": "form-control",
+                }),
+        }
+
+        def clean_phone(self):
+            phone = self.cleaned_data["phone"]
+
+            if len(phone) != 10 or not phone.isdigit():
+                raise forms.ValidationError(
+                    "Phone number must contain exactly 10 digits."
+                )
+
+            return phone
