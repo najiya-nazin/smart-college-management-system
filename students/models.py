@@ -29,9 +29,8 @@ class Student(models.Model):
         related_name="students"
     )
 
-    course = models.ForeignKey(
+    course = models.ManyToManyField(
         Course,
-        on_delete=models.PROTECT,
         related_name="students"
     )
 

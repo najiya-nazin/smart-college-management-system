@@ -33,4 +33,11 @@ urlpatterns = [
         name="fee-delete"
     ),
 
+    path(
+       "fee/<int:pk>/receipt/",
+       views.fee_receipt,
+       name="fee_receipt"
+)
+
+
 ]

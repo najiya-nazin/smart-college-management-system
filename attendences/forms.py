@@ -13,7 +13,6 @@ class AttendanceForm(forms.ModelForm):
             "status",
         ]
 
-
         widgets = {
 
             "student": forms.Select(attrs={

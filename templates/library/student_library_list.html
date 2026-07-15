@@ -1,0 +1,298 @@
+<style>
+
+.page-title{
+    font-size:34px;
+    font-weight:700;
+    color:#2563eb;
+    margin-bottom:30px;
+}
+
+.library-card{
+    width:100%;
+    background:#fff;
+    border-radius:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    overflow:hidden;
+}
+
+.table{
+    width:100%;
+    table-layout:fixed;
+}
+
+.table thead{
+    background:#2563eb;
+    color:#fff;
+}
+
+.table thead th{
+    border:none;
+    padding:18px;
+    text-align:center;
+    white-space:nowrap;
+}
+
+.table tbody td{
+    padding:18px;
+    text-align:center;
+    vertical-align:middle;
+}
+
+.table tbody tr:hover{
+    background:#f8fbff;
+}
+
+.book-title{
+    font-weight:600;
+    color:#1e293b;
+}
+
+.status{
+    padding:7px 16px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.issued{
+    background:#dcfce7;
+    color:#15803d;
+}
+
+.returned{
+    background:#dbeafe;
+    color:#2563eb;
+}
+
+.overdue{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+.fine{
+    color:#dc2626;
+    font-weight:700;
+}
+
+.no-fine{
+    color:#16a34a;
+    font-weight:700;
+}
+
+.empty-card{
+    background:#fff;
+    border-radius:18px;
+    padding:60px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.empty-card i{
+    font-size:70px;
+    color:#94a3b8;
+    margin-bottom:20px;
+}
+
+.empty-card h3{
+    color:#334155;
+    margin-bottom:10px;
+}
+
+.empty-card p{
+    color:#64748b;
+}
+.summary-cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+    margin-bottom:30px;
+}
+
+.summary-card{
+    background:#fff;
+    border-radius:16px;
+    padding:25px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.summary-card:hover{
+    transform:translateY(-5px);
+}
+
+.summary-card i{
+    font-size:34px;
+    color:#2563eb;
+    margin-bottom:15px;
+}
+
+.summary-card h4{
+    color:#64748b;
+    margin-bottom:10px;
+}
+
+.summary-card h2{
+    color:#1e293b;
+    font-size:32px;
+}
+
+</style>
+
+<div class="summary-cards">
+
+    <div class="summary-card">
+
+        <i class="fa-solid fa-book-open"></i>
+
+        <h4>Issued Books</h4>
+
+        <h2>{{ issued_books }}</h2>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <i class="fa-solid fa-circle-check"></i>
+
+        <h4>Returned</h4>
+
+        <h2>{{ returned_books }}</h2>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <i class="fa-solid fa-clock"></i>
+
+        <h4>Overdue</h4>
+
+        <h2>{{ overdue_books }}</h2>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <i class="fa-solid fa-indian-rupee-sign"></i>
+
+        <h4>Total Fine</h4>
+
+        <h2>₹ {{ total_fine }}</h2>
+
+    </div>
+
+</div>
+
+{% if library %}
+
+<div class="library-card">
+
+<table class="table">
+    <thead>
+    <tr>
+        <th style="width:24%;">Book</th>
+        <th style="width:20%;">Author</th>
+        <th style="width:12%;">Issue Date</th>
+        <th style="width:12%;">Due Date</th>
+        <th style="width:12%;">Return Date</th>
+        <th style="width:12%;">Status</th>
+        <th style="width:8%;">Fine</th>
+   </tr>
+   </thead>
+
+    <tbody>
+
+    {% for item in library %}
+
+        <tr>
+
+            <td class="book-title">
+                {{ item.book.title }}
+            </td>
+
+            <td>
+                {{ item.book.author }}
+            </td>
+
+            <td>
+                {{ item.issue_date|date:"M d, Y" }}
+            </td>
+
+            <td>
+                {{ item.due_date|date:"M d, Y" }}
+            </td>
+
+            <td>
+
+                {% if item.return_date %}
+                    {{ item.return_date|date:"M d, Y" }}
+                {% else %}
+                    -
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                {% if item.status == "Issued" %}
+
+                    <span class="status issued">
+                        Issued
+                    </span>
+
+                {% else %}
+
+                    <span class="status returned">
+                        Returned
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                {% if item.fine > 0 %}
+
+                    <span class="fine">
+                        ₹ {{ item.fine }}
+                    </span>
+
+                {% else %}
+
+                    <span class="no-fine">
+                        ₹ 0.00
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+</div>
+
+{% else %}
+
+<div class="empty-card">
+
+    <i class="fa-solid fa-book-open"></i>
+
+    <h3>No Books Issued</h3>
+
+    <p>
+        You haven't borrowed any books from the library yet.
+    </p>
+
+</div>
+
+{% endif %}

@@ -1,0 +1,615 @@
+{% load static %}
+
+<style>
+.receipt-page{
+    width:100%;
+    padding:30px 0;
+    background:transparent;
+}
+
+.receipt{
+    width:100%;
+    margin:auto;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 15px 35px rgba(15,23,42,.08);
+    position:relative;
+}
+
+.receipt::before{
+    content:"SMART COLLEGE";
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) rotate(-28deg);
+    font-size:50px;
+    font-weight:800;
+    color:rgba(37,99,235,.04);
+    letter-spacing:8px;
+    pointer-events:none;
+    user-select:none;
+    z-index:0;
+}
+
+.header{
+    position:relative;
+    z-index:2;
+    background:linear-gradient(135deg,#2563eb,#4f83f1);
+    color:#fff;
+    padding:22px 25px;
+    text-align:center;
+}
+
+.college-logo{
+    font-size:35px;
+    margin-bottom:8px;
+}
+
+.header h1{
+    margin:0;
+    font-size:32px;
+    font-weight:700;
+    letter-spacing:1px;
+}
+
+.header h3{
+    margin:5px 0;
+    font-size:20px;
+    font-weight:500;
+}
+
+.college-info{
+    margin-top:8px;
+    font-size:13px;
+    opacity:.9;
+}
+
+.receipt-meta{
+    margin-top:15px;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.receipt-meta span{
+    padding:8px 13px;
+    font-size:13px;
+}
+
+
+.receipt-body{
+    position:relative;
+    z-index:2;
+    padding:18px;
+}
+.receipt-info{
+
+    background:#f8fbff;
+    border:1px solid #e2e8f0;
+    border-radius:14px;
+    padding:25px;
+    margin-bottom:25px;
+
+}
+
+.info-row{
+
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    padding:12px 0;
+    border-bottom:1px dashed #dbe4f0;
+
+}
+
+.info-row:last-child{
+
+    border-bottom:none;
+
+}
+
+.info-item{
+
+    display:flex;
+    align-items:center;
+
+}
+
+.label{
+
+    width:150px;
+    font-weight:600;
+    color:#475569;
+
+}
+
+.value{
+
+    color:#0f172a;
+    font-weight:500;
+
+}
+
+.table{
+    width:100%;
+    border-collapse:collapse;
+    overflow:hidden;
+    border-radius:14px;
+}
+
+.table thead{
+    background:#2563eb;
+}
+
+.table th{
+    color:#fff;
+    padding:18px;
+    text-align:center;
+    font-size:14px;
+    font-weight:600;
+}
+
+.table td{
+    padding:18px;
+    text-align:center;
+    border-bottom:1px solid #edf2f7;
+    font-size:12px;
+}
+
+.table tbody tr:hover{
+    background:#f8fbff;
+}
+
+.amount{
+    color:#2563eb;
+    font-weight:700;
+}
+
+.balance{
+    color:#ef4444;
+    font-weight:700;
+}
+
+.badge{
+    display:inline-block;
+    padding:8px 20px;
+    border-radius:25px;
+    color:#fff;
+    font-weight:600;
+    font-size:14px;
+}
+
+.paid{
+    background:#16a34a;
+}
+
+.partial{
+    background:#f59e0b;
+}
+
+.pending{
+    background:#ef4444;
+}
+
+.remarks{
+    margin-top:15px;
+    background:#f8fbff;
+    padding:12px;
+    border-left:5px solid #2563eb;
+    border-radius:10px;
+}
+
+.remarks h4{
+    margin:0 0 10px;
+    color:#2563eb;
+}
+
+.buttons{
+    display:flex;
+    gap:15px;
+}
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 22px;
+    border:none;
+    border-radius:10px;
+    text-decoration:none;
+    color:#fff;
+    cursor:pointer;
+    font-weight:600;
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.print{
+    background:#2563eb;
+}
+
+.print:hover{
+    background:#1d4ed8;
+}
+
+.back{
+    background:#64748b;
+}
+
+.back:hover{
+    background:#475569;
+}
+.footer{
+    margin-top:15px;
+    padding-top:20px;
+    border-top:1px solid #e5e7eb;
+    display:flex;
+    justify-content:flex-end;
+}
+
+.receipt-note{
+    margin-top:10px;
+    font-size:14px;
+    color:#64748b;
+    text-align:center;
+}
+
+.receipt-note i{
+    color:#2563eb;
+    margin-right:6px;
+}
+
+@media(max-width:768px){
+    body{
+        padding:15px;
+    }
+    .receipt-top{
+        grid-template-columns:1fr;
+    }
+
+    .footer{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .buttons{
+        width:100%;
+        justify-content:center;
+        flex-wrap:wrap;
+    }
+}
+@media print {
+
+    /* Hide dashboard */
+    .sidebar,
+    .navbar,
+    .logout-btn{
+        display:none !important;
+    }
+
+    /* Hide buttons */
+    .footer,
+    .buttons{
+        display:none !important;
+    }
+
+    body{
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .header{
+        background:#2563eb !important;
+        color:#fff !important;
+    }
+
+    .table thead{
+        background:#2563eb !important;
+    }
+
+    .table th{
+        color:#fff !important;
+    }
+
+    .main{
+        margin:0 !important;
+        width:100% !important;
+    }
+
+    .content{
+        padding:0 !important;
+        margin:0 !important;
+    }
+
+    .receipt-page{
+        padding:0 !important;
+        margin:0 !important;
+    }
+
+    .receipt{
+        width:100% !important;
+        box-shadow:none !important;
+        border-radius:0 !important;
+        page-break-inside:avoid;
+    }
+
+    .receipt::before{
+        opacity:.05;
+    }
+
+    @page{
+        size:A4;
+        margin:12mm;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="receipt-page" id="receipt">
+
+<div class="header">
+
+<div class="college-logo">
+
+<i class="fa-solid fa-building-columns"></i>
+
+</div>
+
+<h1>SMART COLLEGE</h1>
+
+<h3>Student Fee Receipt</h3>
+
+<div class="college-info">
+
+Calicut, Kerala |
+Phone : +91 9876543210 |
+Email : info@smartcollege.com
+
+</div>
+
+<div class="receipt-meta">
+
+<span>
+
+<i class="fa-solid fa-receipt"></i>
+
+Receipt No :
+
+<strong>
+
+RCPT-{{ fee.id|stringformat:"05d" }}
+
+</strong>
+
+</span>
+
+<span>
+
+<i class="fa-solid fa-calendar-days"></i>
+
+Generated :
+
+<strong>
+
+{% now "d M Y" %}
+
+</strong>
+
+</span>
+
+</div>
+
+</div>
+
+<div class="receipt-body">
+
+<div class="receipt-info">
+
+    <div class="info-row">
+
+        <div class="info-item">
+            <span class="label">Student Name</span>
+            <span class="value">{{ fee.student.user.name }}</span>
+        </div>
+
+        <div class="info-item">
+            <span class="label">Receipt No</span>
+            <span class="value">RCPT-{{ fee.id|stringformat:"05d" }}</span>
+        </div>
+
+    </div>
+
+    <div class="info-row">
+
+        <div class="info-item">
+            <span class="label">Student ID</span>
+            <span class="value">{{ fee.student.student_id }}</span>
+        </div>
+
+        <div class="info-item">
+            <span class="label">Payment Date</span>
+            <span class="value">{{ fee.payment_date|date:"d M Y" }}</span>
+        </div>
+
+    </div>
+
+    <div class="info-row">
+
+        <div class="info-item">
+            <span class="label">Department</span>
+            <span class="value">{{ fee.student.department.name }}</span>
+        </div>
+
+        <div class="info-item">
+            <span class="label">Semester</span>
+            <span class="value">{{ fee.semester }}</span>
+        </div>
+
+    </div>
+
+    <div class="info-row">
+
+        <div class="info-item">
+            <span class="label">Course</span>
+            <span class="value">{{ fee.student.course.name }}</span>
+        </div>
+
+    </div>
+
+</div>
+
+    <table class="table">
+
+<thead>
+
+<tr>
+
+<th>Fee Type</th>
+
+<th>Total Fee</th>
+
+<th>Paid Amount</th>
+
+<th>Balance</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>
+
+{{ fee.fee_type }}
+
+</td>
+
+<td class="amount">
+
+₹ {{ fee.amount }}
+
+</td>
+
+<td>
+
+₹ {{ fee.paid_amount }}
+
+</td>
+
+<td class="balance">
+
+₹ {{ fee.balance }}
+
+</td>
+
+<td>
+
+{% if fee.status == "Paid" %}
+
+<span class="badge paid">
+
+Paid
+
+</span>
+
+{% elif fee.status == "Partial" %}
+
+<span class="badge partial">
+
+Partial
+
+</span>
+
+{% else %}
+
+<span class="badge pending">
+
+Pending
+
+</span>
+
+{% endif %}
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+{% if fee.remarks %}
+
+<div class="remarks">
+
+<h4>
+
+<i class="fa-solid fa-note-sticky"></i>
+
+Remarks
+
+</h4>
+
+<p>
+
+{{ fee.remarks }}
+
+</p>
+
+</div>
+
+{% endif %}
+
+    </div>
+
+<div class="footer">
+
+<div class="buttons">
+
+<button
+type="button"
+onclick="window.print()"
+class="btn print">
+
+<i class="fa-solid fa-print"></i>
+
+Print Receipt
+
+</button>
+
+<a href="{% url 'student_dashboard' %}?section=fees"
+
+class="btn back">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Back to Fees
+
+</a>
+
+</div>
+
+</div>
+
+    <div class="receipt-note">
+
+    <i class="fa-solid fa-circle-info"></i>
+
+    This receipt has been electronically generated by Smart College ERP
+    and is valid without a physical signature or seal.
+
+</div>
+
+</div>

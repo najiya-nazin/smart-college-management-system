@@ -1,0 +1,172 @@
+<style>
+
+.page-title{
+    color:#2563eb;
+    font-size:34px;
+    font-weight:700;
+    margin-bottom:30px;
+}
+.exam-grid{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(400px,1fr));
+    gap:25px;
+    margin-top:20px;
+}
+
+/* Remove bottom spacing because grid handles it */
+.exam-card{
+    background:#fff;
+    border-radius:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    margin-bottom:0;
+    overflow:hidden;
+    transition:.3s;
+    height:100%;
+}
+
+.exam-card:hover{
+    transform:translateY(-4px);
+}
+.exam-header{
+    background:#2563eb;
+    color:#fff;
+    padding:18px 25px;
+    font-size:22px;
+    font-weight:600;
+}
+
+.exam-body{
+    padding:25px;
+}
+
+.info-row{
+    display:flex;
+    margin-bottom:18px;
+}
+
+.info-icon{
+    width:35px;
+    color:#2563eb;
+    font-size:18px;
+}
+
+.info-content{
+    flex:1;
+}
+
+.info-title{
+    font-size:14px;
+    color:#64748b;
+    font-weight:600;
+}
+
+.info-value{
+    font-size:17px;
+    color:#1e293b;
+    font-weight:600;
+}
+
+.empty-card{
+    background:#fff;
+    border-radius:18px;
+    padding:60px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.empty-card i{
+    font-size:70px;
+    color:#94a3b8;
+    margin-bottom:20px;
+}
+
+.empty-card h3{
+    color:#334155;
+    margin-bottom:10px;
+}
+
+.empty-card p{
+    color:#64748b;
+}
+/* Responsive */
+@media (max-width:992px){
+    .exam-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+</style>
+{% if exams %}
+
+<div class="exam-grid">
+
+    {% for exam in exams %}
+
+    <div class="exam-card">
+
+        <div class="exam-header">
+            📝 {{ exam.name }}
+        </div>
+
+        <div class="exam-body">
+
+            <div class="info-row">
+
+                <div class="info-icon">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+
+                <div class="info-content">
+                    <div class="info-title">Course</div>
+                    <div class="info-value">{{ exam.course.name }}</div>
+                </div>
+
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-icon">
+                    <i class="fa-solid fa-calendar-days"></i>
+                </div>
+
+                <div class="info-content">
+                    <div class="info-title">Exam Date</div>
+                    <div class="info-value">{{ exam.exam_date }}</div>
+                </div>
+
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-icon">
+                    <i class="fa-solid fa-square-poll-vertical"></i>
+                </div>
+
+                <div class="info-content">
+                    <div class="info-title">Total Marks</div>
+                    <div class="info-value">{{ exam.total_marks }}</div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="empty-card">
+
+    <i class="fa-solid fa-file-circle-xmark"></i>
+
+    <h3>No Upcoming Exams</h3>
+
+    <p>No exams have been scheduled for your course.</p>
+
+</div>
+
+{% endif %}

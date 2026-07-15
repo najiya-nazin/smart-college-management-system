@@ -1,0 +1,511 @@
+<style>
+
+.profile-card{
+    background:#fff;
+    border-radius:22px;
+    overflow:hidden;
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+}
+
+.profile-header{
+    background:linear-gradient(135deg,#2563eb,#4f83f1);
+    color:#fff;
+    padding:18px 28px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.profile-header h2{
+    margin:0;
+    font-size:24px;
+    font-weight:700;
+}
+
+.student-id{
+    background:#fff;
+    color:#1e293b;
+    padding:8px 16px;
+    border-radius:30px;
+    font-size:13px;
+    font-weight:700;
+}
+
+.profile-top{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:28px 20px;
+    border-bottom:1px solid #edf2f7;
+}
+
+.avatar{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#2563eb,#4f83f1);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:40px;
+    font-weight:700;
+    margin-bottom:15px;
+    box-shadow:0 10px 25px rgba(37,99,235,.25);
+}
+
+.profile-top h3{
+    margin:0;
+    font-size:32px;
+    font-weight:700;
+    color:#1e293b;
+}
+
+.profile-top p{
+    margin-top:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+    color:#64748b;
+    font-size:16px;
+    font-weight:500;
+}
+
+.profile-top p i{
+    color:#2563eb;
+    font-size:15px;
+}
+
+.profile-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin:25px 30px;
+}
+
+.profile-box{
+    background:#f8fbff;
+    border:1px solid #e5e7eb;
+    border-radius:16px;
+    padding:22px;
+    transition:.3s;
+}
+
+.profile-box:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 28px rgba(0,0,0,.08);
+}
+
+.profile-box h4{
+    color:#2563eb;
+    font-size:20px;
+    margin-bottom:18px;
+}
+
+.item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 0;
+    border-bottom:1px solid #edf2f7;
+}
+
+.item:last-child{
+    border-bottom:none;
+}
+
+.item span{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#64748b;
+    font-size:14px;
+}
+
+.item span i{
+    width:16px;
+    color:#2563eb;
+}
+
+.item strong{
+    font-size:15px;
+    font-weight:600;
+    color:#1e293b;
+    text-align:right;
+}
+
+.edit-field{
+    display:none;
+}
+
+.edit-field input,
+.edit-field textarea{
+    width:100%;
+    padding:8px 12px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    font-size:14px;
+}
+
+.action{
+    display:flex;
+    justify-content:flex-end;
+    gap:12px;
+    padding:0 30px 25px;
+}
+
+.btn-edit,
+.btn-save,
+.btn-cancel{
+    border:none;
+    border-radius:10px;
+    padding:9px 18px;
+    font-size:14px;
+    color:#fff;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.btn-edit{
+    background:#2563eb;
+}
+
+.btn-edit:hover{
+    background:#1d4ed8;
+}
+
+.btn-save{
+    background:#16a34a;
+    display:none;
+}
+
+.btn-save:hover{
+    background:#15803d;
+}
+
+.btn-cancel{
+    background:#6b7280;
+    display:none;
+}
+
+.btn-cancel:hover{
+    background:#4b5563;
+}
+
+@media(max-width:992px){
+
+    .profile-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:768px){
+
+    .profile-header{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .action{
+        justify-content:center;
+        flex-wrap:wrap;
+    }
+
+}
+
+</style>
+
+<div class="profile-card">
+
+    <div class="profile-header">
+
+        <h2>
+            <i class="fa-solid fa-user-graduate"></i>
+            Student Profile
+        </h2>
+
+        <span class="student-id">
+            {{ student.student_id }}
+        </span>
+
+    </div>
+
+    <div class="profile-top">
+
+        <div class="avatar">
+          {{ student.user.name|first|upper }}
+        </div>
+
+        <h3>{{ student.user.name }}</h3>
+        <p>
+        <i class="fa-solid fa-building"></i>
+        {{ student.department.name }}
+
+        &nbsp; • &nbsp;
+
+        <i class="fa-solid fa-layer-group"></i>
+        Semester {{ student.semester }}
+       </p>
+
+    </div>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="profile-grid">
+
+            <div class="profile-box">
+
+                <h4>
+                    <i class="fa-solid fa-user"></i>
+                    Personal Information
+                </h4>
+
+                <div class="item">
+                    <span>
+                        <i class="fa-solid fa-user"></i>
+                        Name
+                    </span>
+
+                    <strong>{{ student.user.name }}</strong>
+                </div>
+
+                <div class="item">
+                    <span>
+                        <i class="fa-solid fa-envelope"></i>
+                        Email
+                    </span>
+
+                    <strong>{{ student.user.email }}</strong>
+                </div>
+
+                <div class="item editable">
+
+                    <span>
+                        <i class="fa-solid fa-phone"></i>
+                        Phone
+                    </span>
+
+                    <div class="display-value">
+                        <strong>{{ student.user.phone }}</strong>
+                    </div>
+
+                    <div class="edit-field">
+                        {{ user_form.phone }}
+                    </div>
+
+                </div>
+
+                <div class="item">
+                    <span>
+                        <i class="fa-solid fa-venus-mars"></i>
+                        Gender
+                    </span>
+
+                    <strong>{{ student.gender }}</strong>
+                </div>
+
+                <div class="item">
+                    <span>
+                        <i class="fa-solid fa-cake-candles"></i>
+                        DOB
+                    </span>
+
+                    <strong>{{ student.dob|date:"d M Y" }}</strong>
+                </div>
+
+            </div>
+
+            <div class="profile-box">
+
+                <h4>
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    Academic Information
+                </h4>
+
+                <div class="item">
+                    <span>
+                        <i class="fa-solid fa-building"></i>
+                        Department
+                    </span>
+
+                    <strong>{{ student.department.name }}</strong>
+                </div>
+
+<!--                <div class="item">-->
+<!--                    <span>-->
+<!--                        <i class="fa-solid fa-book-open"></i>-->
+<!--                        Course-->
+<!--                    </span>-->
+
+<!--                    <strong>{{ student.course.name }}</strong>-->
+<!--                </div>-->
+
+                <div class="item">
+                    <span>
+                        <i class="fa-solid fa-layer-group"></i>
+                        Semester
+                    </span>
+
+                    <strong>{{ student.semester }}</strong>
+                </div>
+
+                <div class="item">
+                    <span>
+                        <i class="fa-solid fa-calendar-days"></i>
+                        Admission Date
+                    </span>
+
+                    <strong>{{ student.admission_date|date:"d M Y" }}</strong>
+                </div>
+
+            </div>
+
+            <div class="profile-box">
+
+                <h4>
+                    <i class="fa-solid fa-user-group"></i>
+                    Guardian Information
+                </h4>
+
+                <div class="item editable">
+
+                    <span>
+                        <i class="fa-solid fa-user"></i>
+                        Guardian Name
+                    </span>
+
+                    <div class="display-value">
+                        <strong>{{ student.guardian_name }}</strong>
+                    </div>
+
+                    <div class="edit-field">
+                        {{ student_form.guardian_name }}
+                    </div>
+
+                </div>
+
+                <div class="item editable">
+
+                    <span>
+                        <i class="fa-solid fa-phone"></i>
+                        Phone
+                    </span>
+
+                    <div class="display-value">
+                        <strong>{{ student.guardian_phone }}</strong>
+                    </div>
+
+                    <div class="edit-field">
+                        {{ student_form.guardian_phone }}
+                    </div>
+
+                </div>
+
+                <div class="item editable">
+
+                    <span>
+                        <i class="fa-solid fa-location-dot"></i>
+                        Address
+                    </span>
+
+                    <div class="display-value">
+                        <strong>{{ student.address }}</strong>
+                    </div>
+
+                    <div class="edit-field">
+                        {{ student_form.address }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="action">
+
+            <button
+                type="button"
+                id="editBtn"
+                class="btn-edit"
+                onclick="enableEdit()">
+
+                <i class="fa-solid fa-pen"></i>
+                Edit Profile
+
+            </button>
+
+            <button
+                type="button"
+                id="cancelBtn"
+                class="btn-cancel"
+                onclick="cancelEdit()">
+
+                <i class="fa-solid fa-xmark"></i>
+                Cancel
+
+            </button>
+
+            <button
+                type="submit"
+                id="saveBtn"
+                class="btn-save">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+                Save Changes
+
+            </button>
+        </div>
+    </form>
+
+</div>
+
+<script>
+
+function enableEdit(){
+
+    document.querySelectorAll(".display-value").forEach(function(item){
+
+        item.style.display = "none";
+
+    });
+
+    document.querySelectorAll(".edit-field").forEach(function(item){
+
+        item.style.display = "block";
+
+    });
+
+    document.getElementById("editBtn").style.display = "none";
+    document.getElementById("saveBtn").style.display = "inline-block";
+    document.getElementById("cancelBtn").style.display = "inline-block";
+
+}
+
+function cancelEdit(){
+
+    document.querySelectorAll(".display-value").forEach(function(item){
+
+        item.style.display = "block";
+
+    });
+
+    document.querySelectorAll(".edit-field").forEach(function(item){
+
+        item.style.display = "none";
+
+    });
+
+    document.getElementById("editBtn").style.display = "inline-block";
+    document.getElementById("saveBtn").style.display = "none";
+    document.getElementById("cancelBtn").style.display = "none";
+
+}
+</script>

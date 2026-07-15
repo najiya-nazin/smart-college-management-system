@@ -1,0 +1,313 @@
+<style>
+
+.dashboard-header{
+    margin-bottom:40px;
+}
+
+.dashboard-header h2{
+    color:#1e293b;
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+.dashboard-header p{
+    color:#64748b;
+    font-size:15px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:24px;
+    margin-bottom:35px;
+}
+
+.card{
+    background:#fff;
+    border-radius:16px;
+    padding:22px;
+    min-height:140px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card i{
+    width:55px;
+    height:55px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#eef4ff;
+    border-radius:14px;
+    color:#2563eb;
+    font-size:24px;
+    margin-bottom:15px;
+}
+
+.card h4{
+    color:#64748b;
+    font-size:15px;
+    margin-bottom:8px;
+}
+
+.card h3{
+    font-size:34px;
+    font-weight:700;
+    color:#1e293b;
+}
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.box{
+    background:#fff;
+    border-radius:16px;
+    border-top:5px solid #2563eb;
+    padding:28px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    transition:.25s;
+}
+.box:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 28px rgba(0,0,0,.08);
+}
+
+.box h3{
+    margin-bottom:20px;
+    font-size:20px;
+    font-weight:600;
+    color:#1e293b;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#2563eb;
+    color:#fff;
+    padding:14px;
+}
+
+td{
+    padding:16px;
+    border-bottom:1px solid #edf2f7;
+}
+
+table th:first-child,
+table td:first-child{
+    text-align:left;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:42px;
+    height:32px;
+    padding:0 14px;
+    border-radius:20px;
+    background:#e8f0ff;
+    color:#2563eb;
+    font-weight:600;
+}
+
+.empty{
+    text-align:center;
+    color:#6b7280;
+    padding:15px;
+}
+
+</style>
+
+<div class="dashboard-header">
+
+    <h2>Welcome {{ student.user.name }} 👋</h2>
+
+    <p>Welcome back to Smart College Management System</p>
+
+</div>
+
+<div class="cards">
+
+    <div class="card">
+        <i class="fa-solid fa-calendar-check"></i>
+        <h4>Attendance</h4>
+        <h3>{{ attendance_count }}</h3>
+    </div>
+
+    <div class="card">
+        <i class="fa-solid fa-money-check-dollar"></i>
+        <h4>Pending Fees</h4>
+        <h3>{{ pending_fees.count }}</h3>
+    </div>
+
+    <div class="card">
+        <i class="fa-solid fa-book"></i>
+        <h4>Library Books</h4>
+        <h3>{{ library_count }}</h3>
+    </div>
+
+    <div class="card">
+        <i class="fa-solid fa-file-pen"></i>
+        <h4>Upcoming Exams</h4>
+        <h3>{{ upcoming_exams.count }}</h3>
+    </div>
+
+</div>
+
+<div class="dashboard-grid">
+
+    <div class="box">
+
+        <h3>Upcoming Exams</h3>
+        <table>
+            <tr>
+                <th>Exam</th>
+                <th>Date</th>
+            </tr>
+            {% for exam in upcoming_exams %}
+            <tr>
+                <td>{{ exam.name }}</td>
+                <td>{{ exam.exam_date }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2" class="empty">
+                    No upcoming exams.
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="box">
+
+        <h3>Recent Results</h3>
+        <table>
+            <tr>
+                <th>Course</th>
+                <th>Grade</th>
+            </tr>
+
+            {% for mark in marks %}
+
+            <tr>
+                <td>{{ mark.course.name }}</td>
+                <td>
+                    <span class="badge">
+                        {{ mark.grade }}
+                    </span>
+                </td>
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="2" class="empty">
+                    No results available.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </table>
+    </div>
+
+    <div class="box">
+
+        <h3>Today's Timetable</h3>
+
+        <table>
+            <tr>
+                <th>Class</th>
+                <th>Time</th>
+            </tr>
+
+            {% for timetable in timetables %}
+
+            <tr>
+                <td>{{ timetable.class_name }}</td>
+                <td>
+                    {{ timetable.start_time }}
+                    -
+                    {{ timetable.end_time }}
+                </td>
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="2" class="empty">
+                    No classes scheduled.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </table>
+    </div>
+
+    <div class="box">
+
+    <h3>Fee Status</h3>
+
+    <table>
+        <tr>
+            <th>Fee Type</th>
+            <th>Status</th>
+            <th>Amount</th>
+        </tr>
+
+        {% for fee in pending_fees %}
+
+        <tr>
+            <td>{{ fee.fee_type }}</td>
+            <td>
+
+                {% if fee.status == "Paid" %}
+                    <span class="badge bg-success">
+                        {{ fee.status }}
+                    </span>
+
+                {% elif fee.status == "Pending" %}
+                    <span class="badge bg-danger">
+                        {{ fee.status }}
+                    </span>
+
+                {% else %}
+                    <span class="badge bg-warning text-dark">
+                        {{ fee.status }}
+                    </span>
+
+                {% endif %}
+
+            </td>
+            <td>₹ {{ fee.amount }}</td>
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="3" class="empty">
+                No pending fees.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+</div>
+
+</div>

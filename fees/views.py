@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 
@@ -130,3 +131,23 @@ def fee_delete(request, pk):
         )
 
     return redirect("fee-list")
+
+
+@login_required
+def fee_receipt(request, pk):
+
+    fee = get_object_or_404(
+        Fee,
+        pk=pk,
+        student__user=request.user
+    )
+
+    fee.balance = fee.amount - fee.paid_amount
+
+    return render(
+        request,
+        "fees/fee_receipt.html",
+        {
+            "fee": fee
+        }
+    )

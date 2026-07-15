@@ -1,0 +1,331 @@
+{% load static %}
+
+<style>
+
+.page-title{
+    font-size:34px;
+    font-weight:700;
+    color:#2563eb;
+    margin-bottom:30px;
+}
+
+.schedule-card{
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.schedule-header{
+    background:linear-gradient(135deg,#2563eb,#4f83f1);
+    color:#fff;
+    padding:22px 30px;
+}
+
+.schedule-header h2{
+    margin:0;
+    font-size:30px;
+    font-weight:700;
+}
+
+.schedule-header p{
+    margin:8px 0 0;
+    opacity:.9;
+}
+
+.schedule-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.schedule-table th{
+    background:#2563eb;
+    color:#fff;
+    padding:16px;
+    text-align:center;
+    font-size:17px;
+    border:1px solid rgba(255,255,255,.15);
+}
+
+.schedule-table td{
+    border:1px solid #e5e7eb;
+    padding:16px;
+    vertical-align:top;
+    text-align:center;
+}
+
+.time-column{
+    width:180px;
+    font-weight:700;
+    background:#f8fbff;
+}
+
+.class-box{
+    background:#eef4ff;
+    border-left:5px solid #2563eb;
+    border-radius:10px;
+    padding:12px;
+    text-align:left;
+}
+
+.course{
+    font-size:18px;
+    font-weight:700;
+    color:#1e293b;
+}
+
+.teacher{
+    color:#475569;
+    margin-top:5px;
+}
+
+.room{
+    margin-top:6px;
+    color:#2563eb;
+    font-weight:600;
+}
+
+.empty-cell{
+    color:#cbd5e1;
+    font-size:20px;
+}
+
+.empty-card{
+    background:#fff;
+    border-radius:18px;
+    padding:70px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.empty-card i{
+    font-size:70px;
+    color:#94a3b8;
+    margin-bottom:20px;
+}
+
+.empty-card h3{
+    color:#334155;
+    margin-bottom:10px;
+}
+
+.empty-card p{
+    color:#64748b;
+}
+
+</style>
+
+{% if timetable %}
+
+<div class="schedule-card">
+
+    <div class="schedule-header">
+        <h2>Class Schedule</h2>
+        <p>Weekly Academic Timetable</p>
+    </div>
+
+    <table class="schedule-table">
+
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        {% for slot, days in timetable.items %}
+
+        <tr>
+
+            <td class="time-column">
+                {{ slot.0 }}
+                <br> -
+                <br>
+                {{ slot.1 }}
+            </td>
+
+            <!-- Monday -->
+            <td>
+
+                {% if days.Monday %}
+
+                <div class="class-box">
+
+                    <div class="course">
+                        {{ days.Monday.course.name }}
+                    </div>
+
+                    <div class="teacher">
+                        <i class="fa-solid fa-user"></i>
+                        {{ days.Monday.teacher.user.name }}
+                    </div>
+
+                    <div class="room">
+                        <i class="fa-solid fa-location-dot"></i>
+                        {{ days.Monday.room_no }}
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <div class="empty-cell">—</div>
+
+                {% endif %}
+
+            </td>
+
+            <!-- Tuesday -->
+            <td>
+
+                {% if days.Tuesday %}
+
+                <div class="class-box">
+
+                    <div class="course">
+                        {{ days.Tuesday.course.name }}
+                    </div>
+
+                    <div class="teacher">
+                        <i class="fa-solid fa-user"></i>
+                        {{ days.Tuesday.teacher.user.name }}
+                    </div>
+
+                    <div class="room">
+                        <i class="fa-solid fa-location-dot"></i>
+                        {{ days.Tuesday.room_no }}
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <div class="empty-cell">—</div>
+
+                {% endif %}
+
+            </td>
+
+            <!-- Wednesday -->
+            <td>
+
+                {% if days.Wednesday %}
+
+                <div class="class-box">
+
+                    <div class="course">
+                        {{ days.Wednesday.course.name }}
+                    </div>
+
+                    <div class="teacher">
+                        <i class="fa-solid fa-user"></i>
+                        {{ days.Wednesday.teacher.user.name }}
+                    </div>
+
+                    <div class="room">
+                        <i class="fa-solid fa-location-dot"></i>
+                        {{ days.Wednesday.room_no }}
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <div class="empty-cell">—</div>
+
+                {% endif %}
+
+            </td>
+
+            <!-- Thursday -->
+            <td>
+
+                {% if days.Thursday %}
+
+                <div class="class-box">
+
+                    <div class="course">
+                        {{ days.Thursday.course.name }}
+                    </div>
+
+                    <div class="teacher">
+                        <i class="fa-solid fa-user"></i>
+                        {{ days.Thursday.teacher.user.name }}
+                    </div>
+
+                    <div class="room">
+                        <i class="fa-solid fa-location-dot"></i>
+                        {{ days.Thursday.room_no }}
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <div class="empty-cell">—</div>
+
+                {% endif %}
+
+            </td>
+
+            <!-- Friday -->
+            <td>
+
+                {% if days.Friday %}
+
+                <div class="class-box">
+
+                    <div class="course">
+                        {{ days.Friday.course.name }}
+                    </div>
+
+                    <div class="teacher">
+                        <i class="fa-solid fa-user"></i>
+                        {{ days.Friday.teacher.user.name }}
+                    </div>
+
+                    <div class="room">
+                        <i class="fa-solid fa-location-dot"></i>
+                        {{ days.Friday.room_no }}
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <div class="empty-cell">—</div>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% else %}
+
+<div class="empty-card">
+
+    <i class="fa-solid fa-calendar-xmark"></i>
+
+    <h3>No Timetable Available</h3>
+
+    <p>Your timetable has not been published yet.</p>
+
+</div>
+
+{% endif %}
+
