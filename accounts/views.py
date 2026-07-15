@@ -52,7 +52,6 @@ from django.db.models import Count
 from django.utils import timezone
 from django.db.models import Sum
 
-
 # def register(request):
 #     if request.method == "POST":
 #         form = RegisterForm(request.POST)
@@ -98,6 +97,15 @@ def login_view(request):
             update_last_login(None, user)
 
             if user.role == Role.ADMIN:
+
+
+            
+
+            messages.success(request, "Login Successful")
+
+
+            if user.role == "ADMIN":
+
                 return redirect("admin_dashboard")
 
             elif user.role == Role.TEACHER:
@@ -730,6 +738,7 @@ def admin_dashboard(request):
 
     elif section == "timetable_detail":
 
+
         timetable = get_object_or_404(
             Timetable.objects.select_related(
                 "course",
@@ -739,6 +748,7 @@ def admin_dashboard(request):
         )
 
         context["timetable"] = timetable
+
 
     return render(request, "accounts/admin_dashboard.html", context)
 
@@ -1002,6 +1012,15 @@ def student_dashboard(request):
     return render(request, "students/student_dashboard.html", context)
 
 
+
+@login_required
+def logout_view(request):
+    logout(request)
+    messages.success(request, "Logout Successful")
+    return redirect("login")
+
+
+
 def forgot_password(request):
 
     if request.method == "POST":
@@ -1023,6 +1042,10 @@ def forgot_password(request):
                 recipient_list=[email],
                 fail_silently=False,
             )
+
+
+            messages.success(request, "OTP Sent Successfully")
+
 
             return redirect("verify-otp")
 
