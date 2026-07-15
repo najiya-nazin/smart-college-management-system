@@ -1,207 +1,519 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Department List</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
     <style>
 
-        body{
-            background:#f4f7fc;
-            font-family:'Segoe UI',sans-serif;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-        .card{
-            border:none;
-            border-radius:18px;
-            box-shadow:0 10px 30px rgba(0,0,0,.08);
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
 
-        .card-header{
-            background:linear-gradient(135deg,#0d6efd,#3f7bff);
-            color:#fff;
-            padding:18px 25px;
-        }
+body{
+    background:#f4f7fc;
+}
 
-        .card-header h3{
-            margin:0;
-            font-weight:700;
-        }
+/* ===========================
+   Header
+=========================== */
+.page-header{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:#fff;
+    border-radius:18px;
+    padding:20px 28px;
 
-        .btn-add{
-            background:#198754;
-            color:#fff;
-            border:none;
-            border-radius:10px;
-            padding:10px 18px;
-            font-weight:600;
-        }
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-        .btn-add:hover{
-            background:#157347;
-            color:#fff;
-        }
+    margin-bottom:25px;
+}
 
-        table th{
-            background:#0d6efd;
-            color:#fff;
-            text-align:center;
-            vertical-align:middle;
-        }
+.page-header h2{
+    margin:0;
+    font-size:24px;
+    font-weight:700;
+}
 
-        table td{
-            text-align:center;
-            vertical-align:middle;
-        }
+.page-header h2 i{
+    margin-right:12px;
+}
 
-        .btn-action{
-            width:38px;
-            height:38px;
-            border-radius:50%;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            margin:auto;
-        }
+.btn-add{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    background:#fff;
+    color:#2563eb;
+
+    padding:10px 18px;
+    border-radius:10px;
+
+    text-decoration:none;
+    font-size:15px;
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.btn-add:hover{
+    background:#eef4ff;
+    color:#1d4ed8;
+    transform:translateY(-2px);
+}
+
+.btn-add i{
+    font-size:14px;
+}
+
+/* ===========================
+   Card
+=========================== */
+
+.table-card{
+    background:#fff;
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 8px 25px rgba(0,0,0,.05);
+}
+
+/* ===========================
+   Toolbar
+=========================== */
+
+.toolbar{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:22px;
+}
+
+.search-box{
+    flex:1;
+    position:relative;
+}
+
+.search-box i{
+    position:absolute;
+    left:16px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#94a3b8;
+}
+
+.search-input{
+    width:100%;
+    height:50px;
+    border:1px solid #dbe3ef;
+    border-radius:12px;
+    padding-left:48px;
+    padding-right:15px;
+    font-size:15px;
+    transition:.3s;
+}
+
+.search-input:focus{
+    outline:none;
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.1);
+}
+
+/* ===========================
+   Table
+=========================== */
+
+.department-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.department-table thead{
+    background:#2563eb;
+}
+
+.department-table thead th{
+    color:#fff;
+    padding:16px;
+    font-size:15px;
+    font-weight:600;
+    text-align:left;
+}
+
+.department-table tbody td{
+    padding:18px 16px;
+    border-bottom:1px solid #edf2f7;
+    vertical-align:middle;
+}
+
+.department-table tbody tr:hover{
+    background:#f8fbff;
+}
+
+/* ===========================
+   Department Info
+=========================== */
+
+.department-info{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.avatar{
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    background:#2563eb;
+    color:#fff;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:20px;
+}
+
+.department-info strong{
+    display:block;
+    color:#1e293b;
+    font-size:16px;
+    font-weight:600;
+}
+
+/* ===========================
+   Badge
+=========================== */
+
+.badge{
+    display:inline-block;
+    background:#eef4ff;
+    color:#2563eb;
+    padding:8px 18px;
+    border-radius:25px;
+    font-size:13px;
+    font-weight:600;
+}
+
+/* ===========================
+   Actions
+=========================== */
+
+.actions{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+}
+
+.actions a{
+    min-width:70px;
+    height:36px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border-radius:8px;
+
+    text-decoration:none;
+    color:#fff;
+
+    font-size:14px;
+    font-weight:600;
+
+    transition:.25s;
+}
+
+.actions a:hover{
+    transform:translateY(-2px);
+}
+
+.view{
+    background:#2563eb;
+}
+
+.edit{
+    background:#f59e0b;
+}
+
+.delete{
+    background:#ef4444;
+}
+
+/* ===========================
+   Empty State
+=========================== */
+
+.empty-state{
+    text-align:center;
+    padding:50px 20px;
+}
+
+.empty-state i{
+    font-size:50px;
+    color:#94a3b8;
+    margin-bottom:15px;
+}
+
+.empty-state h3{
+    color:#334155;
+    margin-bottom:8px;
+}
+
+.empty-state p{
+    color:#64748b;
+}
+
+/* ===========================
+   Bottom Button
+=========================== */
+
+.bottom-actions{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:24px;
+}
+
+.btn-back{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+
+    background:#2563eb;
+    color:#fff;
+
+    text-decoration:none;
+
+    padding:12px 24px;
+
+    border-radius:10px;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.btn-back:hover{
+    background:#1d4ed8;
+    color:#fff;
+    transform:translateY(-2px);
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media(max-width:992px){
+
+    .toolbar{
+        flex-direction:column;
+    }
+
+    .search-box{
+        width:100%;
+    }
+
+    .department-table{
+        min-width:850px;
+    }
+
+}
+
+@media(max-width:768px){
+
+    .page-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
+    }
+
+    .page-header h2{
+        font-size:24px;
+    }
+
+}
+
 
     </style>
+<div class="page-header">
 
-</head>
-<body>
+    <div>
+        <h2>
+            <i class="fa-solid fa-building-columns"></i>
+            Department Management
+        </h2>
+    </div>
 
-<div class="container py-5">
+    <a href="?section=department_create" class="btn-add">
+       <i class="fa-solid fa-plus"></i>
+       Add
+    </a>
 
-    <div class="card">
+</div>
 
-        <div class="card-header d-flex justify-content-between align-items-center">
+<div class="table-card">
 
-            <h3>
-                <i class="bi bi-building"></i>
-                Department List
-            </h3>
+    <form method="GET" class="toolbar">
 
-            <a href="{% url 'department-create' %}" class="btn btn-add">
-                <i class="bi bi-plus-circle-fill"></i>
-                Add Department
-            </a>
+        <input
+            type="hidden"
+            name="section"
+            value="departments">
+
+        <div class="search-box">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="text"
+                name="search"
+                class="search-input"
+                value="{{ search }}"
+                placeholder="Search by Department Name or Code">
 
         </div>
 
-        <div class="card-body">
+    </form>
 
-            <div class="table-responsive">
+    <div class="table-responsive">
 
-                <table class="table table-bordered table-hover">
+        <table class="department-table">
 
-                    <thead>
+            <thead>
 
-                    <tr>
-                        <th>#</th>
-                        <th>Department Name</th>
-                        <th>Department Code</th>
-                        <th>Description</th>
-                        <th>Created Date</th>
-                        <th width="180">Action</th>
-                    </tr>
+                <tr>
 
-                    </thead>
+                    <th>Department</th>
+                    <th>Code</th>
+                    <th>Description</th>
+<!--                    <th>Created</th>-->
+                    <th>Actions</th>
 
-                    <tbody>
+                </tr>
 
-                    {% for department in departments %}
+            </thead>
 
-                    <tr>
+            <tbody>
 
-                        <td>{{ forloop.counter }}</td>
+            {% for department in departments %}
 
-                        <td>{{ department.name }}</td>
+                <tr>
 
-                        <td>
-                            <span class="badge bg-primary">
-                                {{ department.code }}
-                            </span>
-                        </td>
+                    <td>
 
-                        <td>
-                            {{ department.description|default:"-" }}
-                        </td>
+                        <div class="department-info">
 
-                        <td>
-                            {{ department.created_at|date:"d M Y" }}
-                        </td>
+                            <div class="avatar">
 
-                        <td>
-
-                            <div class="d-flex justify-content-center gap-2">
-
-                                <a href="{% url 'department-detail' department.id %}"
-                                   class="btn btn-info btn-sm btn-action"
-                                   title="View">
-
-                                    <i class="bi bi-eye-fill"></i>
-
-                                </a>
-
-                                <a href="{% url 'department-update' department.id %}"
-                                   class="btn btn-warning btn-sm btn-action"
-                                   title="Edit">
-
-                                    <i class="bi bi-pencil-square"></i>
-
-                                </a>
-
-                                <a href=""
-                                   class="btn btn-danger btn-sm btn-action"
-                                   title="Delete">
-
-                                    <i class="bi bi-trash-fill"></i>
-
-                                </a>
+                                <i class="fa-solid fa-building-columns"></i>
 
                             </div>
 
-                        </td>
+                            <div>
 
-                    </tr>
-
-                    {% empty %}
-
-                    <tr>
-
-                        <td colspan="6">
-
-                            <div class="alert alert-warning mb-0">
-
-                                <i class="bi bi-exclamation-circle"></i>
-
-                                No Departments Found.
+                                <strong>{{ department.name }}</strong>
 
                             </div>
 
-                        </td>
+                        </div>
 
-                    </tr>
+                    </td>
 
-                    {% endfor %}
+                    <td>
 
-                    </tbody>
+                        <span class="badge">
 
-                </table>
+                            {{ department.code }}
 
-            </div>
+                        </span>
 
-        </div>
+                    </td>
+
+                    <td>
+
+                        {{ department.description|default:"-" }}
+
+                    </td>
+
+<!--                    <td>-->
+
+<!--                        {{ department.created_at|date:"d M Y" }}-->
+
+<!--                    </td>-->
+
+                    <td>
+
+                        <div class="actions">
+
+    <a href="?section=department_detail&id={{ department.id }}"
+       class="view">
+        View
+    </a>
+
+    <a href="?section=department_update&id={{ department.id }}"
+       class="edit">
+        Edit
+    </a>
+
+    <a href="?section=department_delete&id={{ department.id }}"
+       class="delete"
+       onclick="return confirm('Are you sure you want to delete this department?')">
+        Delete
+    </a>
+
+</div>
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td colspan="5">
+
+                        <div class="empty-state">
+
+                            <i class="fa-solid fa-building-columns"></i>
+
+                            <h3>No Departments Found</h3>
+
+                            <p>No departments available.</p>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
 
     </div>
 
 </div>
 
-</body>
-</html>
+
+<script>
+const search = document.querySelector(".search-input");
+
+let timer;
+
+search.addEventListener("keyup", function(){
+
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+
+        this.form.submit();
+
+    },500);
+
+});
+</script>

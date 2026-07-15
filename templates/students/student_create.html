@@ -1,391 +1,509 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Student</title>
-
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
     <style>
-        body{
-            background:#f4f7fc;
-            font-family: 'Segoe UI', sans-serif;
-        }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-        .card{
-            border:none;
-            border-radius:18px;
-            overflow:hidden;
-            box-shadow:0 10px 30px rgba(0,0,0,.08);
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
 
-        .card-header{
-            background:linear-gradient(135deg,#0d6efd,#3f7bff);
-            color:#fff;
-            padding:20px;
-        }
+body{
+    background:#f4f7fc;
+    color:#1e293b;
+}
 
-        .card-header h3{
-            margin:0;
-            font-weight:700;
-        }
+/* ==========================
+   Container
+========================== */
 
-        .card-body{
-            padding:35px;
-        }
+.student-container{
+    width:100%;
+    padding:20px;
+}
 
-        .form-label{
-            font-weight:600;
-            color:#495057;
-        }
+/* ==========================
+   Header
+========================== */
 
-        .form-control,
-        .form-select{
-            height:48px;
-            border-radius:10px;
-            border:1px solid #ced4da;
-        }
+.page-header{
+    background:#2563eb;
+    color:#fff;
+    border-radius:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 28px;
+    margin-bottom:20px;
+}
 
-        textarea.form-control{
-            height:120px;
-        }
+.page-header h2{
+    font-size:28px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
 
-        .form-control:focus,
-        .form-select:focus{
-            border-color:#0d6efd;
-            box-shadow:0 0 0 .2rem rgba(13,110,253,.15);
-        }
+.page-header p{
+    margin-top:6px;
+    opacity:.9;
+    font-size:14px;
+}
 
-        .btn-save{
-            background:#0d6efd;
-            color:white;
-            border:none;
-            border-radius:10px;
-            padding:10px 30px;
-            font-weight:600;
-        }
+.header-badge{
+    background:#fff;
+    color:#2563eb;
+    padding:12px 28px;
+    border-radius:30px;
+    font-weight:700;
+    font-size:15px;
+}
 
-        .btn-save:hover{
-            background:#0b5ed7;
-        }
+/* ==========================
+   Form Card
+========================== */
 
-        .btn-back{
-            border-radius:10px;
-            padding:10px 30px;
-        }
+.form-card{
+    background:#fff;
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
 
-        .section-title{
-            font-size:18px;
-            font-weight:700;
-            color:#0d6efd;
-            margin-bottom:25px;
-            border-left:5px solid #0d6efd;
-            padding-left:10px;
-        }
+/* ==========================
+   Cards Layout
+========================== */
+
+.student-form-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+/* ==========================
+   Info Card
+========================== */
+
+.info-card{
+    border:1px solid #e5e7eb;
+    border-radius:16px;
+    padding:20px;
+}
+
+.info-card h3{
+    font-size:22px;
+    margin-bottom:18px;
+    padding-bottom:12px;
+    color:#2563eb;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    border-bottom:1px solid #edf2f7;
+}
+
+/* ==========================
+   Grid
+========================== */
+
+.info-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.full-width{
+    grid-column:1/-1;
+}
+
+/* ==========================
+   Form
+========================== */
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group label{
+    font-weight:600;
+    color:#334155;
+    font-size:14px;
+    margin-bottom:6px;
+}
+
+.form-control,
+.form-select{
+    height:42px;
+    font-size:14px;
+    border-radius:10px;
+    width:100%;
+    border:1px solid #dbe3ef;
+    padding:0 16px;
+    transition:.3s;
+}
+
+textarea.form-control{
+    height:90px;
+    padding:14px 16px;
+    resize:none;
+}
+
+.form-control:focus,
+.form-select:focus{
+    border-color:#2563eb;
+    outline:none;
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+
+/* ==========================
+   Buttons
+========================== */
+
+.form-buttons{
+    margin-top:20px;
+    padding-top:20px;
+    border-top:1px solid #edf2f7;
+    display:flex;
+    justify-content:flex-end;
+    gap:15px;
+}
+
+.btn-cancel{
+    padding:10px 22px;
+    font-size:15px;
+    background:#e2e8f0;
+    color:#334155;
+    text-decoration:none;
+    border-radius:12px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.btn-cancel:hover{
+    background:#cbd5e1;
+}
+
+.btn-save{
+    padding:10px 22px;
+    font-size:15px;
+    background:#16a34a;
+    color:#fff;
+    border:none;
+    border-radius:12px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.btn-save:hover{
+    background:#15803d;
+    transform:translateY(-2px);
+}
+
+/* ==========================
+   Errors
+========================== */
+
+.errorlist{
+    list-style:none;
+    margin-top:6px;
+    color:#dc2626;
+    font-size:13px;
+}
+
+/* ==========================
+   Responsive
+========================== */
+
+@media(max-width:1200px){
+
+.student-form-grid{
+    grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:768px){
+
+.page-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:15px;
+}
+
+.page-header h2{
+    font-size:28px;
+}
+
+.info-grid{
+    grid-template-columns:1fr;
+}
+
+.form-buttons{
+    flex-direction:column;
+}
+
+.btn-save,
+.btn-cancel{
+    width:100%;
+    text-align:center;
+}
+
+}
     </style>
 
-</head>
+<div class="student-container">
 
-<body>
+    <!-- Header -->
+    <div class="page-header">
 
-<div class="container py-5">
+        <div>
+            <h2>
+                <i class="fa-solid fa-user-graduate"></i>
+                Add Student
+            </h2>
 
-<div class="row justify-content-center">
+        </div>
+    </div>
 
-<div class="col-lg-10">
+    <!-- Form Card -->
 
-<div class="card">
+    <div class="form-card">
 
-<div class="card-header">
-<h3><i class="bi bi-person-plus-fill"></i> Add New Student</h3>
-</div>
+        <form method="POST">
 
-<div class="card-body">
+            {% csrf_token %}
 
-<div class="section-title">
-Student Information
-</div>
+            <div class="student-form-grid">
 
-<form method="POST" class="needs-validation" novalidate>
+                <!-- ================= Personal ================= -->
 
-{% csrf_token %}
+    <div class="info-card">
 
-<div class="row">
+                    <h3>
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        Academic Information
+                    </h3>
+                <div class="info-grid">
 
-<div class="col-md-6 mb-3">
-<label class="form-label">User</label>
+    <div class="form-group">
+        <label>Student Name</label>
+        {{ form.name }}
+        {{ form.name.errors }}
+    </div>
 
-<select name="user" class="form-select" required>
+    <div class="form-group">
+        <label>Email Address</label>
+        {{ form.email }}
+        {{ form.email.errors }}
+    </div>
 
-<option value="">Select User</option>
+    <div class="form-group">
+        <label>Phone Number</label>
+        {{ form.phone }}
+        {{ form.phone.errors }}
+    </div>
 
-{% for user in users %}
-<option value="{{ user.id }}">{{ user.name }}</option>
-{% endfor %}
+    <div class="form-group">
+        <label>Student ID</label>
+        {{ form.student_id }}
+        {{ form.student_id.errors }}
+    </div>
 
-</select>
+    <div class="form-group">
+        <label>Date of Birth</label>
+        {{ form.dob }}
+        {{ form.dob.errors }}
+    </div>
 
-<div class="invalid-feedback">
-    Please select a user.
-</div>
+    <div class="form-group">
+        <label>Gender</label>
+        {{ form.gender }}
+        {{ form.gender.errors }}
+    </div>
 
-</div>
+    <div class="form-group">
+        <label>Password</label>
+        {{ form.password }}
+        {{ form.password.errors }}
+    </div>
 
-
-<div class="col-md-6 mb-3">
-<label class="form-label">Student ID</label>
-
-<input
-type="text"
-name="student_id"
-class="form-control"
-placeholder="Enter Student ID"
-required
-minlength="4"
-maxlength="20">
-
-<div class="invalid-feedback">
-    Please enter a valid Student ID.
-</div>
-
-
-</div>
-
-
-<div class="col-md-6 mb-3">
-<label class="form-label">Date of Birth</label>
-
-<input
-type="date"
-name="dob"
-class="form-control"
-required>
-
-<div class="invalid-feedback">
-    Please select Date of Birth.
-</div>
-
-</div>
-
-
-<div class="col-md-6 mb-3">
-<label class="form-label">Gender</label>
-
-<select name="gender" class="form-select" required>
-
-<option value="">Select Gender</option>
-<option value="Male">Male</option>
-<option value="Female">Female</option>
-<option value="Other">Other</option>
-
-</select>
-
-<div class="invalid-feedback">
-    Please select gender.
-</div>
+    <div class="form-group">
+        <label>Confirm Password</label>
+        {{ form.confirm_password }}
+        {{ form.confirm_password.errors }}
+    </div>
 
 </div>
+        </div>
 
+                <!-- ================= Academic ================= -->
 
-<div class="col-12 mb-3">
-<label class="form-label">Address</label>
+                <div class="info-card">
 
-<textarea
-name="address"
-class="form-control"
-required
-minlength="10"
-placeholder="Enter Address"></textarea>
+                    <h3>
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        Academic Information
+                    </h3>
 
-<div class="invalid-feedback">
-    Address should contain at least 10 characters.
-</div>
+                    <div class="info-grid">
 
-</div>
+                        <div class="form-group">
 
+                            <label>Department</label>
 
-<div class="col-md-6 mb-3">
-    <label class="form-label">Department</label>
+                            <select
+                                name="department"
+                                class="form-select"
+                                required>
 
-    <select name="department" class="form-select" required>
+                                <option value="">Select Department</option>
 
-        <option value="">Select Department</option>
+                                {% for department in departments %}
 
-        {% for department in departments %}
-            <option value="{{ department.id }}">
-                {{ department.name }}
-            </option>
-        {% endfor %}
+                                <option value="{{ department.id }}">
+                                    {{ department.name }}
+                                </option>
 
-    </select>
+                                {% endfor %}
 
-    <div class="invalid-feedback">
-    Please select department.
-</div>
+                            </select>
 
-</div>
+                        </div>
 
+<!--                        <div class="form-group">-->
 
-</select>
+<!--                            <label>Course</label>-->
 
-</div>
+<!--                            <select-->
+<!--                                name="course"-->
+<!--                                class="form-select"-->
+<!--                                required>-->
 
+<!--                                <option value="">Select Course</option>-->
 
-<div class="col-md-6 mb-3">
-    <label class="form-label">Course</label>
+<!--                                {% for course in courses %}-->
 
-    <select name="course" class="form-select" required>
+<!--                                <option value="{{ course.id }}">-->
+<!--                                    {{ course.name }}-->
+<!--                                </option>-->
 
-        <option value="">Select Course</option>
+<!--                                {% endfor %}-->
 
-        {% for course in courses %}
-            <option value="{{ course.id }}">
-                {{ course.name }}
-            </option>
-        {% endfor %}
+<!--                            </select>-->
 
-    </select>
+<!--                        </div>-->
 
-    <div class="invalid-feedback">
-    Please select course.
-</div>
+                        <div class="form-group">
 
+                            <label>Semester</label>
 
-</div>
+                            <input
+                                type="number"
+                                name="semester"
+                                class="form-control"
+                                placeholder="Semester">
 
+                        </div>
 
-<div class="col-md-6 mb-3">
-<label class="form-label">Semester</label>
+                        <div class="form-group">
 
-<input
-type="number"
-name="semester"
-class="form-control"
-min="1"
-max="8"
-required
-placeholder="Enter Semester">
+                            <label>Admission Date</label>
 
-<div class="invalid-feedback">
-    Semester must be between 1 and 8.
-</div>
+                            <input
+                                type="date"
+                                name="admission_date"
+                                class="form-control">
 
-</div>
+                        </div>
 
+                    </div>
 
-<div class="col-md-6 mb-3">
-<label class="form-label">Admission Date</label>
+                </div>
 
-<input
-type="date"
-name="admission_date"
-class="form-control"
-required>
+                <!-- ================= Guardian ================= -->
 
-<div class="invalid-feedback">
-    Please select admission date.
-</div>
+                <div class="info-card">
 
-</div>
+                    <h3>
+                        <i class="fa-solid fa-users"></i>
+                        Guardian Information
+                    </h3>
 
+                    <div class="info-grid">
 
-<div class="col-md-6 mb-3">
-<label class="form-label">Guardian Name</label>
+                        <div class="form-group">
 
-<input
-type="text"
-name="guardian_name"
-class="form-control"
-required
-minlength="3"
-placeholder="Guardian Name">
+                            <label>Guardian Name</label>
 
-<div class="invalid-feedback">
-    Enter guardian name.
-</div>
+                            <input
+                                type="text"
+                                name="guardian_name"
+                                class="form-control"
+                                placeholder="Guardian Name">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Guardian Phone</label>
+
+                            <input
+                                type="text"
+                                name="guardian_phone"
+                                class="form-control"
+                                placeholder="Guardian Phone">
+
+                        </div>
+
+                        <div class="form-group full-width">
+
+    <label>Address</label>
+
+    {{ form.address }}
+
+    {{ form.address.errors }}
 
 </div>
 
 
-<div class="col-md-6 mb-3">
-<label class="form-label">Guardian Phone</label>
+                    </div>
 
-<input
-type="text"
-name="guardian_phone"
-class="form-control"
-required
-pattern="[0-9]{10}"
-maxlength="10"
-placeholder="9876543210">
+                </div>
 
-<div class="invalid-feedback">
-    Enter a valid 10-digit phone number.
-</div>
+            </div>
 
-</div>
+            <!-- Buttons -->
 
-</div>
+            <div class="form-buttons">
 
-<hr>
+                <a
+                    href="{% url 'admin_dashboard' %}?section=users"
+                    class="btn-cancel">
 
-<div class="text-end">
+                    <i class="fa-solid fa-arrow-left"></i>
 
-<a href="{% url 'admin_dashboard' %}" class="btn btn-secondary btn-back">
-<i class="bi bi-arrow-left-circle"></i>
-Back
-</a>
+                    Back
 
-<button type="submit" class="btn btn-save">
-<i class="bi bi-check-circle-fill"></i>
-Save Student
-</button>
+                </a>
 
-</div>
+                <button
+                    type="submit"
+                    class="btn-save">
 
-</form>
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Save Student
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
 
 </div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</body>
-
-<script>
-(() => {
-    'use strict';
-
-    const forms = document.querySelectorAll('.needs-validation');
-
-    Array.from(forms).forEach(form => {
-
-        form.addEventListener('submit', event => {
-
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-
-            form.classList.add('was-validated');
-
-        }, false);
-
-    });
-
-})();
-</script>
-
-</html>

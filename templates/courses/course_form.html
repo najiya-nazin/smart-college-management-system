@@ -1,150 +1,452 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+/* ===================================
+   COURSE FORM PAGE
+=================================== */
 
-    <title>
-        {% if form.instance.pk %}
-            Update Course
-        {% else %}
-            Add Course
-        {% endif %}
-    </title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-        body{
-            background:#f4f7fb;
-            font-family:"Segoe UI",sans-serif;
-        }
-
-        .container{
-            max-width:900px;
-            margin:50px auto;
-        }
-
-        .card{
-            border:none;
-            border-radius:15px;
-            box-shadow:0 8px 20px rgba(0,0,0,.08);
-        }
-
-        .card-header{
-            background:#0d6efd;
-            color:#fff;
-            padding:18px 25px;
-        }
-
-        .card-body{
-            padding:30px;
-        }
-
-        .form-label{
-            font-weight:600;
-        }
-
-        textarea{
-            min-height:120px;
-        }
-
-        .button-group{
-            display:flex;
-            justify-content:space-between;
-            margin-top:30px;
-        }
-
-        .errorlist{
-            list-style:none;
-            padding:0;
-            margin-top:5px;
-            color:red;
-        }
-
-        .is-invalid{
-    border:2px solid red !important;
+.course-container{
+    max-width:1400px;
+    margin:0 auto;
+    padding:30px;
 }
 
-.js-error{
-    color:red;
+/* ===================================
+   HEADER
+=================================== */
+
+.page-header{
+    background:linear-gradient(135deg,#2563eb,#4f8df7);
+    color:#fff;
+    padding:24px 32px;
+    border-radius:22px;
+    margin-bottom:28px;
+}
+
+.page-header h2{
+    margin:0;
+    font-size:28px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+/* ===================================
+   FORM CARD
+=================================== */
+
+.form-card{
+    background:#fff;
+    border-radius:26px;
+    padding:28px;
+    box-shadow:0 12px 35px rgba(30,64,175,.08);
+}
+
+/* ===================================
+   GRID
+=================================== */
+
+.course-form-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:25px;
+}
+
+/* ===================================
+   INFORMATION CARD
+=================================== */
+
+.info-card{
+    border:1px solid #dbe7ff;
+    border-radius:20px;
+    padding:30px;
+}
+
+.info-card h3{
+    color:#2f61df;
+    font-size:22px;
+    font-weight:700;
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    margin-bottom:28px;
+    padding-bottom:18px;
+
+    border-bottom:1px solid #e7edf8;
+}
+
+/* ===================================
+   FORM GRID
+=================================== */
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:24px;
+}
+
+.full-width{
+    grid-column:1/-1;
+}
+
+/* ===================================
+   FORM GROUP
+=================================== */
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group label{
+    font-size:17px;
+    font-weight:600;
+    color:#1e293b;
+    margin-bottom:10px;
+}
+
+/* ===================================
+   INPUTS
+=================================== */
+
+.form-group input,
+.form-group textarea,
+.form-group select{
+
+    width:100%;
+
+    border:1px solid #dbe3ef;
+    border-radius:14px;
+
+    padding:14px 18px;
+
+    font-size:16px;
+    color:#1e293b;
+
+    background:#fff;
+
+    transition:.3s;
+}
+
+.form-group textarea{
+    min-height:130px;
+    resize:vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.08);
+
+}
+
+/* ===================================
+   SELECT
+=================================== */
+
+.form-group select{
+
+    appearance:none;
+    cursor:pointer;
+
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 5.5L8 12l6.5-6.5' stroke='%2364748b' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+    background-repeat:no-repeat;
+    background-position:right 18px center;
+    background-size:16px;
+
+}
+
+/* ===================================
+   ERROR
+=================================== */
+
+.errorlist{
+    list-style:none;
+    margin-top:8px;
+    padding:0;
+}
+
+.errorlist li{
+    color:#dc2626;
     font-size:14px;
-    margin-top:5px;
+    font-weight:500;
+}
+
+/* ===================================
+   BUTTONS
+=================================== */
+
+.form-buttons{
+
+    display:flex;
+    justify-content:flex-end;
+    gap:16px;
+    margin-top:20px;
+    padding-top:20px;
+
+    border-top:1px solid #e7edf8;
+
+}
+
+.btn-save,
+.btn-cancel{
+
+    min-width:220px;
+    height:56px;
+
+    border:none;
+    border-radius:14px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+
+    text-decoration:none;
+
+    font-size:17px;
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.btn-save{
+
+    background:#2f61df;
+    color:#fff;
+
+}
+
+.btn-save:hover{
+
+    background:#1d4ed8;
+    color:#fff;
+
+}
+
+.btn-cancel{
+
+    background:#dbe4f0;
+    color:#1e3a5f;
+
+}
+
+.btn-cancel:hover{
+
+    background:#cdd7e6;
+    color:#1e3a5f;
+
+}
+
+/* ===================================
+   ALERT
+=================================== */
+
+.alert{
+
+    border-radius:14px;
+    margin-bottom:25px;
+
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media(max-width:992px){
+
+    .course-container{
+        padding:20px;
+    }
+
+    .page-header h2{
+        font-size:30px;
+    }
+
+    .info-grid{
+        grid-template-columns:1fr;
+    }
+
+    .full-width{
+        grid-column:auto;
+    }
+
+    .form-buttons{
+        flex-direction:column-reverse;
+    }
+
+    .btn-save,
+    .btn-cancel{
+        width:100%;
+    }
+
 }
     </style>
-</head>
 
-<body>
+<div class="course-container">
 
-<div class="container">
+    <!-- Header -->
+    <div class="page-header">
 
-    <div class="card">
+        <div>
 
-        <div class="card-header">
+            <h2>
 
-            <h3>
+                <i class="fa-solid fa-book-open"></i>
+
                 {% if form.instance.pk %}
-                    Update Course
+                    Edit Course
                 {% else %}
                     Add Course
                 {% endif %}
-            </h3>
+
+            </h2>
 
         </div>
 
-        <div class="card-body">
-
-            <form method="POST" id="courseForm" novalidate>
-    {% csrf_token %}
-
-    {% if form.non_field_errors %}
-    <div class="alert alert-danger">
-        {{ form.non_field_errors }}
-    </div>
-    {% endif %}
-
-    {% for field in form %}
-    <div class="mb-3">
-
-        <label class="form-label">{{ field.label }}</label>
-
-        {{ field }}
-
-        <div class="text-danger js-error" id="{{ field.id_for_label }}_error"></div>
-
-        {% if field.errors %}
-        <div class="text-danger">
-            {% for error in field.errors %}
-            <small>{{ error }}</small><br>
-            {% endfor %}
-        </div>
-        {% endif %}
-
-    </div>
-    {% endfor %}
-
-    <div class="button-group">
-
-        <button class="btn btn-primary">
-            Save Course
-        </button>
-
-        <a href="{% url 'course-list' %}" class="btn btn-secondary">
-            Back
-        </a>
-
     </div>
 
-</form>
+    <!-- Form Card -->
+    <div class="form-card">
 
-        </div>
+        <form method="POST" novalidate>
+
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+
+            <div class="alert alert-danger">
+
+                {{ form.non_field_errors }}
+
+            </div>
+
+            {% endif %}
+
+            <div class="course-form-grid">
+
+                <!-- Course Information -->
+
+                <div class="info-card">
+
+                    <h3>
+
+                        <i class="fa-solid fa-book"></i>
+
+                        Course Information
+
+                    </h3>
+
+                    <div class="info-grid">
+
+                        <!-- Course Name -->
+
+                        <div class="form-group">
+
+                            <label>Course Name</label>
+
+                            {{ form.name }}
+
+                            {{ form.name.errors }}
+
+                        </div>
+
+                        <!-- Course Code -->
+
+                        <div class="form-group">
+
+                            <label>Course Code</label>
+
+                            {{ form.code }}
+
+                            {{ form.code.errors }}
+
+                        </div>
+
+                        <!-- Department -->
+
+                        <div class="form-group">
+
+                            <label>Department</label>
+
+                            {{ form.department }}
+
+                            {{ form.department.errors }}
+
+                        </div>
+
+                        <!-- Duration -->
+
+                        <div class="form-group">
+
+                            <label>Duration</label>
+
+                            {{ form.duration }}
+
+                            {{ form.duration.errors }}
+
+                        </div>
+
+                        <!-- Description -->
+
+                        <div class="form-group full-width">
+
+                            <label>Description</label>
+
+                            {{ form.description }}
+
+                            {{ form.description.errors }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Buttons -->
+
+            <div class="form-buttons">
+
+                <a href="?section=courses"
+                   class="btn-cancel">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Back
+
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn-save">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    {% if form.instance.pk %}
+                        Update Course
+                    {% else %}
+                        Save Course
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+        </form>
 
     </div>
 
 </div>
-
-</body>
-
 <script>
 const form = document.getElementById("courseForm");
 
@@ -225,4 +527,3 @@ form.addEventListener("submit", function(e){
 
 });
 </script>
-</html>

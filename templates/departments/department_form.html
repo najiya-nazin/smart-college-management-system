@@ -1,205 +1,326 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+<style>
+      /* ===================================
+   Container
+=================================== */
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Department</title>
+.department-container{
+    width:100%;
+    padding:20px;
+}
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+/* ===================================
+   Header
+=================================== */
 
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+.page-header{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:#fff;
+    border-radius:18px;
+    padding:18px 28px;
+    margin-bottom:22px;
+}
 
-    <style>
-        body{
-            background:#f4f7fc;
-            font-family:'Segoe UI',sans-serif;
-        }
+.page-header h2{
+    margin:0;
+    font-size:30px;
+    font-weight:700;
+}
 
-        .card{
-            border:none;
-            border-radius:18px;
-            box-shadow:0 15px 35px rgba(0,0,0,.08);
-            overflow:hidden;
-        }
+.page-header i{
+    margin-right:10px;
+}
 
-        .card-header{
-            background:linear-gradient(135deg,#0d6efd,#3f7bff);
-            color:#fff;
-            padding:20px;
-        }
+/* ===================================
+   Form Card
+=================================== */
 
-        .card-header h3{
-            margin:0;
-            font-weight:700;
-        }
+.form-card{
+    background:#fff;
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
+}
 
-        .card-body{
-            padding:35px;
-        }
+/* ===================================
+   Grid
+=================================== */
 
-        .section-title{
-            font-size:18px;
-            font-weight:700;
-            color:#0d6efd;
-            border-left:5px solid #0d6efd;
-            padding-left:10px;
-            margin-bottom:25px;
-        }
+.department-form-grid{
+    display:grid;
+    grid-template-columns:1fr;
+}
 
-        .form-label{
-            font-weight:600;
-            color:#495057;
-        }
+.info-card{
+    border:1px solid #e5e7eb;
+    border-radius:16px;
+    padding:25px;
+}
 
-        .form-control{
-            border-radius:10px;
-            height:48px;
-        }
+.info-card h3{
+    color:#2563eb;
+    font-size:24px;
+    font-weight:700;
+    margin-bottom:22px;
+    padding-bottom:15px;
+    border-bottom:1px solid #edf2f7;
 
-        textarea.form-control{
-            height:120px;
-            resize:none;
-        }
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
 
-        .form-control:focus{
-            border-color:#0d6efd;
-            box-shadow:0 0 0 .2rem rgba(13,110,253,.15);
-        }
+/* ===================================
+   Form Grid
+=================================== */
 
-        .btn-save{
-            background:#0d6efd;
-            color:#fff;
-            border:none;
-            border-radius:10px;
-            padding:10px 25px;
-            font-weight:600;
-        }
+.info-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
 
-        .btn-save:hover{
-            background:#0b5ed7;
-            color:#fff;
-        }
+.full-width{
+    grid-column:1 / -1;
+}
 
-        .btn-back{
-            border-radius:10px;
-            padding:10px 25px;
-        }
+/* ===================================
+   Inputs
+=================================== */
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group label{
+    font-weight:600;
+    margin-bottom:8px;
+    color:#1e293b;
+}
+
+.form-control,
+.form-select{
+    width:100%;
+    height:46px;
+    border:1px solid #dbe3ef;
+    border-radius:10px;
+    padding:0 15px;
+    font-size:15px;
+}
+
+textarea.form-control{
+    height:140px;
+    padding:12px 15px;
+    resize:none;
+}
+
+.form-control:focus,
+.form-select:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.12);
+    outline:none;
+}
+
+/* ===================================
+   Error
+=================================== */
+
+.errorlist{
+    list-style:none;
+    margin-top:6px;
+    color:#dc2626;
+    font-size:14px;
+    padding:0;
+}
+
+/* ===================================
+   Buttons
+=================================== */
+
+.form-buttons{
+    display:flex;
+    justify-content:flex-end;
+    gap:15px;
+    margin-top:25px;
+    padding-top:20px;
+    border-top:1px solid #edf2f7;
+}
+
+.btn-cancel,
+.btn-save{
+    min-width:180px;
+    height:46px;
+    border-radius:10px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+
+    text-decoration:none;
+    font-weight:600;
+    transition:.3s;
+}
+
+.btn-cancel{
+    background:#e2e8f0;
+    color:#334155;
+}
+
+.btn-cancel:hover{
+    background:#cbd5e1;
+    color:#1e293b;
+}
+
+.btn-save{
+    border:none;
+    background:#2563eb;
+    color:#fff;
+    cursor:pointer;
+}
+
+.btn-save:hover{
+    background:#1d4ed8;
+}
+
+/* ===================================
+   Responsive
+=================================== */
+
+@media(max-width:768px){
+
+    .info-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-buttons{
+        flex-direction:column;
+    }
+
+    .btn-save,
+    .btn-cancel{
+        width:100%;
+    }
+
+}
     </style>
 
-</head>
+<div class="department-container">
 
-<body>
+    <!-- Header -->
 
-<div class="container py-5">
+    <div class="page-header">
 
-    <div class="row justify-content-center">
+        <div>
 
-        <div class="col-lg-8">
+            <h2>
 
-            <div class="card">
+                <i class="fa-solid fa-building-columns"></i>
 
-                <div class="card-header">
-                    <h3>
-                        <i class="bi bi-building-fill-add"></i>
-                        Add Department
-                    </h3>
-                </div>
+                {% if form.instance.pk %}
+                    Edit Department
+                {% else %}
+                    Add Department
+                {% endif %}
 
-                <div class="card-body">
-
-                    <div class="section-title">
-                        Department Information
-                    </div>
-
-                    <form method="POST" class="needs-validation" novalidate>
-
-                        {% csrf_token %}
-
-                        <div class="mb-3">
-    <label class="form-label">Department Name</label>
-    {{ form.name }}
-    {{ form.name.errors }}
-
-    <div class="invalid-feedback">
-        Please enter the department name.
-    </div>
-</div>
-
-                        <div class="mb-3">
-    <label class="form-label">Department Code</label>
-    {{ form.code }}
-    {{ form.code.errors }}
-
-    <div class="invalid-feedback">
-        Please enter the department code.
-    </div>
-</div>
-
-                        <div class="mb-3">
-    <label class="form-label">Description</label>
-    {{ form.description }}
-    {{ form.description.errors }}
-
-    <div class="invalid-feedback">
-        Please enter the description.
-    </div>
-
-</div>
-
-                        <hr>
-
-                        <div class="text-end">
-
-                            <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary btn-back">
-                                <i class="bi bi-arrow-left-circle"></i>
-                                Back
-                            </a>
-
-                            <button type="submit" class="btn btn-save">
-                                <i class="bi bi-check-circle-fill"></i>
-                                Save Department
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </div>
+            </h2>
 
         </div>
 
     </div>
 
+    <!-- Form Card -->
+
+    <div class="form-card">
+
+        <form method="POST" novalidate>
+
+            {% csrf_token %}
+
+            <div class="department-form-grid">
+
+                <!-- Basic Information -->
+
+                <div class="info-card">
+
+                    <h3>
+
+                        <i class="fa-solid fa-circle-info"></i>
+
+                        Department Information
+
+                    </h3>
+
+                    <div class="info-grid">
+
+                        <div class="form-group">
+
+                            <label>Department Name</label>
+
+                            {{ form.name }}
+
+                            {{ form.name.errors }}
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Department Code</label>
+
+                            {{ form.code }}
+
+                            {{ form.code.errors }}
+
+                        </div>
+
+                        <div class="form-group full-width">
+
+                            <label>Description</label>
+
+                            {{ form.description }}
+
+                            {{ form.description.errors }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Buttons -->
+
+            <div class="form-buttons">
+
+                <a href="?section=departments"
+                   class="btn-cancel">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Back
+
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn-save">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    {% if form.instance.pk %}
+                        Update Department
+                    {% else %}
+                        Save Department
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
 </div>
-
-</body>
-
-<script>
-(() => {
-    'use strict';
-
-    const forms = document.querySelectorAll('.needs-validation');
-
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-
-            form.classList.add('was-validated');
-
-        }, false);
-    });
-
-})();
-</script>
-</html>

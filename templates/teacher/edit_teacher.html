@@ -1,4 +1,3 @@
-{% load static %}
 <style>
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -307,140 +306,119 @@ textarea.form-control{
 
 <div class="teacher-container">
 
-    <!-- Header -->
     <div class="page-header">
 
         <div>
+
             <h2>
-                <i class="fa-solid fa-user-tie"></i>
-                Add Teacher
+
+                <i class="fa-solid fa-user-pen"></i>
+
+                Edit Teacher
+
             </h2>
+
+
         </div>
+
 
     </div>
 
-    <!-- Form -->
     <div class="form-card">
 
         <form method="POST">
+
             {% csrf_token %}
 
             <div class="teacher-form-grid">
 
-                <!-- ================= Left Card ================= -->
+                <!-- Account -->
 
                 <div class="info-card">
 
                     <h3>
+
                         <i class="fa-solid fa-user"></i>
+
                         Account Information
+
                     </h3>
 
                     <div class="info-grid">
 
                         <div class="form-group">
+
                             <label>Teacher Name</label>
-                            <div class="input-icon">
-                               <i class="fa-solid fa-user"></i>
-                               {{ form.name }}
-                            </div>
-                            {{ form.name.errors }}
+
+                            {{ form.name }}
+
                         </div>
 
                         <div class="form-group">
-                            <label>Email Address</label>
-                            <div class="input-icon">
-                                 <i class="fa-solid fa-envelope"></i>
-                                 {{ form.email }}
-                            </div>
+
+                            <label>Email</label>
+
+                            {{ form.email }}
+
                         </div>
 
                         <div class="form-group">
-                            <label>Phone Number</label>
 
-                            <div class="input-icon">
-                                <i class="fa-solid fa-phone"></i>
-                                {{ form.phone }}
-                            </div>
+                            <label>Phone</label>
+
+                            {{ form.phone }}
+
                         </div>
-<div class="form-group">
 
-    <label>Password</label>
-
-    <div class="input-icon">
-        <i class="fa-solid fa-lock"></i>
-        {{ form.password }}
-    </div>
-
-</div>
-<div class="form-group">
-
-    <label>Confirm Password</label>
-
-    <div class="input-icon">
-        <i class="fa-solid fa-lock"></i>
-        {{ form.confirm_password }}
-    </div>
-
-</div>
                     </div>
 
                 </div>
 
-                <!-- ================= Right Card ================= -->
+                <!-- Professional -->
 
                 <div class="info-card">
 
                     <h3>
+
                         <i class="fa-solid fa-graduation-cap"></i>
-                        Faculty Information
+
+                        Professional Information
+
                     </h3>
 
                     <div class="info-grid">
 
                         <div class="form-group">
 
-    <label>Department</label>
+                            <label>Department</label>
 
-    <div class="input-icon">
-        <i class="fa-solid fa-building-columns"></i>
-        {{ form.department }}
-    </div>
+                            {{ form.department }}
 
-</div>
+                        </div>
 
-                       <div class="form-group">
+                        <div class="form-group">
 
-    <label>Qualification</label>
+                            <label>Qualification</label>
 
-    <div class="input-icon">
-        <i class="fa-solid fa-graduation-cap"></i>
-        {{ form.qualification }}
-    </div>
+                            {{ form.qualification }}
 
-</div>
+                        </div>
 
-                       <div class="form-group">
+                        <div class="form-group">
 
-    <label>Experience</label>
+                            <label>Experience</label>
 
-    <div class="input-icon">
-        <i class="fa-solid fa-chart-line"></i>
-        {{ form.experience }}
-    </div>
+                            {{ form.experience }}
 
-</div>
+                        </div>
 
-                       <div class="form-group">
+                        <div class="form-group">
 
-    <label>Salary</label>
+                            <label>Salary</label>
 
-    <div class="input-icon">
-        <i class="fa-solid fa-indian-rupee-sign"></i>
-        {{ form.salary }}
-    </div>
+                            {{ form.salary }}
 
-</div>
+                        </div>
 
                     </div>
 
@@ -448,18 +426,22 @@ textarea.form-control{
 
             </div>
 
-            <!-- Buttons -->
-
             <div class="form-buttons">
 
                 <a href="?section=teachers" class="btn-cancel">
+
                     <i class="fa-solid fa-arrow-left"></i>
-                    View Lists
+
+                    Cancel
+
                 </a>
 
-                <button type="submit" class="btn-save">
+                <button class="btn-save">
+
                     <i class="fa-solid fa-floppy-disk"></i>
-                    Save Teacher
+
+                    Update Teacher
+
                 </button>
 
             </div>

@@ -1,414 +1,593 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Courses</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet">
-
 <style>
+/* ===================================
+   COURSE MANAGEMENT
+=================================== */
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Segoe UI,sans-serif;
-}
-
-body{
-    background:#f4f7fb;
-}
-
-.container{
-    width:95%;
-    margin:40px auto;
-}
-
-.header{
+.page-header{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:#fff;
+    border-radius:16px;
+    padding:18px 24px;
 
     display:flex;
     justify-content:space-between;
     align-items:center;
 
-    margin-bottom:25px;
-
+    margin-bottom:20px;
 }
 
-.header h2{
-
-    color:#0d6efd;
+.page-header h2{
+    margin:0;
+    font-size:22px;
     font-weight:700;
 
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 
-.add-btn{
+/* ===================================
+   ADD BUTTON
+=================================== */
 
-    background:#0d6efd;
-    color:white;
+.btn-add{
+    display:flex;
+    align-items:center;
+    gap:8px;
 
-    padding:10px 20px;
+    padding:10px 18px;
+
+    background:#fff;
+    color:#2563eb;
+
+    border-radius:10px;
 
     text-decoration:none;
-
-    border-radius:8px;
+    font-size:15px;
+    font-weight:600;
 
     transition:.3s;
-
 }
 
-.add-btn:hover{
+.btn-add:hover{
+    background:#eef4ff;
+    color:#2563eb;
+}
 
-    background:#084fc7;
-    color:white;
+/* ===================================
+   CARD
+=================================== */
 
+.table-card{
+    background:#fff;
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 8px 20px rgba(0,0,0,.05);
+}
+
+/* ===================================
+   TOOLBAR
+=================================== */
+
+.toolbar{
+    display:flex;
+    gap:15px;
+    align-items:center;
+    margin-bottom:22px;
 }
 
 .search-box{
-
-    margin-bottom:20px;
-
+    position:relative;
+    flex:1;
 }
 
-.search-box input{
-
-    width:350px;
-
-    max-width:100%;
-
-    padding:10px;
-
-    border-radius:8px;
-
-    border:1px solid #ccc;
-
+.search-box i{
+    position:absolute;
+    left:18px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#94a3b8;
+    font-size:16px;
 }
 
-.table-card{
+.search-input{
+    width:100%;
+    height:46px;
 
-    background:white;
-
+    border:1px solid #dbe3ef;
     border-radius:12px;
 
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
+    padding-left:48px;
+    padding-right:18px;
 
-    overflow:hidden;
+    font-size:15px;
 
+    transition:.3s;
 }
 
-table{
-
-    margin-bottom:0;
-
+.search-input:focus{
+    outline:none;
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.08);
 }
 
-thead{
+/* Department Filter */
 
-    background:#0d6efd;
+.filter-select{
 
-    color:white;
+    width:220px;
+    height:46px;
 
+    border:1px solid #dbe3ef;
+    border-radius:12px;
+
+    padding:0 15px;
+
+    font-size:15px;
+    background:#fff;
+    cursor:pointer;
 }
 
-tbody tr:hover{
-
-    background:#f2f8ff;
-
+.filter-select:focus{
+    outline:none;
+    border-color:#2563eb;
 }
 
-th,td{
+/* ===================================
+   TABLE
+=================================== */
 
-    text-align:center;
+.table-responsive{
+    overflow-x:auto;
+}
+
+.course-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.course-table thead{
+    background:#2f61df;
+}
+
+.course-table thead th{
+
+    padding:15px;
+
+    color:#fff;
+
+    font-size:16px;
+    font-weight:600;
+
+    text-align:left;
+}
+
+.course-table tbody td{
+
+    padding:16px 15px;
+
+    border-bottom:1px solid #edf2f7;
 
     vertical-align:middle;
-
 }
 
-.action{
+.course-table tbody tr:hover{
+    background:#f8fbff;
+}
 
-    padding:5px 12px;
+/* ===================================
+   COURSE INFO
+=================================== */
 
-    text-decoration:none;
+.course-info{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
 
-    border-radius:5px;
+.avatar{
 
-    color:white;
+    width:46px;
+    height:46px;
 
-    font-size:14px;
+    border-radius:50%;
 
-    margin:2px;
+    background:#2563eb;
+    color:#fff;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:18px;
+}
+
+.course-info strong{
+
+    font-size:16px;
+    font-weight:600;
+
+    color:#1e293b;
+}
+
+/* ===================================
+   BADGE
+=================================== */
+
+.badge{
 
     display:inline-block;
 
+    background:#eef4ff;
+    color:#2563eb;
+
+    padding:7px 16px;
+
+    border-radius:25px;
+
+    font-size:14px;
+    font-weight:600;
+}
+
+/* ===================================
+   ACTION BUTTONS
+=================================== */
+
+.actions{
+
+    display:flex;
+    justify-content:center;
+    gap:8px;
+}
+
+.actions a{
+
+    width:72px;
+    height:34px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border-radius:8px;
+
+    color:#fff;
+    text-decoration:none;
+
+    font-size:13px;
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.actions a:hover{
+    transform:translateY(-2px);
 }
 
 .view{
-
-    background:#198754;
-
+    background:#2563eb;
 }
 
 .edit{
-
-    background:#ffc107;
-
-    color:black;
-
+    background:#f59e0b;
 }
 
 .delete{
-
-    background:#dc3545;
-    border:none;
-    cursor:pointer;
-
+    background:#ef4444;
 }
 
-.delete:hover{
+/* ===================================
+   EMPTY
+=================================== */
 
-    background:#bb2d3b;
-
-}
-
-.no-data{
-
+.empty-state{
+    padding:50px 20px;
     text-align:center;
+    color:#64748b;
+}
 
-    padding:20px;
+.empty-state i{
+    font-size:45px;
+    color:#94a3b8;
+    margin-bottom:12px;
+}
 
+.empty-state h3{
+    font-size:22px;
+    margin-bottom:8px;
+    color:#334155;
+}
+
+.empty-state p{
+    font-size:15px;
+}
+
+/* ===================================
+   BACK BUTTON
+=================================== */
+
+.bottom-actions{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:20px;
+}
+
+.btn-back{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    padding:10px 22px;
+
+    background:#2563eb;
+    color:#fff;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-size:15px;
     font-weight:600;
 
+    transition:.3s;
 }
 
+.btn-back:hover{
+    background:#1d4ed8;
+    color:#fff;
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media(max-width:992px){
+
+    .toolbar{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .filter-select{
+        width:100%;
+    }
+
+    .page-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .course-table{
+        min-width:900px;
+    }
+}
+
+@media(max-width:768px){
+
+    .actions{
+        flex-direction:column;
+    }
+
+    .page-header h2{
+        font-size:20px;
+    }
+
+    .avatar{
+        width:42px;
+        height:42px;
+        font-size:16px;
+    }
+
+    .course-info strong{
+        font-size:15px;
+    }
+}
 </style>
 
-</head>
 
-<body>
+<div class="page-header">
 
-<div class="container">
+    <div>
+        <h2>
+            <i class="fa-solid fa-book-open"></i>
+            Course Management
+        </h2>
+    </div>
 
-<div class="header">
-
-<h2>Course Management</h2>
-
-<a
-href="{% url 'course-create' %}"
-class="add-btn">
-
-+ Add Course
-
+   <a href="?section=course_create" class="btn-add">
+    <i class="fa-solid fa-plus"></i>
+    Add
 </a>
-
-</div>
-
-<div class="search-box">
-
-<input
-type="text"
-id="searchInput"
-placeholder="Search Course..."
-onkeyup="searchCourse()">
 
 </div>
 
 <div class="table-card">
 
-<table class="table table-hover table-bordered">
+    <form method="GET" class="toolbar">
 
-<thead>
+    <input type="hidden"
+           name="section"
+           value="courses">
 
-<tr>
+    <div class="search-box">
 
-<th>Name</th>
+        <i class="fa-solid fa-magnifying-glass"></i>
 
-<th>Code</th>
+        <input
+            type="text"
+            name="search"
+            class="search-input"
+            value="{{ search }}"
+            placeholder="Search Course">
 
-<th>Department</th>
+    </div>
 
-<th>Duration</th>
+        <select
+    name="department"
+    class="filter-select"
+    onchange="this.form.submit()">
 
-<th>Actions</th>
+    <option value="">All Departments</option>
 
-</tr>
+    {% for department in departments %}
+        <option
+            value="{{ department.id }}"
+            {% if selected_department == department.id|stringformat:"s" %}
+                selected
+            {% endif %}>
+            {{ department.name }}
+        </option>
+    {% endfor %}
 
-</thead>
+    </select>
 
-<tbody id="courseTable">
+</form>
 
-{% for course in courses %}
+    <div class="table-responsive">
 
-<tr>
+        <table class="course-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Course</th>
+                    <th>Code</th>
+                    <th>Department</th>
+                    <th>Duration</th>
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for course in courses %}
+
+                <tr>
+
+                    <td>
+
+                        <div class="course-info">
+
+                            <div class="avatar">
+
+                                <i class="fa-solid fa-book"></i>
+
+                            </div>
+
+                            <div>
+
+                                <strong>{{ course.name }}</strong>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge">
+
+                            {{ course.code }}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        {{ course.department.name }}
+
+                    </td>
+
+                    <td>
+
+                        {{ course.duration }}
+
+                    </td>
+
+                    <td>
 
 
-<td>{{ course.name }}</td>
+<div class="actions">
 
-<td>{{ course.code }}</td>
+    <a href="?section=course_detail&id={{ course.id }}"
+       class="view">
 
-<td>{{ course.department.name }}</td>
+        View
 
-<td>{{ course.duration }}</td>
+    </a>
 
-<td>
+    <a href="?section=course_update&id={{ course.id }}"
+       class="edit">
 
-<a
-href="{% url 'course-detail' course.id %}"
-class="action view">
+        Edit
 
-View
+    </a>
 
-</a>
+    <a href="?section=course_delete&id={{ course.id }}"
+       class="delete"
+       onclick="return confirm('Delete this course?')">
 
-<a
-href="{% url 'course-update' course.id %}"
-class="action edit">
+        Delete
 
-Edit
+    </a>
 
-</a>
-
-<button
-type="button"
-class="action delete border-0"
-data-bs-toggle="modal"
-data-bs-target="#deleteModal{{ course.id }}">
-
-Delete
-
-</button>
+</div>
 
 </td>
 
-</tr>
-<div class="modal fade"
-id="deleteModal{{ course.id }}"
-tabindex="-1"
-aria-hidden="true">
+                </tr>
 
-    <div class="modal-dialog modal-dialog-centered">
+            {% empty %}
 
-        <div class="modal-content">
+                <tr>
 
-            <div class="modal-header bg-danger text-white">
+                    <td colspan="5">
 
-                <h5 class="modal-title">
-                    Delete Course
-                </h5>
+                        <div class="empty-state">
 
-                <button
-                    type="button"
-                    class="btn-close btn-close-white"
-                    data-bs-dismiss="modal">
-                </button>
+                            <i class="fa-solid fa-book-open"></i>
 
-            </div>
+                            <h3>No Courses Found</h3>
 
-            <div class="modal-body text-center">
+                            <p>No courses available.</p>
 
-                <h5>⚠ Are you sure?</h5>
+                        </div>
 
-                <p class="mt-3">
+                    </td>
 
-                    Do you really want to delete
+                </tr>
 
-                    <strong>{{ course.name }}</strong> ?
+            {% endfor %}
 
-                </p>
+            </tbody>
 
-                <small class="text-danger">
-
-                    This action cannot be undone.
-
-                </small>
-
-            </div>
-
-            <div class="modal-footer">
-
-                <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal">
-
-                    Cancel
-
-                </button>
-
-                <form
-                    method="POST"
-                    action="{% url 'course-delete' course.id %}">
-
-                    {% csrf_token %}
-
-                    <button
-                        type="submit"
-                        class="btn btn-danger">
-
-                        Delete
-
-                    </button>
-
-                </form>
-
-            </div>
-
-        </div>
+        </table>
 
     </div>
 
 </div>
 
-{% empty %}
-
-<tr>
-
-<td colspan="5"
-class="no-data">
-
-No Courses Found
-
-</td>
-
-</tr>
-
-{% endfor %}
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
 <script>
+const search = document.querySelector(".search-input");
 
-function searchCourse(){
+let timer;
 
-let input=document.getElementById("searchInput").value.toLowerCase();
+search.addEventListener("keyup", function(){
 
-let rows=document.querySelectorAll("#courseTable tr");
+    clearTimeout(timer);
 
-rows.forEach(function(row){
+    timer = setTimeout(() => {
 
-let text=row.innerText.toLowerCase();
+        this.form.submit();
 
-row.style.display=text.includes(input) ? "" : "none";
+    },500);
 
 });
-
-}
-
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-
-</html>

@@ -1,191 +1,444 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student List</title>
-
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
 
-        body{
-            background:#f4f7fc;
-            font-family:'Segoe UI',sans-serif;
-        }
+        /* ==========================
+   Student List
+========================== */
 
-        .card{
-            border:none;
-            border-radius:18px;
-            box-shadow:0 10px 30px rgba(0,0,0,.08);
-        }
+.student-page{
+    padding:20px;
+}
 
-        .card-header{
-            background:linear-gradient(135deg,#0d6efd,#3f7bff);
-            color:#fff;
-            padding:18px 25px;
-        }
+/* Header */
 
-        .card-header h3{
-            margin:0;
-            font-weight:700;
-        }
+.page-header{
+    background:#2563eb;
+    color:#fff;
+    border-radius:16px;
+    padding:18px 28px;
+    margin-bottom:22px;
+}
 
-        .btn-add{
-            background:#198754;
-            color:#fff;
-            border:none;
-            border-radius:10px;
-            padding:10px 18px;
-            font-weight:600;
-        }
+.page-header h2{
+    margin:0;
+    font-size:30px;
+    font-weight:700;
+}
 
-        .btn-add:hover{
-            background:#157347;
-            color:#fff;
-        }
+/* Card */
 
-        table th{
-            background:#0d6efd;
-            color:#fff;
-            text-align:center;
-            vertical-align:middle;
-        }
+.table-card{
+    background:#fff;
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
+}
 
-        table td{
-            text-align:center;
-            vertical-align:middle;
-        }
+/* ==========================
+   Search Toolbar
+========================== */
 
-        .badge-dept{
-            background:#0dcaf0;
-            color:#fff;
-            padding:7px 10px;
-            border-radius:20px;
-        }
+.toolbar{
+    display:flex;
+    gap:18px;
+    margin-bottom:22px;
+}
 
-        .badge-course{
-            background:#6f42c1;
-            color:#fff;
-            padding:7px 10px;
-            border-radius:20px;
-        }
+.search-box{
+    flex:1;
+    position:relative;
+}
 
-        .btn-action{
-            width:38px;
-            height:38px;
-            border-radius:50%;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-        }
+.search-box i{
+    position:absolute;
+    top:50%;
+    left:16px;
+    transform:translateY(-50%);
+    color:#94a3b8;
+    font-size:18px;
+}
+
+.search-input{
+    width:100%;
+    height:48px;
+    padding-left:45px;
+    border:1px solid #dbe3ef;
+    border-radius:12px;
+    font-size:15px;
+    transition:.3s;
+}
+
+.search-input:focus{
+    outline:none;
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+
+.filter-select{
+    width:280px;
+    height:48px;
+    border:1px solid #dbe3ef;
+    border-radius:12px;
+    padding:0 16px;
+    font-size:15px;
+    transition:.3s;
+}
+
+.filter-select:focus{
+    outline:none;
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+
+/* ==========================
+   Table
+========================== */
+
+.student-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.student-table thead{
+    background:#2563eb;
+}
+
+.student-table thead th{
+    color:#fff;
+    font-size:16px;
+    font-weight:600;
+    padding:18px;
+    text-align:left;
+}
+
+.student-table tbody td{
+    padding:18px;
+    border-bottom:1px solid #edf2f7;
+    vertical-align:middle;
+}
+
+.student-table tbody tr:hover{
+    background:#f8fbff;
+}
+
+/* ==========================
+   Student Info
+========================== */
+
+.student-info{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.avatar{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:#2563eb;
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    font-weight:700;
+    flex-shrink:0;
+}
+
+.student-info strong{
+    display:block;
+    font-size:16px;
+    color:#1e293b;
+}
+
+.student-info span{
+    display:block;
+    margin-top:4px;
+    color:#64748b;
+    font-size:14px;
+}
+
+/* Department Badge */
+
+.badge{
+    display:inline-block;
+    background:#eef4ff;
+    color:#2563eb;
+    padding:8px 18px;
+    border-radius:25px;
+    font-size:14px;
+    font-weight:600;
+}
+
+/* ==========================
+   Action Buttons
+========================== */
+
+.actions{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+}
+
+.actions a{
+    min-width:88px;
+    height:40px;
+    border-radius:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-decoration:none;
+    color:#fff;
+    font-size:14px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.actions a:hover{
+    transform:translateY(-2px);
+}
+
+.view{
+    background:#2563eb;
+}
+
+.view:hover{
+    background:#1d4ed8;
+}
+
+.edit{
+    background:#f59e0b;
+}
+
+.edit:hover{
+    background:#d97706;
+}
+
+.delete{
+    background:#ef4444;
+}
+
+.delete:hover{
+    background:#dc2626;
+}
+
+/* ==========================
+   Empty State
+========================== */
+
+.empty-state{
+    text-align:center;
+    padding:60px;
+    color:#64748b;
+}
+
+.empty-state i{
+    font-size:55px;
+    color:#94a3b8;
+    margin-bottom:15px;
+}
+
+.empty-state h3{
+    margin-bottom:8px;
+}
+
+/* ==========================
+   Bottom Button
+========================== */
+
+.bottom-actions{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:24px;
+}
+
+.btn-back{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:#2563eb;
+    color:#fff;
+    padding:12px 24px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:600;
+    transition:.3s;
+}
+
+.btn-back:hover{
+    background:#1d4ed8;
+    color:#fff;
+    transform:translateY(-2px);
+}
+
+/* ==========================
+   Responsive
+========================== */
+
+@media(max-width:992px){
+
+    .toolbar{
+        flex-direction:column;
+    }
+
+    .filter-select{
+        width:100%;
+    }
+
+    .student-table{
+        min-width:850px;
+    }
+
+    .bottom-actions{
+        justify-content:center;
+    }
+
+}
 
     </style>
+<div class="page-header">
 
-</head>
-<body>
+    <div>
+        <h2>
+            <i class="fa-solid fa-user-graduate"></i>
+            Student Management
+        </h2>
 
-<div class="container py-5">
+    </div>
 
-    <div class="card">
+</div>
 
-        <div class="card-header d-flex justify-content-between align-items-center">
+<div class="table-card">
 
-            <h3>
-                <i class="bi bi-mortarboard-fill"></i>
-                Student List
-            </h3>
+<form method="GET" class="toolbar">
 
-            <a href="{% url 'student_create' %}" class="btn btn-add">
-                <i class="bi bi-plus-circle-fill"></i>
-                Add Student
-            </a>
+    <input
+        type="hidden"
+        name="section"
+        value="students">
 
-        </div>
+    <div class="search-box">
 
-        <div class="card-body">
+        <i class="fa-solid fa-magnifying-glass"></i>
 
-            <div class="table-responsive">
+        <input
+            type="text"
+            name="search"
+            class="search-input"
+            value="{{ search }}"
+            placeholder="Search by Name or Email">
 
-                <table class="table table-bordered table-hover align-middle">
+    </div>
 
-                    <thead>
+    <select
+        name="department"
+        class="filter-select">
 
-                        <tr>
+        <option value="">All Departments</option>
 
-                            <th>ID</th>
-                            <th>Student ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Department</th>
-                            <th>Course</th>
-                            <th>Semester</th>
-                            <th width="170">Action</th>
+        {% for department in departments %}
 
-                        </tr>
+        <option
+            value="{{ department.id }}"
+            {% if selected_department == department.id|stringformat:"s" %}
+            selected
+            {% endif %}>
 
-                    </thead>
+            {{ department.name }}
 
-                    <tbody>
+        </option>
+
+        {% endfor %}
+
+    </select>
+
+</form>
+
+<div class="table-responsive">
+
+<table class="student-table">
+
+<thead>
+
+<tr>
+
+    <th>Student</th>
+    <th>Department</th>
+    <th>Semester</th>
+    <th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody>
 
 {% for student in students %}
 
 <tr>
 
-    <td>{{ forloop.counter }}</td>
+<td>
 
-    <td>{{ student.student_id }}</td>
+<div class="student-info">
 
-    <td>{{ student.user.name }}</td>
+<div class="avatar">
 
-    <td>{{ student.user.email }}</td>
+{{ student.user.name|first|upper }}
 
-    <td>
-        <span class="badge-dept">
-            {{ student.department.name }}
-        </span>
-    </td>
+</div>
 
-    <td>
-        <span class="badge-course">
-            {{ student.course.name }}
-        </span>
-    </td>
+<div>
 
-    <td>{{ student.semester }}</td>
+<strong>{{ student.user.name }}</strong>
 
-    
+<span>{{ student.user.email }}</span>
 
-    <td>
+</div>
 
-        <div class="d-flex justify-content-center gap-2">
+</div>
 
-            <a href="{% url 'student_detail' student.id %}"
-   class="btn btn-info btn-sm btn-action"
-   title="View">
-    <i class="bi bi-eye-fill"></i>
+</td>
+
+<td>
+
+<span class="badge">
+
+{{ student.department.name }}
+
+</span>
+
+</td>
+
+<td>
+
+Semester {{ student.semester }}
+
+</td>
+
+
+<td>
+
+<div class="actions">
+
+<a href="?section=student_detail&id={{ student.id }}" class="view">
+    View
 </a>
 
-            <a href="{% url 'student_update' student.id %}"
-               class="btn btn-warning btn-sm btn-action"
-               title="Edit">
-                <i class="bi bi-pencil-square"></i>
-            </a>
+<a href="?section=student_update&id={{ student.id }}" class="edit">
+    Edit
+</a>
 
-            <a href="{% url 'student_delete' student.id %}"
-               class="btn btn-danger btn-sm btn-action"
-               title="Delete">
-                <i class="bi bi-trash-fill"></i>
-            </a>
 
-        </div>
+    <a href="?section=teacher_delete&id={{ teacher.id }}"
+       class="delete"
+       onclick="return confirm('Are you sure you want to delete this teacher?')">
+        Delete
+    </a>
 
-    </td>
+</div>
+
+</td>
 
 </tr>
 
@@ -193,32 +446,61 @@
 
 <tr>
 
-    <td colspan="9">
+<td colspan="5">
 
-        <div class="alert alert-warning mb-0 text-center">
+<div class="empty-state">
 
-            <i class="bi bi-exclamation-circle"></i>
+<i class="fa-solid fa-user-graduate"></i>
 
-            No Students Found.
+<h3>No Students Found</h3>
 
-        </div>
+<p>No students available.</p>
 
-    </td>
+</div>
+
+</td>
 
 </tr>
 
 {% endfor %}
 
 </tbody>
-                </table>
 
-            </div>
-
-        </div>
-
+</table>
     </div>
 
 </div>
 
-</body>
-</html>
+<div class="bottom-actions">
+
+    <a href="{% url 'admin_dashboard' %}?section=users"
+       class="btn-back">
+
+        <i class="fa-solid fa-arrow-left"></i>
+        Back to Users
+
+    </a>
+
+</div>
+
+
+        <script>
+            const search = document.querySelector(".search-input");
+const department = document.querySelector(".filter-select");
+
+let timer;
+
+search.addEventListener("keyup", function () {
+
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+        this.form.submit();
+    }, 500);   // waits 0.5 second
+
+});
+
+department.addEventListener("change", function () {
+    this.form.submit();
+});
+</script>

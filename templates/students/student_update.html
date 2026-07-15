@@ -1,242 +1,433 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Student</title>
-
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
     <style>
 
-        body{
-    background:#f1f5f9;
-    font-family:'Segoe UI',sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
 }
 
-.card{
-    border:none;
-    border-radius:18px;
-    overflow:hidden;
-    box-shadow:0 15px 40px rgba(0,0,0,.08);
+body{
+    background:#f5f7fb;
+    color:#1e293b;
 }
 
-.card-header{
-    background:linear-gradient(135deg,#0d6efd,#4b86ff);
+/* =========================================
+   Container
+========================================= */
+
+.student-container{
+    width:100%;
+    padding:20px;
+}
+
+/* =========================================
+   Header
+========================================= */
+
+.page-header{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
     color:#fff;
-    padding:22px 30px;
+    border-radius:18px;
+    padding:15px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
 }
 
-.card-body{
-    padding:40px;
-}
-
-.section-title{
-    font-size:20px;
+.page-header h2{
+    font-size:30px;
     font-weight:700;
-    color:#0d6efd;
-    margin-bottom:30px;
-    border-left:5px solid #0d6efd;
-    padding-left:12px;
+    margin-bottom:5px;
 }
 
-.form-label{
+.page-header i{
+    margin-right:10px;
+}
+
+
+/* =========================================
+   Main Card
+========================================= */
+
+.form-card{
+    background:#fff;
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 12px 30px rgba(15,23,42,.08);
+}
+
+/* ===============================
+   Form Grid
+================================ */
+
+.student-form-grid{
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0,1fr));
+    gap:20px;
+    align-items:start;
+}
+
+.info-card{
+    width:100%;
+    min-height:420px;      /* Equal height */
+    display:flex;
+    flex-direction:column;
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:16px;
+    padding:20px;
+}
+
+.info-card h3{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    color:#2563eb;
+    font-size:22px;
+    font-weight:700;
+
+    margin-bottom:18px;
+    padding-bottom:12px;
+
+    border-bottom:1px solid #edf2f7;
+}
+
+.info-card h3 i{
+    font-size:22px;
+}
+
+/* ===============================
+   Form Grid Inside Card
+================================ */
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group label{
+    font-size:14px;
     font-weight:600;
-    color:#495057;
-    margin-bottom:8px;
+    margin-bottom:6px;
+    color:#1e293b;
+}
+
+.full-width{
+    grid-column:1 / -1;
 }
 
 .form-control,
 .form-select{
-    height:50px;
+    height:42px;
+    font-size:15px;
+    width:100%;
+    border:1px solid #dbe3ef;
     border-radius:10px;
-    border:1px solid #ced4da;
+    padding:0 14px;
+    transition:.3s;
 }
 
 textarea.form-control{
-    height:120px;
+    height:75x;
+    resize:none;
+    padding:12px 14px;
 }
 
 .form-control:focus,
 .form-select:focus{
-    border-color:#0d6efd;
-    box-shadow:0 0 0 .2rem rgba(13,110,253,.15);
+    outline:none;
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.1);
 }
 
-.btn{
+/* ===============================
+   Buttons
+================================ */
+
+.form-buttons{
+    display:flex;
+    justify-content:flex-end;
+    gap:15px;
+
+    margin-top:28px;
+    padding-top:24px;
+
+    border-top:1px solid #edf2f7;
+}
+
+.btn-cancel,
+.btn-save{
+
+    min-width:180px;
+    height:48px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+
     border-radius:10px;
-    padding:10px 26px;
+    text-decoration:none;
+
+    font-size:16px;
     font-weight:600;
+
+    transition:.3s;
 }
 
-.btn-primary{
-    background:#0d6efd;
+.btn-cancel{
+    background:#e2e8f0;
+    color:#334155;
+}
+
+.btn-cancel:hover{
+    background:#cbd5e1;
+    color:#1e293b;
+}
+
+.btn-save{
+    background:#198754;
+    color:#fff;
     border:none;
+    cursor:pointer;
 }
 
-.btn-primary:hover{
-    background:#0b5ed7;
-}
-
-.btn-outline-secondary:hover{
+.btn-save:hover{
+    background:#157347;
     color:#fff;
 }
+@media(max-width:1200px){
 
-.errorlist{
-    list-style:none;
-    color:#dc3545;
-    padding:0;
-    margin-top:5px;
-    font-size:14px;
+    .student-form-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:768px){
+
+    .student-form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .info-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-buttons{
+        flex-direction:column;
+    }
+
+    .btn-save,
+    .btn-cancel{
+        width:100%;
+    }
+
 }
     </style>
+<div class="student-container">
 
-</head>
-<body>
+    <!-- Header -->
 
-<div class="container py-5">
+    <div class="page-header">
 
-    <div class="row justify-content-center">
+        <div>
 
-        <div class="col-lg-10">
-
-            <div class="card">
-
-                <!-- Card Header -->
-                <div class="card-header d-flex justify-content-between align-items-center">
-
-                    <div>
-                        <h3 class="mb-1">
-                            <i class="bi bi-person-fill-gear me-2"></i>
-                            Update Student
-                        </h3>
-
-                        <small class="opacity-75">
-                            Edit Student Information
-                        </small>
-                    </div>
-
-                    <i class="bi bi-mortarboard-fill fs-1 opacity-50"></i>
-
-                </div>
-
-                <!-- Card Body -->
-                <div class="card-body">
-
-                    <div class="section-title">
-                        <i class="bi bi-person-vcard-fill me-2"></i>
-                        Student Information
-                    </div>
-
-                    <form method="POST">
-
-                        {% csrf_token %}
-
-                        <div class="row">
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">User</label>
-                                {{ form.user }}
-                                {{ form.user.errors }}
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Student ID</label>
-                                {{ form.student_id }}
-                                {{ form.student_id.errors }}
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Date of Birth</label>
-                                {{ form.dob }}
-                                {{ form.dob.errors }}
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Gender</label>
-                                {{ form.gender }}
-                                {{ form.gender.errors }}
-                            </div>
-
-                            <div class="col-12 mb-3">
-                                <label class="form-label">Address</label>
-                                {{ form.address }}
-                                {{ form.address.errors }}
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Department</label>
-                                {{ form.department }}
-                                {{ form.department.errors }}
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Course</label>
-                                {{ form.course }}
-                                {{ form.course.errors }}
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Semester</label>
-                                {{ form.semester }}
-                                {{ form.semester.errors }}
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Admission Date</label>
-                                {{ form.admission_date }}
-                                {{ form.admission_date.errors }}
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Guardian Name</label>
-                                {{ form.guardian_name }}
-                                {{ form.guardian_name.errors }}
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Guardian Phone</label>
-                                {{ form.guardian_phone }}
-                                {{ form.guardian_phone.errors }}
-                            </div>
-
-                        </div>
-
-                        <hr>
-
-                        <div class="d-flex justify-content-end gap-2">
-
-                            <a href="{% url 'student_list' %}" class="btn btn-outline-secondary">
-                                <i class="bi bi-arrow-left-circle me-1"></i>
-                                Back
-                            </a>
-
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-check-circle-fill me-1"></i>
-                                Update Student
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </div>
-                <!-- End Card Body -->
-
-            </div>
-            <!-- End Card -->
+            <h2>
+                <i class="fa-solid fa-user-pen"></i>
+                Edit Student
+            </h2>
 
         </div>
 
     </div>
 
-</div>
+    <!-- Form Card -->
 
-</body>
-</body>
-</html>
+    <div class="form-card">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="student-form-grid">
+
+                <!-- ================= Personal ================= -->
+
+                <div class="info-card">
+
+                    <h3>
+
+                        <i class="fa-solid fa-user"></i>
+
+                        Personal Information
+
+                    </h3>
+
+                    <div class="info-grid">
+
+                        <div class="form-group">
+                            <label>Student Name</label>
+                            {{ form.name }}
+                            {{ form.name.errors }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email</label>
+                            {{ form.email }}
+                            {{ form.email.errors }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phone</label>
+                            {{ form.phone }}
+                            {{ form.phone.errors }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>Student ID</label>
+                            {{ form.student_id }}
+                            {{ form.student_id.errors }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>Date of Birth</label>
+                            {{ form.dob }}
+                            {{ form.dob.errors }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>Gender</label>
+                            {{ form.gender }}
+                            {{ form.gender.errors }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ================= Academic ================= -->
+
+                <div class="info-card">
+
+                    <h3>
+
+                        <i class="fa-solid fa-graduation-cap"></i>
+
+                        Academic Information
+
+                    </h3>
+
+                    <div class="info-grid">
+
+                        <div class="form-group">
+                            <label>Department</label>
+                            {{ form.department }}
+                            {{ form.department.errors }}
+                        </div>
+
+<!-- Uncomment if using Course -->
+
+<!--
+                        <div class="form-group">
+                            <label>Course</label>
+                            {{ form.course }}
+                            {{ form.course.errors }}
+                        </div>
+-->
+
+                        <div class="form-group">
+                            <label>Semester</label>
+                            {{ form.semester }}
+                            {{ form.semester.errors }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>Admission Date</label>
+                            {{ form.admission_date }}
+                            {{ form.admission_date.errors }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ================= Guardian ================= -->
+
+                <div class="info-card">
+
+                    <h3>
+
+                        <i class="fa-solid fa-users"></i>
+
+                        Guardian Information
+
+                    </h3>
+
+                    <div class="info-grid">
+
+                        <div class="form-group">
+                            <label>Guardian Name</label>
+                            {{ form.guardian_name }}
+                            {{ form.guardian_name.errors }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>Guardian Phone</label>
+                            {{ form.guardian_phone }}
+                            {{ form.guardian_phone.errors }}
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Address</label>
+                            {{ form.address }}
+                            {{ form.address.errors }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Buttons -->
+
+            <div class="form-buttons">
+
+                <a href="{% url 'admin_dashboard' %}?section=students"
+                   class="btn-cancel">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Cancel
+
+                </a>
+
+                <button type="submit"
+                        class="btn-save">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Update Student
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

@@ -35,12 +35,17 @@ class CourseForm(forms.ModelForm):
                 "required": True,
             }),
 
-            "duration": forms.NumberInput(attrs={
+            # "duration": forms.NumberInput(attrs={
+            #     "class": "form-control",
+            #     "placeholder": "Enter Duration",
+            #     "required": True,
+            #     "min": 1,
+            #     "max": 10,
+            # }),
+            "duration": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "Enter Duration",
+                "placeholder": "Example: 6 Months",
                 "required": True,
-                "min": 1,
-                "max": 10,
             }),
 
             "description": forms.Textarea(attrs={

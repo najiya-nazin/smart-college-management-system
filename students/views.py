@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from .forms import StudentForm
+from .forms import StudentCreateForm, StudentUpdateForm
 from .models import Student
 from departments.models import Department
 from courses.models import Course
@@ -13,26 +13,25 @@ User = get_user_model()
 
 def student_create(request):
 
-    users = User.objects.filter(role="STUDENT")
-    departments = Department.objects.all()
-    courses = Course.objects.all()
-
     if request.method == "POST":
-        form = StudentForm(request.POST)
+        form = StudentCreateForm(request.POST)
 
         if form.is_valid():
             form.save()
             return redirect("student_list")
+
     else:
-        form = StudentForm()
+        form = StudentCreateForm()
 
-    return render(request, "students/student_create.html", {
-        "form": form,
-        "users": users,
-        "departments": departments,
-        "courses": courses,
-    })
-
+    return render(
+        request,
+        "students/student_create.html",
+        {
+            "form": form,
+            "departments": Department.objects.all(),
+            "courses": Course.objects.all(),
+        },
+    )
 
 # List Students
 def student_list(request):
@@ -56,8 +55,6 @@ def student_detail(request, pk):
         Student.objects.select_related(
             "user",
             "department"
-        ).prefetch_related(
-            "courses"
         ),
         pk=pk
     )
@@ -72,13 +69,13 @@ def student_update(request, pk):
     student = get_object_or_404(Student, pk=pk)
 
     if request.method == "POST":
-        form = StudentForm(request.POST, instance=student)
+        form = StudentUpdateForm(request.POST, instance=student)
 
         if form.is_valid():
             form.save()
             return redirect("student_list")
     else:
-        form = StudentForm(instance=student)
+        form = StudentUpdateForm(instance=student)
 
     return render(request, "students/student_update.html", {
         "form": form

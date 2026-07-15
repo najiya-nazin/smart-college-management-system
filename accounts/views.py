@@ -1,12 +1,9 @@
 import random
-<<<<<<< HEAD
 from django.shortcuts import render, redirect,get_object_or_404
-=======
 from datetime import date
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
->>>>>>> c4dd427c09c3e7fe049f5a82dff2781af6074e5b
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth import login, logout
@@ -14,8 +11,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import update_last_login
 from django.core.cache import cache
 from django.core.mail import send_mail
-from .models import User
-from .forms import (RegisterForm, LoginForm, ForgotPasswordForm, VerifyOTPForm, ResetPasswordForm)
+from django.urls import reverse
+
+from .models import User, Role
+from .forms import (LoginForm, ForgotPasswordForm, VerifyOTPForm, ResetPasswordForm)
 from courses.models import Course
 from courses.forms import CourseForm
 from departments.models import Department
@@ -25,10 +24,10 @@ from attendences.forms import AttendanceForm
 from attendences.models import AttendanceStatus
 from reports.models import Report
 from reports.forms import ReportForm
-from students.forms import StudentForm, StudentProfileForm, UserProfileForm
+from students.forms import StudentCreateForm, StudentProfileForm, UserProfileForm, StudentUpdateForm
 from students.models import Student
 from teachers.models import Teacher
-from teachers.forms import TeacherForm
+from teachers.forms import TeacherCreateForm, TeacherUpdateForm
 from timetable.models import Timetable
 from timetable.forms import TimetableForm
 from exams.models import Exam
@@ -39,58 +38,75 @@ from placement.models import Company
 from placement.forms import CompanyForm
 from marks.models import Marks
 from marks.forms import MarksForm
-<<<<<<< HEAD
 from placement.forms import CompanyForm
 from placement.forms import PlacementForm
 from reports.forms import ReportForm
 from event.models import Event
 from event.forms import EventForm
-
-=======
 from event.models import Event
 from fees.models import Fee, PaymentStatus
 from library.models import Library
 from library.models import LibraryStatus
 from collections import OrderedDict
->>>>>>> c4dd427c09c3e7fe049f5a82dff2781af6074e5b
+from django.db.models import Count
+from django.utils import timezone
+from django.db.models import Sum
 
 
-def register(request):
-    if request.method == "POST":
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            messages.success(request, "Registration Successful")
-    else:
-        form = RegisterForm()
-    return render(request, "accounts/register.html", {"form": form})
+# def register(request):
+#     if request.method == "POST":
+#         form = RegisterForm(request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             messages.success(request, "Registration Successful")
+#     else:
+#         form = RegisterForm()
+#     return render(request, "accounts/register.html", {"form": form})
 
+
+# def login_view(request):
+#     if request.method == "POST":
+#         form = LoginForm(request.POST)
+#         if form.is_valid():
+#             user = form.get_user()
+#             login(request, user)
+#             update_last_login(None, user)
+#
+#             if user.role == "ADMIN":
+#                 return redirect("admin_dashboard")
+#
+#             elif user.role == "TEACHER":
+#                 return redirect("teacher_dashboard")
+#
+#             elif user.role == "STUDENT":
+#                 return redirect("student_dashboard")
+#
+#             else:
+#                 return redirect("login")
+#
+#     else:
+#         form = LoginForm()
+#     return render(request, "accounts/login.html", {"form": form})
 
 def login_view(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
+
         if form.is_valid():
             user = form.get_user()
             login(request, user)
             update_last_login(None, user)
-<<<<<<< HEAD
 
-            
-=======
-            messages.success(request, "Login Successful")
->>>>>>> c4dd427c09c3e7fe049f5a82dff2781af6074e5b
-
-            if user.role == "ADMIN":
+            if user.role == Role.ADMIN:
                 return redirect("admin_dashboard")
 
-            elif user.role == "TEACHER":
+            elif user.role == Role.TEACHER:
                 return redirect("teacher_dashboard")
 
-            elif user.role == "STUDENT":
+            elif user.role == Role.STUDENT:
                 return redirect("student_dashboard")
 
-            else:
-                return redirect("login")
+            return redirect("login")
 
     else:
         form = LoginForm()
@@ -100,645 +116,629 @@ def login_view(request):
 @login_required
 def admin_dashboard(request):
 
-    section = request.GET.get("section", "dashboard")
+    if request.user.role != Role.ADMIN:
+        return HttpResponseForbidden(
+            "You are not authorized to access this page."
+        )
+
+    section = request.GET.get(
+        "section",
+        "dashboard"
+    )
 
     context = {
         "section": section,
-
-        "students_count": User.objects.filter(role="STUDENT").count(),
-        "teacher_count": User.objects.filter(role="TEACHER").count(),
-        "course_count": Course.objects.count(),
-        "department_count": Department.objects.count(),
-        "attendance_count": Attendance.objects.count(),
-        "report_count": Report.objects.count(),
-        "company_count": Company.objects.count(),
-        "placement_count": Placement.objects.count(),
     }
 
-    context["recent_users"] = User.objects.order_by("-id")[:5]
+    if section == "dashboard":
 
-    if section == "students":
-        context["students"] = Student.objects.select_related(
-                  "user",
-                  "department"
-                  ).prefetch_related(
-                   "courses"
+        today = timezone.now().date()
+
+        department_chart = (
+            Department.objects
+            .annotate(student_count=Count("students"))
+            .order_by("name")
         )
 
-    elif section == "teachers":
-        context["teachers"] = Teacher.objects.select_related(
+        context.update({
+
+            "students_count": Student.objects.count(),
+            "teachers_count": Teacher.objects.count(),
+            "departments_count": Department.objects.count(),
+            "courses_count": Course.objects.count(),
+            "attendance_count": Attendance.objects.count(),
+            "placements_count": Placement.objects.count(),
+            "companies_count": Company.objects.count(),
+            "reports_count": Report.objects.count(),
+
+            "department_chart": department_chart,
+
+            "upcoming_events": Event.objects.filter(
+                event_date__gte=today
+            ).order_by(
+                "event_date"
+            )[:4],
+
+            "recent_users": User.objects.order_by(
+                "-created_at"
+            )[:5],
+
+            "today_attendance": Attendance.objects.filter(
+                date=today
+            ).count(),
+
+            "today_events": Event.objects.filter(
+                event_date=today
+            ).count(),
+
+            "today_exams": Exam.objects.filter(
+                exam_date=today
+            ).count(),
+
+            "pending_fee_amount": Fee.objects.filter(
+                status="Pending"
+            ).aggregate(
+                total=Sum("amount")
+            )["total"] or 0,
+
+            "recent_students": Student.objects.select_related(
+                "user"
+            ).order_by("-id")[:1],
+
+            "recent_teachers": Teacher.objects.select_related(
+                "user"
+            ).order_by("-id")[:1],
+
+            "recent_attendance": Attendance.objects.select_related(
+                "student__user"
+            ).order_by("-id")[:1],
+
+            "recent_events": Event.objects.order_by(
+                "-id"
+            )[:1],
+
+            "recent_placements": Placement.objects.select_related(
+                "student__user",
+                "company"
+            ).order_by("-id")[:1],
+
+        })
+
+    elif section == "users":
+
+        context.update({
+
+            "admins_count": User.objects.filter(
+                role=Role.ADMIN
+            ).count(),
+
+            "users_count": User.objects.count(),
+
+            "teachers_count": Teacher.objects.count(),
+
+            "students_count": Student.objects.count(),
+
+            "recent_students": Student.objects.select_related(
+                "user",
+                "department"
+            ).order_by("-id")[:5],
+
+            "recent_teachers": Teacher.objects.select_related(
+                "user",
+                "department"
+            ).order_by("-id")[:5],
+        })
+
+    elif section == "students":
+
+        students = Student.objects.select_related(
             "user",
             "department"
+        ).prefetch_related(
+            "course"
+        )
+
+        departments = Department.objects.all()
+
+        search = request.GET.get("search", "")
+        department = request.GET.get("department", "")
+
+        if search:
+            students = students.filter(
+                Q(user__name__icontains=search) |
+                Q(user__email__icontains=search) |
+                Q(student_id__icontains=search)
+            )
+
+        if department:
+            students = students.filter(
+                department_id=department
+            )
+
+        context.update({
+            "students": students,
+            "departments": departments,
+            "search": search,
+            "selected_department": department,
+        })
+
+    elif section == "student_detail":
+
+        student_id = request.GET.get("id")
+
+        student = get_object_or_404(
+            Student.objects.select_related(
+                "user",
+                "department"
+            ).prefetch_related(
+                "course"
+            ),
+            pk=student_id
+        )
+
+        context["student"] = student
+
+    elif section == "student_update":
+
+        student_id = request.GET.get("id")
+
+        student = get_object_or_404(
+            Student,
+            pk=student_id
+        )
+
+        if request.method == "POST":
+
+            form = StudentUpdateForm(
+                request.POST,
+                instance=student
+            )
+
+            if form.is_valid():
+                form.save()
+
+                return redirect(
+                    reverse("admin_dashboard") + "?section=students"
+                )
+
+        else:
+
+            form = StudentUpdateForm(
+                instance=student
+            )
+
+        context.update({
+
+            "form": form,
+
+            "student": student,
+
+        })
+
+    elif section == "teachers":
+
+        teachers = Teacher.objects.select_related(
+            "user",
+            "department"
+        )
+
+        departments = Department.objects.all()
+
+        search = request.GET.get("search", "")
+        department = request.GET.get("department", "")
+
+        if search:
+            teachers = teachers.filter(
+                Q(user__name__icontains=search) |
+                Q(user__email__icontains=search)
+            )
+
+        if department:
+            teachers = teachers.filter(
+                department_id=department
+            )
+
+        context.update({
+            "teachers": teachers,
+            "departments": departments,
+            "search": search,
+            "selected_department": department,
+        })
+
+    elif section == "student_create":
+
+        if request.method == "POST":
+
+            form = StudentCreateForm(request.POST)
+
+            if form.is_valid():
+
+                form.save()
+
+                return redirect(
+                    reverse("admin_dashboard") + "?section=students"
+                )
+
+            else:
+                print(form.errors)
+
+        else:
+
+            form = StudentCreateForm()
+
+        context.update({
+
+            "form": form,
+
+            "departments": Department.objects.all(),
+
+            "courses": Course.objects.all(),
+
+        })
+
+    elif section == "teacher_create":
+
+        if request.method == "POST":
+
+            form = TeacherCreateForm(request.POST)
+
+            if form.is_valid():
+                user = User.objects.create_user(
+                    email=form.cleaned_data["email"],
+                    name=form.cleaned_data["name"],
+                    password=form.cleaned_data["password"],
+                    role=Role.TEACHER,
+                    phone=form.cleaned_data["phone"],
+                )
+
+                Teacher.objects.create(
+                    user=user,
+                    department=form.cleaned_data["department"],
+                    qualification=form.cleaned_data["qualification"],
+                    experience=form.cleaned_data["experience"],
+                    salary=form.cleaned_data["salary"],
+                )
+
+                return redirect("teacher_list")
+
+        else:
+
+            form = TeacherCreateForm()
+
+        context["form"] = form
+
+    elif section == "teacher_view":
+
+        teacher = get_object_or_404(
+            Teacher.objects.select_related(
+                "user",
+                "department"
+            ),
+            id=request.GET.get("id")
+        )
+
+        context["teacher"] = teacher
+
+    elif section == "teacher_edit":
+
+        teacher = get_object_or_404(
+            Teacher,
+            id=request.GET.get("id")
+        )
+
+        if request.method == "POST":
+
+            form = TeacherUpdateForm(
+                request.POST,
+                instance=teacher
+            )
+
+            if form.is_valid():
+
+                teacher.user.name = form.cleaned_data["name"]
+                teacher.user.email = form.cleaned_data["email"]
+                teacher.user.phone = form.cleaned_data["phone"]
+
+                # if form.cleaned_data["password"]:
+                #     teacher.user.set_password(
+                #         form.cleaned_data["password"]
+                #     )
+
+                teacher.user.save()
+
+                form.save()
+
+                return redirect(
+                    "/admin_dashboard/?section=teachers"
+                )
+
+        else:
+
+            initial = {
+                "name": teacher.user.name,
+                "email": teacher.user.email,
+                "phone": teacher.user.phone,
+            }
+
+            form = TeacherUpdateForm(
+                instance=teacher,
+                initial=initial
+            )
+
+        context["form"] = form
+
+    elif section == "teacher_delete":
+
+        teacher = get_object_or_404(
+            Teacher,
+            id=request.GET.get("id")
+        )
+
+        teacher.user.delete()
+
+        return redirect(
+            "/admin_dashboard/?section=teachers"
         )
 
     elif section == "departments":
-        context["departments"] = Department.objects.all()
 
-    elif section == "courses":
-        context["courses"] = Course.objects.select_related(
-            "department"
-        )
+        search = request.GET.get("search", "")
 
-    elif section == "timetable":
-        context["timetables"] = Timetable.objects.select_related(
-            "course",
-            "teacher__user"
-        ) 
+        departments = Department.objects.all()
 
-    elif section == "attendance":
-        context["attendance"] = Attendance.objects.select_related(
-            "student",
-            "student__user"
-        ).order_by("-date")   
+        if search:
+            departments = departments.filter(
+                Q(name__icontains=search) |
+                Q(code__icontains=search)
+            )
 
-    elif section == "exams":
-        context["exams"] = Exam.objects.select_related(
-            "course"
-        ).order_by("-exam_date")    
-
-    elif section == "placements":
-        context["placements"] = Placement.objects.select_related(
-            "student",
-            "student__user",
-            "company"
-        ).order_by("-placement_date")   
-
-    elif section == "company":
-        context["companies"] = Company.objects.all().order_by("name")
-
-    elif section == "reports":
-        context["reports"] = Report.objects.select_related(
-            "generated_by"
-        ).order_by("-generated_on")
-
-    elif section == "users":
-        context["users"] = User.objects.all().order_by("name")   
-
-
-    elif section == "events":
-
-        context["events"] = Event.objects.select_related(
-            "organized_by"
-    ).order_by("-event_date")
-        
-
-    elif section == "event_create":
-
-        if request.method == "POST":
-
-            form = EventForm(request.POST)
-
-            if form.is_valid():
-                form.save()
-                messages.success(request, "Event created successfully.")
-                return redirect("/admin_dashboard/?section=events")
-
-        else:
-            form = EventForm()
-
-        context["form"] = form
-
-    elif section == "student_detail":
-        student_id = request.GET.get("id")
-        context["student"] = Student.objects.select_related(
-            "user",
-            "department"
-            ).prefetch_related(
-            "course"
-        ).get(id=student_id)  
-
-    elif section == "student_update":
-        student = Student.objects.select_related(
-            "user",
-            "department"
-            ).prefetch_related(
-            "course"
-        ).get(id=request.GET.get("id"))
-
-        if request.method == "POST":
-            form = StudentForm(request.POST, instance=student)
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=students")
-
-        else:
-            form = StudentForm(instance=student)
-
-        context["form"] = form
-        context["student"] = student
-
-    elif section == "teacher_create":
-        if request.method == "POST":
-            form = TeacherForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=teachers")
-
-        else:
-            form = TeacherForm()
-
-        context["form"] = form     
-
-    elif section == "teacher_detail":
-        teacher = Teacher.objects.select_related(
-            "user",
-            "department"
-        ).get(id=request.GET.get("id"))
-
-        context["teacher"] = teacher  
+        context.update({
+            "departments": departments.order_by("name"),
+            "search": search,
+        })
 
     elif section == "department_create":
+
         if request.method == "POST":
             form = DepartmentForm(request.POST)
+
             if form.is_valid():
                 form.save()
-                return redirect("/admin_dashboard/?section=departments")
+                return redirect(reverse("admin_dashboard") + "?section=departments")
 
         else:
             form = DepartmentForm()
 
         context["form"] = form
 
-    elif section == "department_detail":
-        department = Department.objects.get(id=request.GET.get("id"))
-        context["department"] = department 
-
     elif section == "department_update":
-        department = Department.objects.get(id=request.GET.get("id"))
+
+        department = get_object_or_404(
+            Department,
+            pk=request.GET.get("id")
+        )
 
         if request.method == "POST":
-            form = DepartmentForm(request.POST, instance=department)
+            form = DepartmentForm(
+                request.POST,
+                instance=department
+            )
 
             if form.is_valid():
                 form.save()
-                return redirect("/admin_dashboard/?section=departments")
+                return redirect(reverse("admin_dashboard") + "?section=departments")
 
         else:
             form = DepartmentForm(instance=department)
 
         context["form"] = form
+
+    elif section == "department_detail":
+
+        department = get_object_or_404(
+            Department,
+            pk=request.GET.get("id")
+        )
+
         context["department"] = department
 
-    elif section == "course_create":
+    elif section == "department_update":
+
+        department = get_object_or_404(
+            Department,
+            pk=request.GET.get("id")
+        )
+
         if request.method == "POST":
-            form = CourseForm(request.POST)
+            form = DepartmentForm(
+                request.POST,
+                instance=department
+            )
+
             if form.is_valid():
                 form.save()
-                return redirect("/admin_dashboard/?section=courses")
+                return redirect(
+                    reverse("admin_dashboard") + "?section=departments"
+                )
+
+        else:
+            form = DepartmentForm(instance=department)
+
+        context["form"] = form
+
+    elif section == "courses":
+
+        search = request.GET.get("search", "")
+        selected_department = request.GET.get("department", "")
+
+        courses = Course.objects.select_related("department").all()
+        departments = Department.objects.all().order_by("name")
+
+        # Search
+        if search:
+            courses = courses.filter(
+                Q(name__icontains=search) |
+                Q(code__icontains=search)
+            )
+
+        # Department Filter
+        if selected_department:
+            courses = courses.filter(
+                department_id=selected_department
+            )
+
+        context.update({
+            "courses": courses.order_by("name"),
+            "departments": departments,
+            "search": search,
+            "selected_department": selected_department,
+        })
+
+    elif section == "course_create":
+
+        if request.method == "POST":
+
+            form = CourseForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+
+                return redirect(
+                    reverse("admin_dashboard") + "?section=courses"
+                )
 
         else:
             form = CourseForm()
 
-        context["form"] = form      
-
-    elif section == "course_detail":
-        course = Course.objects.select_related(
-            "department"
-        ).get(id=request.GET.get("id"))
-
-        context["course"] = course
+        context["form"] = form
 
     elif section == "course_update":
-        course = Course.objects.select_related(
-            "department"
-        ).get(id=request.GET.get("id"))
+
+        course = get_object_or_404(
+            Course,
+            pk=request.GET.get("id")
+        )
 
         if request.method == "POST":
-            form = CourseForm(request.POST, instance=course)
+
+            form = CourseForm(
+                request.POST,
+                instance=course
+            )
 
             if form.is_valid():
                 form.save()
-                return redirect("/admin_dashboard/?section=courses")
+
+                return redirect(
+                    reverse("admin_dashboard") + "?section=courses"
+                )
 
         else:
+
             form = CourseForm(instance=course)
 
         context["form"] = form
+
+    elif section == "course_detail":
+
+        course = get_object_or_404(
+            Course.objects.select_related("department"),
+            pk=request.GET.get("id")
+        )
+
         context["course"] = course
 
-    elif section == "teacher_update":
-        teacher = Teacher.objects.select_related(
-            "user",
-            "department"
-        ).get(id=request.GET.get("id"))
+    elif section == "timetables":
 
-        if request.method == "POST":
-            form = TeacherForm(request.POST, instance=teacher)
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=teachers")
+        search = request.GET.get("search", "")
+        day = request.GET.get("day", "")
 
-        else:
-            form = TeacherForm(instance=teacher)
+        timetables = Timetable.objects.select_related(
+            "course",
+            "teacher"
+        )
 
-        context["form"] = form
-        context["teacher"] = teacher 
+        if search:
+            timetables = timetables.filter(
+                Q(course__name__icontains=search) |
+                Q(teacher__user__name__icontains=search) |
+                Q(class_name__icontains=search) |
+                Q(room_no__icontains=search)
+            )
+
+        if day:
+            timetables = timetables.filter(day=day)
+
+        context.update({
+            "timetables": timetables.order_by("day", "start_time"),
+            "search": search,
+            "selected_day": day,
+            "days": [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday"
+            ]
+        })
 
     elif section == "timetable_create":
+
         if request.method == "POST":
+
             form = TimetableForm(request.POST)
+
             if form.is_valid():
                 form.save()
-                return redirect("/admin_dashboard/?section=timetable")
+                return redirect(
+                    reverse("admin_dashboard")
+                    + "?section=timetables"
+                )
 
         else:
             form = TimetableForm()
 
         context["form"] = form
 
-    elif section == "timetable_detail":
-        timetable = Timetable.objects.select_related(
-            "course",
-            "teacher__user"
-        ).get(id=request.GET.get("id"))
-
-        context["timetable"] = timetable 
-
     elif section == "timetable_update":
-        timetable = Timetable.objects.select_related(
-            "course",
-            "teacher"
-        ).get(id=request.GET.get("id"))
+
+        timetable = get_object_or_404(
+            Timetable,
+            pk=request.GET.get("id")
+        )
 
         if request.method == "POST":
-            form = TimetableForm(request.POST, instance=timetable)
+
+            form = TimetableForm(
+                request.POST,
+                instance=timetable
+            )
 
             if form.is_valid():
                 form.save()
-                return redirect("/admin_dashboard/?section=timetable")
+
+                return redirect(
+                    reverse("admin_dashboard")
+                    + "?section=timetables"
+                )
 
         else:
             form = TimetableForm(instance=timetable)
 
         context["form"] = form
-        context["timetable"] = timetable 
 
-    elif section == "attendance_create":
-        if request.method == "POST":
-            form = AttendanceForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=attendance")
-
-        else:
-            form = AttendanceForm()
-
-        context["form"] = form    
-
-    elif section == "attendance_detail":
-        print(request.GET)
-        attendance = Attendance.objects.select_related(
-            "student",
-            "student__user"
-
-        ).get(id=request.GET.get("id"))
-
-        context["attendance"] = attendance
-
-    elif section == "attendance_update":
-        attendance = Attendance.objects.select_related(
-            "student",
-            "student__user"
-        ).get(id=request.GET.get("id"))
-
-        if request.method == "POST":
-            form = AttendanceForm(request.POST, instance=attendance)
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=attendance")
-
-        else:
-            form = AttendanceForm(instance=attendance)
-
-        context["form"] = form
-        context["attendance"] = attendance
-
-<<<<<<< HEAD
-
-
-      
-
-
-
-=======
->>>>>>> c4dd427c09c3e7fe049f5a82dff2781af6074e5b
-    elif section == "exam_create":
-        if request.method == "POST":
-            form = ExamForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=exams")
-
-        else:
-            form = ExamForm()
-
-        context["form"] = form
-
-    elif section == "results":
-            context["marks"] = Marks.objects.select_related(
-                "student",
-                "student__user",
-                "course"
-            ).order_by("-id")  
-
-    elif section == "result_create":
-        if request.method == "POST":
-            form = MarksForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=results")
-            else:
-                print(form.errors)  
-
-        else:
-            form = MarksForm()
-
-        context["form"] = form
-
-    elif section == "company_create":
-        if request.method == "POST":
-            form = CompanyForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=company")
-
-        else:
-            form = CompanyForm()
-
-        context["form"] = form  
-
-    elif section == "placement_create":
-        if request.method == "POST":
-            form = PlacementForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=placements")
-
-        else:
-            form = PlacementForm()
-
-        context["form"] = form
-
-    elif section == "report_create":
-        if request.method == "POST":
-            form = ReportForm(request.POST, request.FILES)
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=reports")
-
-        else:
-            form = ReportForm()
-
-<<<<<<< HEAD
-        context["form"] = form
-
-
-    elif section == "exam_detail":
-
-        exam = Exam.objects.select_related(
-            "course"
-        ).get(id=request.GET.get("id"))
-
-        context["exam"] = exam  
-
-
-
-    elif section == "exam_update":
-
-        exam = Exam.objects.select_related(
-            "course"
-        ).get(id=request.GET.get("id"))
-
-
-        if request.method == "POST":
-
-            form = ExamForm(
-                request.POST,
-                instance=exam
-            )
-
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=exams")
-
-        else:
-            form = ExamForm(instance=exam)
-
-        context["form"] = form
-        context["exam"] = exam
-
-
-
-    elif section == "result_detail":
-
-        mark = Marks.objects.select_related(
-            "student",
-            "student__user",
-            "course"
-        ).get(id=request.GET.get("id"))
-
-        context["mark"] = mark
-
-
-
-
-    elif section == "result_update":
-
-        mark = Marks.objects.select_related(
-            "student",
-            "course"
-        ).get(id=request.GET.get("id"))
-
-        if request.method == "POST":
-
-            form = MarksForm(
-                request.POST,
-                instance=mark
-            )
-
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=results")
-
-        else:
-            form = MarksForm(instance=mark)
-
-        context["form"] = form
-        context["mark"] = mark 
-
-
-    elif section == "placement_detail":
-
-        placement = Placement.objects.select_related(
-            "student",
-            "student__user",
-            "company"
-        ).get(id=request.GET.get("id"))
-
-        context["placement"] = placement 
-
-
-
-    elif section == "placement_update":
-
-        placement = Placement.objects.select_related(
-            "student",
-            "company"
-        ).get(id=request.GET.get("id"))
-
-        if request.method == "POST":
-
-            form = PlacementForm(
-                request.POST,
-                instance=placement
-            )
-
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=placements")
-
-        else:
-            form = PlacementForm(instance=placement)
-
-        context["form"] = form
-        context["placement"] = placement
-
-
-
-    elif section == "company_detail":
-
-        company = Company.objects.get(
-            id=request.GET.get("id")
+    elif section == "timetable_detail":
+
+        timetable = get_object_or_404(
+            Timetable.objects.select_related(
+                "course",
+                "teacher"
+            ),
+            pk=request.GET.get("id")
         )
 
-        context["company"] = company
-
-
-    elif section == "company_update":
-
-        company = Company.objects.get(
-            id=request.GET.get("id")
-        )
-
-        if request.method == "POST":
-
-            form = CompanyForm(
-                request.POST,
-                instance=company
-            )
-
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=company")
-
-        else:
-
-            form = CompanyForm(instance=company)
-
-        context["form"] = form
-        context["company"] = company
-
-
-
-    elif section == "report_detail":
-
-        report = Report.objects.select_related(
-            "generated_by"
-        ).get(id=request.GET.get("id"))
-
-        context["report"] = report
-
-
-    elif section == "report_update":
-
-        report = Report.objects.select_related(
-            "generated_by"
-        ).get(id=request.GET.get("id"))
-
-        if request.method == "POST":
-
-            form = ReportForm(
-                request.POST,
-                request.FILES,
-                instance=report
-            )
-
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=reports")
-
-        else:
-
-            form = ReportForm(instance=report)
-
-        context["form"] = form
-        context["report"] = report
-
-
-
-    elif section == "student_delete":
-
-        student = get_object_or_404(
-            Student.objects.select_related("user"),
-            id=request.GET.get("id")
-        )
-
-        student.user.delete()
-
-        return redirect("/admin_dashboard/?section=students")  
-
-
-
-
-    elif section == "event_detail":
-
-        event = Event.objects.select_related(
-            "organized_by"
-        ).get(id=request.GET.get("id"))
-
-        context["event"] = event
-
-
-
-    elif section == "event_update":
-
-        event = Event.objects.select_related(
-            "organized_by"
-        ).get(id=request.GET.get("id"))
-
-        if request.method == "POST":
-
-            form = EventForm(
-                request.POST,
-                instance=event
-            )
-
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=events")
-
-        else:
-            form = EventForm(instance=event)
-
-        context["form"] = form
-        context["event"] = event                                                               
-                               
-
-=======
-        context["form"] = form                   
->>>>>>> c4dd427c09c3e7fe049f5a82dff2781af6074e5b
-
-    elif section == "student_create":
-        if request.method == "POST":
-            form = StudentForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect("/admin_dashboard/?section=students")
-
-        else:
-            form = StudentForm()
-
-            context["form"] = form
+        context["timetable"] = timetable
 
     return render(request, "accounts/admin_dashboard.html", context)
 
@@ -746,9 +746,6 @@ def admin_dashboard(request):
 @login_required
 def student_dashboard(request):
 
-<<<<<<< HEAD
-
-=======
     if request.user.role != "STUDENT":
         return HttpResponseForbidden(
             "You are not authorized to access this page."
@@ -902,13 +899,9 @@ def student_dashboard(request):
     elif section == "timetable":
 
         timetable_qs = (
-
             Timetable.objects.filter(course__in=student.course.all())
-
             .select_related("course", "teacher__user")
-
             .order_by("start_time", "day")
-
         )
 
         timetable = OrderedDict()
@@ -916,26 +909,17 @@ def student_dashboard(request):
         for item in timetable_qs:
 
             slot = (
-
                 item.start_time.strftime("%I:%M %p"),
-
                 item.end_time.strftime("%I:%M %p")
-
             )
 
             if slot not in timetable:
                 timetable[slot] = {
-
                     "Monday": None,
-
                     "Tuesday": None,
-
                     "Wednesday": None,
-
                     "Thursday": None,
-
                     "Friday": None,
-
                 }
 
             timetable[slot][item.day] = item
@@ -949,11 +933,8 @@ def student_dashboard(request):
         ).filter(student=student)
 
         issued_books = library.filter(status=LibraryStatus.ISSUED).count()
-
         returned_books = library.filter(status=LibraryStatus.RETURNED).count()
-
         overdue_books = library.filter(status=LibraryStatus.ISSUED, due_date__lt=date.today()).count()
-
         total_fine = library.aggregate(total=Sum("fine"))["total"] or 0
 
         context.update({
@@ -1019,14 +1000,6 @@ def student_dashboard(request):
         )
 
     return render(request, "students/student_dashboard.html", context)
->>>>>>> c4dd427c09c3e7fe049f5a82dff2781af6074e5b
-
-
-@login_required
-def logout_view(request):
-    logout(request)
-    messages.success(request, "Logout Successful")
-    return redirect("login")
 
 
 def forgot_password(request):
@@ -1050,17 +1023,12 @@ def forgot_password(request):
                 recipient_list=[email],
                 fail_silently=False,
             )
-<<<<<<< HEAD
 
-
-=======
-            messages.success(request, "OTP Sent Successfully")
->>>>>>> c4dd427c09c3e7fe049f5a82dff2781af6074e5b
             return redirect("verify-otp")
 
     else:
         form = ForgotPasswordForm()
-    return render(request, "accounts/forgot_password.html",{"form": form},)
+    return render(request, "accounts/forgot_password.html", {"form": form})
 
 
 def verify_otp(request):
@@ -1113,11 +1081,10 @@ def reset_password(request):
     )
 
 
-
-
+@login_required
 def logout_view(request):
     logout(request)
+    messages.success(request, "Logout Successful")
     return redirect("login")
 
-    return render(request, "accounts/reset_password.html", {"form": form},)
 
