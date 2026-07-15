@@ -84,6 +84,7 @@ Main
 
 .main{
     margin-left:260px;
+    padding-top: 70px; 
 }
 
 /* =======================
@@ -91,13 +92,18 @@ Navbar
 ======================= */
 
 .navbar{
-    height:70px;
-    background:#fff;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:0 30px;
-    box-shadow:0 3px 10px rgba(0,0,0,.08);
+    position: fixed;
+    top: 0;
+    left: 260px;              /* Sidebar width */
+    right: 0;
+    height: 70px;
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.08);
+    z-index: 1000;
 }
 
 .navbar h2{
@@ -187,6 +193,7 @@ Responsive
     flex-direction:column;
     height:auto;
     padding:20px;
+    display: flex;
 }
 
 }
@@ -496,6 +503,26 @@ textarea.form-control{
 .btn-back i{
     font-size: 14px;
 }
+
+
+
+.logout-link{
+    text-decoration: none;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.logout-link:hover,
+.logout-link:focus,
+.logout-link:active{
+    text-decoration: none;
+    color: #0d6efd;
+}
+
+
+
+
+
 </style>
 
 </head>
@@ -560,12 +587,12 @@ Smart College
         </a>
     </li>
 
-    <li>
+    {% comment %} <li>
         <a href="?section=attendance"
            class="{% if section == 'attendance' %}active{% endif %}">
             <i class="fa-solid fa-calendar-check"></i> Attendance
         </a>
-    </li>
+    </li> {% endcomment %}
 
     <li>
         <a href="?section=exams"
@@ -595,6 +622,13 @@ Smart College
     </a>
 </li>
 
+
+<li>
+    <a href="?section=events">
+        <i class="fa-solid fa-calendar-days"></i> Events
+    </a>
+</li>
+
     <li>
         <a href="?section=reports"
            class="{% if section == 'reports' %}active{% endif %}">
@@ -602,12 +636,7 @@ Smart College
         </a>
     </li>
 
-    <li>
-        <a href="?section=settings"
-           class="{% if section == 'settings' %}active{% endif %}">
-            <i class="fa-solid fa-gear"></i> Settings
-        </a>
-    </li>
+    
 
 </ul>
 
@@ -621,16 +650,24 @@ Smart College
 
 <h2>Admin Dashboard</h2>
 
+
 <div class="profile">
-<i class="fa-solid fa-right-from-bracket"></i>
-Logout
+    <a href="{% url 'logout_view' %}" class="logout-link">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+    </a>
 </div>
+
+
 
 </div>
 
 <div class="content">
 
-{% if section == "dashboard" %}    
+    {% if section == "dashboard" %} 
+
+
+
 
 
 <div class="cards">
@@ -668,13 +705,13 @@ Logout
 <div class="card">
 <i class="fa-solid fa-briefcase"></i>
 <h3>Total Placements</h3>
-<h1>4</h1>
+<h1>{{ placement_count }}</h1>
 </div>
 
 <div class="card">
 <i class="fa-solid fa-building"></i>
 <h3>Total Companies</h3>
-<h1>32</h1>
+<h1>{{ company_count }}</h1>
 </div>
 
 <div class="card">
@@ -684,17 +721,56 @@ Logout
 </div>
 
 
+</div> 
+
+<br>
+
+<br>
+
+
+
+<div class="row mt-4">
+
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header">
+                <h5>College Statistics</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="dashboardChart" height="180"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <br>
+
+    <div class="col-md-3">
+        <div class="card shadow">
+            <div class="card-header">
+                <h5>Overview</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="pieChart" height="180"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
 
 {% elif section == "students" %}
 
-<div class="d-flex justify-content-end mb-4">
+    <h2>Student</h2>
 
-    <a href="?section=student_create"
-       class="btn btn-primary">
+<div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+    <a href="?section=student_create" class="btn btn-primary">
         <i class="fa-solid fa-user-plus"></i>
-        Add Student
+        Add
     </a>
-
 </div>
 
 
@@ -740,7 +816,11 @@ Logout
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
 
-                                <a href="" class="btn btn-danger btn-sm btn-action" title="Delete">
+                               
+
+                                <a href=""
+                                    class="btn btn-danger btn-sm btn-action"
+                                    title="Delete">
                                     <i class="fa-solid fa-trash"></i>
                                 </a>
 
@@ -757,6 +837,40 @@ Logout
         {% endfor %}
     </tbody>
 </table>
+
+
+
+
+
+
+{% elif section == "student_delete" %}
+
+<div class="card shadow">
+    <div class="card-header bg-danger text-white">
+        <h4>Delete Student</h4>
+    </div>
+
+    <div class="card-body">
+        <p>
+            Are you sure you want to delete
+            <strong>{{ student.user.name }}</strong>?
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <button type="submit" class="btn btn-danger">
+                Yes, Delete
+            </button>
+
+            <a href="?section=students" class="btn btn-secondary">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
+
+
 
 
 {% elif section == "student_create" %}
@@ -848,14 +962,12 @@ Logout
 
 {% elif section == "student_detail" %}
 
-<div class="card shadow border-0">
 
-    <div class="card-header bg-primary text-white">
-        <h4 class="mb-0">
-            <i class="fa-solid fa-user-graduate me-2"></i>
-            Student Details
-        </h4>
-    </div>
+
+    {% comment %} <h3 class="mb-4">
+    <i class="fa-solid fa-user-graduate me-2 text-primary"></i>
+    Student Details
+</h3> {% endcomment %}
 
     <div class="card-body">
 
@@ -923,14 +1035,15 @@ Logout
 
         </table>
 
-        <div class="text-end">
+        <div style="display:flex; justify-content:end; margin-top:20px;">
     <a href="?section=students" class="btn-back">
-        
-        Back to Students
+        Cancel
     </a>
 </div>
 
-    </div>
+</div>
+
+    
 
 </div>
 
@@ -1020,23 +1133,19 @@ Logout
 
     </div>
 
-</div>
-
-
-
-
-
-
+</div> 
 
 {% elif section == "teachers" %}
 
 <h2>Teachers</h2>
 
-<a href="?section=teacher_create"
-   class="btn btn-primary mb-3">
-    <i class="fa-solid fa-user-plus"></i>
-    Add Teacher
-</a>
+
+<div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+    <a href="?section=teacher_create" class="btn btn-primary">
+        <i class="fa-solid fa-user-plus"></i>
+        Add
+    </a>
+</div>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -1076,10 +1185,10 @@ Logout
                 </a>
 
                 <a href="/admin_dashboard/?section=teacher_update&id={{ teacher.id }}"
-   class="btn btn-warning btn-sm btn-action"
-   title="Edit">
-    <i class="fa-solid fa-pen-to-square"></i>
-</a>
+                    class="btn btn-warning btn-sm btn-action"
+                    title="Edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
 
                 <a href=""
                    class="btn btn-danger btn-sm btn-action"
@@ -1113,12 +1222,7 @@ Logout
 
     <div class="card shadow border-0 rounded-4">
 
-        <div class="card-header bg-primary text-white py-3">
-            <h4 class="mb-0">
-                <i class="fa-solid fa-user-plus me-2"></i>
-                Add Teacher
-            </h4>
-        </div>
+        
 
         <div class="card-body">
 
@@ -1163,15 +1267,18 @@ Logout
 
                 <hr>
 
-                <button type="submit" class="btn btn-success">
-                    <i class="fa-solid fa-floppy-disk me-2"></i>
-                    Save
-                </button>
+                
 
-                <a href="?section=teachers"
-                   class="btn btn-secondary ms-2">
-                    Cancel
+
+                <div class="button-group">
+                    <a href="?section=teachers" class="btn btn-cancel">
+                    Back
                 </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Save Student
+                </button>
+                </div>
 
             </form>
 
@@ -1187,11 +1294,9 @@ Logout
 
 {% elif section == "teacher_detail" %}
 
-<div class="card shadow border-0">
 
-    <div class="card-header bg-primary text-white">
-        <h4 class="mb-0">Teacher Details</h4>
-    </div>
+
+    
 
     <div class="card-body">
 
@@ -1234,13 +1339,12 @@ Logout
 
         </table>
 
-        <div class="text-end">
-            <a href="?section=teachers" class="btn-back">
-                Back to Teachers
-            </a>
-        </div>
+        <div style="display:flex; justify-content:end; margin-top:20px;">
+    <a href="?section=teachers" class="btn-back">
+        Cancel
+    </a>
 
-    </div>
+    
 
 </div>
 
@@ -1261,13 +1365,17 @@ Logout
 
             {{ form.as_p }}
 
-            <button type="submit" class="btn btn-success">
-                Update Teacher
-            </button>
 
-            <a href="?section=teachers" class="btn btn-secondary">
-                Cancel
-            </a>
+            <div class="button-group">
+                <a href="?section=teachers" class="btn-back">
+                    Cancel
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Update Teacher
+                </button>
+            </div>
+
         </form>
 
     </div>
@@ -1278,11 +1386,12 @@ Logout
 
 <h2>Departments</h2>
 
-<a href="?section=department_create"
-   class="btn btn-primary mb-3">
-    <i class="fa-solid fa-plus"></i>
-    Add Department
-</a>
+<div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+    <a href="?section=department_create" class="btn btn-primary">
+        <i class="fa-solid fa-user-plus"></i>
+        Add
+    </a>
+</div>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -1315,10 +1424,10 @@ Logout
             <td>
 
                 <a href="/admin_dashboard/?section=department_detail&id={{ department.id }}"
-   class="btn btn-info btn-sm btn-action"
-   title="View">
-    <i class="fa-solid fa-eye"></i>
-</a>
+                    class="btn btn-info btn-sm btn-action"
+                    title="View">
+                    <i class="fa-solid fa-eye"></i>
+                </a>
 
                 <a href="/admin_dashboard/?section=department_update&id={{ department.id }}"
                     class="btn btn-warning btn-sm btn-action"
@@ -1353,16 +1462,13 @@ Logout
 
 {% elif section == "department_create" %}
 
-<div class="container py-4">
+  
+
+{% comment %} <div class="container py-4">
 
     <div class="card shadow border-0 rounded-4">
 
-        <div class="card-header bg-primary text-white py-3">
-            <h4 class="mb-0">
-                <i class="fa-solid fa-building me-2"></i>
-                Add Department
-            </h4>
-        </div>
+        
 
         <div class="card-body">
 
@@ -1396,16 +1502,82 @@ Logout
 
                 <hr>
 
-                <button type="submit" class="btn btn-success">
-                    <i class="fa-solid fa-floppy-disk me-2"></i>
-                    Save
-                </button>
+            
 
-                <a href="?section=departments"
-                   class="btn btn-secondary ms-2">
-                    <i class="fa-solid fa-arrow-left me-2"></i>
-                    Cancel
+                <div class="button-group">
+                    <a href="?section=departments" class="btn btn-cancel">
+                    Back
                 </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Save Department
+                </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div> {% endcomment %}
+
+
+<div class="container py-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-body">
+
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">
+                            Department Name
+                        </label>
+                        {{ form.name }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">
+                            Department Code
+                        </label>
+                        {{ form.code }}
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-12 mb-3">
+                        <label class="form-label fw-bold">
+                            Description
+                        </label>
+                        {{ form.description }}
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <div class="button-group">
+                    <a href="?section=departments" class="btn btn-cancel">
+                        Back
+                    </a>
+
+                    <button type="submit" class="btn btn-primary">
+                        Save Department
+                    </button>
+                </div>
 
             </form>
 
@@ -1422,12 +1594,9 @@ Logout
 
 {% elif section == "department_detail" %}
 
-<div class="card shadow">
-    <div class="card-header bg-info text-white">
-        <h4>Department Details</h4>
-    </div>
 
-    <div class="card-body">
+
+    {% comment %} <div class="card-body">
 
         <table class="table table-bordered">
 
@@ -1453,12 +1622,56 @@ Logout
 
         </table>
 
-        <a href="?section=departments"
-           class="btn btn-secondary">
-            Back
-        </a>
+        <div style="display:flex; justify-content:end; margin-top:20px;">
+    <a href="?section=departments" class="btn-back">
+        Cancel
+    </a>
+
+    
+</div> {% endcomment %}
+
+
+<div class="container py-4">
+
+    
+
+        
+
+        <div class="card-body">
+
+            <table class="table table-bordered">
+
+                <tr>
+                    <th width="25%">ID</th>
+                    <td>{{ department.id }}</td>
+                </tr>
+
+                <tr>
+                    <th>Name</th>
+                    <td>{{ department.name }}</td>
+                </tr>
+
+                <tr>
+                    <th>Code</th>
+                    <td>{{ department.code }}</td>
+                </tr>
+
+                <tr>
+                    <th>Description</th>
+                    <td>{{ department.description }}</td>
+                </tr>
+
+            </table>
+
+            <div style="display:flex; justify-content:end; margin-top:20px;">
+    <a href="?section=departments" class="btn-back">
+        Cancel
+    </a>
+
+        </div>
 
     </div>
+
 </div>
 
 
@@ -1479,13 +1692,17 @@ Logout
 
             {{ form.as_p }}
 
-            <button type="submit" class="btn btn-success">
-                Update
-            </button>
 
-            <a href="?section=departments" class="btn btn-secondary">
-                Cancel
-            </a>
+
+            <div class="button-group">
+                <a href="?section=departments" class="btn-back">
+                    Cancel
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Update Department
+                </button>
+            </div>
 
         </form>
 
@@ -1502,12 +1719,12 @@ Logout
 
 <h2>Courses</h2>
 
-
-<a href="?section=course_create"
-   class="btn btn-primary mb-3">
-    <i class="fa-solid fa-plus"></i>
-    Add Course
-</a>
+<div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+    <a href="?section=course_create" class="btn btn-primary">
+        <i class="fa-solid fa-user-plus"></i>
+        Add
+    </a>
+</div>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -1543,16 +1760,16 @@ Logout
             <td>
 
                 <a href="/admin_dashboard/?section=course_detail&id={{ course.id }}"
-   class="btn btn-info btn-sm btn-action"
-   title="View">
-    <i class="fa-solid fa-eye"></i>
-</a>
+                    class="btn btn-info btn-sm btn-action"
+                    title="View">
+                    <i class="fa-solid fa-eye"></i>
+                </a>
 
                 <a href="/admin_dashboard/?section=course_update&id={{ course.id }}"
-   class="btn btn-warning btn-sm btn-action"
-   title="Edit">
-    <i class="fa-solid fa-pen-to-square"></i>
-</a>
+                    class="btn btn-warning btn-sm btn-action"
+                    title="Edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
 
                 <a href=""
                    class="btn btn-danger btn-sm btn-action"
@@ -1583,16 +1800,12 @@ Logout
 
 {% elif section == "course_create" %}
 
+
 <div class="container py-4">
 
     <div class="card shadow border-0 rounded-4">
 
-        <div class="card-header bg-primary text-white py-3">
-            <h4 class="mb-0">
-                <i class="fa-solid fa-book me-2"></i>
-                Add Course
-            </h4>
-        </div>
+        
 
         <div class="card-body">
 
@@ -1647,16 +1860,17 @@ Logout
 
                 <hr>
 
-                <button type="submit" class="btn btn-success">
-                    <i class="fa-solid fa-floppy-disk me-2"></i>
-                    Save
-                </button>
 
-                <a href="?section=courses"
-                   class="btn btn-secondary ms-2">
-                    <i class="fa-solid fa-arrow-left me-2"></i>
-                    Cancel
+
+                <div class="button-group">
+                    <a href="?section=courses" class="btn btn-cancel">
+                    Back
                 </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Save Course
+                </button>
+                </div>
 
             </form>
 
@@ -1670,10 +1884,7 @@ Logout
 
 {% elif section == "course_detail" %}
 
-<div class="card shadow">
-    <div class="card-header bg-info text-white">
-        <h4>Course Details</h4>
-    </div>
+
 
     <div class="card-body">
 
@@ -1706,9 +1917,10 @@ Logout
 
         </table>
 
-        <a href="?section=courses" class="btn btn-secondary">
-            Back
-        </a>
+        <div style="display:flex; justify-content:end; margin-top:20px;">
+    <a href="?section=courses" class="btn-back">
+        Cancel
+    </a>
 
     </div>
 </div>
@@ -1719,7 +1931,7 @@ Logout
 
 <div class="card shadow">
     <div class="card-header bg-warning">
-        <h4>Edit Course</h4>
+        
     </div>
 
     <div class="card-body">
@@ -1728,13 +1940,18 @@ Logout
 
             {{ form.as_p }}
 
-            <button type="submit" class="btn btn-success">
-                Update
-            </button>
+            
 
-            <a href="?section=courses" class="btn btn-secondary">
-                Cancel
-            </a>
+
+            <div class="button-group">
+                <a href="?section=courses" class="btn-back">
+                    Cancel
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Update Course
+                </button>
+            </div>
         </form>
     </div>
 </div>
@@ -1745,11 +1962,12 @@ Logout
 
 {% elif section == "timetable" %}
 
-<div class="d-flex justify-content-end mb-4">
-    <a href="?section=timetable_create"
-       class="btn btn-primary">
+    <h2>Timetable</h2>
+
+<div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+    <a href="?section=timetable_create" class="btn btn-primary">
         <i class="fa-solid fa-user-plus"></i>
-        Add Timetable
+        Add
     </a>
 </div>
 
@@ -1793,16 +2011,16 @@ Logout
             <td>
 
                 <a href="/admin_dashboard/?section=timetable_detail&id={{ timetable.id }}"
-   class="btn btn-info btn-sm btn-action"
-   title="View">
-    <i class="fa-solid fa-eye"></i>
-</a>
+                    class="btn btn-info btn-sm btn-action"
+                    title="View">
+                    <i class="fa-solid fa-eye"></i>
+                </a>
 
                 <a href="/admin_dashboard/?section=timetable_update&id={{ timetable.id }}"
-   class="btn btn-warning btn-sm btn-action"
-   title="Edit">
-    <i class="fa-solid fa-pen-to-square"></i>
-</a>
+                    class="btn btn-warning btn-sm btn-action"
+                    title="Edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
 
                 <a href=""
                    class="btn btn-danger btn-sm btn-action"
@@ -1834,9 +2052,7 @@ Logout
 {% elif section == "timetable_create" %}
 
 <div class="card shadow">
-    <div class="card-header bg-primary text-white">
-        <h4>Add Timetable</h4>
-    </div>
+    
 
     <div class="card-body">
 
@@ -1845,14 +2061,17 @@ Logout
 
             {{ form.as_p }}
 
-            <button type="submit" class="btn btn-success">
-                Save
-            </button>
+        
 
-            <a href="?section=timetable"
-               class="btn btn-secondary">
-                Cancel
-            </a>
+            <div class="button-group">
+                    <a href="?section=timetable" class="btn btn-cancel">
+                    Back
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Save Timetable
+                </button>
+                </div>
 
         </form>
 
@@ -1866,10 +2085,7 @@ Logout
 
 {% elif section == "timetable_detail" %}
 
-<div class="card shadow">
-    <div class="card-header bg-info text-white">
-        <h4>Timetable Details</h4>
-    </div>
+
 
     <div class="card-body">
 
@@ -1912,9 +2128,10 @@ Logout
 
         </table>
 
-        <a href="?section=timetable" class="btn btn-secondary">
-            Back
-        </a>
+        <div style="display:flex; justify-content:end; margin-top:20px;">
+    <a href="?section=timetable" class="btn-back">
+        Cancel
+    </a>
 
     </div>
 </div>
@@ -1937,13 +2154,16 @@ Logout
 
             {{ form.as_p }}
 
-            <button type="submit" class="btn btn-success">
-                Update
-            </button>
 
-            <a href="?section=timetable" class="btn btn-secondary">
-                Cancel
-            </a>
+            <div class="button-group">
+                <a href="?section=timetable" class="btn-back">
+                    Cancel
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Update Timetable
+                </button>
+            </div>
 
         </form>
 
@@ -1959,11 +2179,12 @@ Logout
 
 <h2>Attendance</h2>
 
-<a href="?section=attendance_create"
-       class="btn btn-primary">
-        <i class="fa-solid fa-plus"></i>
-        Add Attendance
+    <div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+    <a href="?section=attendance_create" class="btn btn-primary">
+        <i class="fa-solid fa-user-plus"></i>
+        Add
     </a>
+</div>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -2015,17 +2236,17 @@ Logout
 
             <td>
 
-<a href="{% url 'admin_dashboard' %}?section=attendance_detail&id={{ item.id }}"
-   class="btn btn-info btn-sm btn-action"
-   title="View">
-    <i class="fa-solid fa-eye"></i>
-</a>
+                <a href="{% url 'admin_dashboard' %}?section=attendance_detail&id={{ item.id }}"
+                    class="btn btn-info btn-sm btn-action"
+                    title="View">
+                    <i class="fa-solid fa-eye"></i>
+                </a>
 
                 <a href="{% url 'admin_dashboard' %}?section=attendance_update&id={{ item.id }}"
-   class="btn btn-warning btn-sm btn-action"
-   title="Edit">
-    <i class="fa-solid fa-pen-to-square"></i>
-</a>
+                    class="btn btn-warning btn-sm btn-action"
+                    title="Edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
 
                 <a href=""
                    class="btn btn-danger btn-sm btn-action"
@@ -2061,12 +2282,7 @@ Logout
 
     <div class="card border-0 shadow rounded-4">
 
-        <div class="card-header bg-primary text-white py-3">
-            <h4 class="mb-0">
-                <i class="fa-solid fa-calendar-check me-2"></i>
-                Add Attendance
-            </h4>
-        </div>
+        
 
         <div class="card-body p-4">
 
@@ -2113,16 +2329,17 @@ Logout
 
                 <hr>
 
-                <button class="btn btn-success px-4" type="submit">
-                    <i class="fa-solid fa-floppy-disk me-2"></i>
-                    Save
-                </button>
+            
 
-                <a href="?section=attendance"
-                   class="btn btn-secondary px-4 ms-2">
-                    <i class="fa-solid fa-arrow-left me-2"></i>
-                    Cancel
+                <div class="button-group">
+                    <a href="?section=attendance" class="btn btn-cancel">
+                    Back
                 </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Save Attendance
+                </button>
+                </div>
 
             </form>
 
@@ -2136,10 +2353,7 @@ Logout
 
 {% elif section == "attendance_detail" %}
 
-<div class="card shadow">
-    <div class="card-header bg-info text-white">
-        <h4>Attendance Details</h4>
-    </div>
+
 
     <div class="card-body">
         <table class="table table-bordered">
@@ -2168,10 +2382,10 @@ Logout
 
         </table>
 
-        <a href="{% url 'admin_dashboard' %}?section=attendance"
-           class="btn btn-secondary">
-            Back
-        </a>
+        <div style="display:flex; justify-content:end; margin-top:20px;">
+    <a href="?section=attendance" class="btn-back">
+        Cancel
+    </a>
     </div>
 </div>
 
@@ -2221,16 +2435,18 @@ Logout
 
                 <hr class="my-4">
 
-                <button type="submit" class="btn btn-success btn-lg px-5">
-                    
-                    Update
-                </button>
+                
 
-                <a href="{% url 'admin_dashboard' %}?section=attendance"
-                   class="btn btn-secondary btn-lg px-5 ms-2">
-                    
+
+                <div class="button-group">
+                <a href="?section=attendance" class="btn-back">
                     Cancel
                 </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Update Attendance
+                </button>
+            </div>
 
             </form>
 
@@ -2247,11 +2463,15 @@ Logout
 
 <h2>Exams</h2>
 
-<a href="?section=exam_create"
-       class="btn btn-primary">
-        <i class="fa-solid fa-plus"></i>
-        Add Exam
+
+
+
+    <div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+    <a href="?section=exam_create" class="btn btn-primary">
+        <i class="fa-solid fa-user-plus"></i>
+        Add
     </a>
+</div>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -2283,15 +2503,15 @@ Logout
 
         <td>
 
-            <a href=""
-               class="btn btn-info btn-sm btn-action"
-               title="View">
+            <a href="?section=exam_detail&id={{ exam.id }}"
+                class="btn btn-info btn-sm btn-action"
+                title="View">
                 <i class="fa-solid fa-eye"></i>
             </a>
 
-            <a href=""
-               class="btn btn-warning btn-sm btn-action"
-               title="Edit">
+            <a href="?section=exam_update&id={{ exam.id }}"
+                class="btn btn-warning btn-sm btn-action"
+                title="Edit">
                 <i class="fa-solid fa-pen-to-square"></i>
             </a>
 
@@ -2327,12 +2547,7 @@ Logout
 
     <div class="card shadow-lg border-0 rounded-4">
 
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">
-                <i class="fa-solid fa-file-circle-plus me-2"></i>
-                Add Exam
-            </h4>
-        </div>
+        
 
         <div class="card-body p-4">
 
@@ -2366,15 +2581,18 @@ Logout
 
                 <hr>
 
-                <button class="btn btn-success" type="submit">
-                    <i class="fa-solid fa-floppy-disk me-2"></i>
-                    Save
-                </button>
+                
 
-                <a href="?section=exams"
-                   class="btn btn-secondary ms-2">
-                    Cancel
+
+                <div class="button-group">
+                    <a href="?section=exams" class="btn btn-cancel">
+                    Back
                 </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Save Exam
+                </button>
+                </div>
 
             </form>
 
@@ -2388,15 +2606,96 @@ Logout
 
 
 
+{% elif section == "exam_detail" %}
+
+
+    <div class="card-body">
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Exam Name</th>
+                <td>{{ exam.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Course</th>
+                <td>{{ exam.course.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Exam Date</th>
+                <td>{{ exam.exam_date|date:"d M Y" }}</td>
+            </tr>
+
+            <tr>
+                <th>Total Marks</th>
+                <td>{{ exam.total_marks }}</td>
+            </tr>
+
+        </table>
+
+        <div style="display:flex; justify-content:end; margin-top:20px;">
+    <a href="?section=exams" class="btn-back">
+        Cancel
+    </a>
+
+    
+
+</div>
+
+
+
+
+{% elif section == "exam_update" %}
+
+<div class="card shadow">
+
+    <div class="card-header bg-warning">
+        <h4>Edit Exam</h4>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            
+
+
+            <div class="button-group">
+                <a href="?section=exams" class="btn-back">
+                    Cancel
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Update Exam
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+
+
 {% elif section == "results" %}
 
 <h2>Results</h2>
 
-<a href="?section=result_create"
-   class="btn btn-primary mb-3">
-    <i class="fa-solid fa-plus"></i>
-    Add Result
-</a>
+
+<div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+    <a href="?section=result_create" class="btn btn-primary">
+        <i class="fa-solid fa-user-plus"></i>
+        Add
+    </a>
+</div>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -2438,17 +2737,17 @@ Logout
 
         <td>
 
-            <a href=""
-               class="btn btn-info btn-sm btn-action"
-               title="View">
-                <i class="fa-solid fa-eye"></i>
-            </a>
+    <a href="?section=result_detail&id={{ mark.id }}"
+        class="btn btn-info btn-sm btn-action"
+        title="View">
+        <i class="fa-solid fa-eye"></i>
+    </a>
 
-            <a href=""
-               class="btn btn-warning btn-sm btn-action"
-               title="Edit">
-                <i class="fa-solid fa-pen-to-square"></i>
-            </a>
+    <a href="?section=result_update&id={{ mark.id }}"
+        class="btn btn-warning btn-sm btn-action"
+        title="Edit">
+        <i class="fa-solid fa-pen-to-square"></i>
+    </a>
 
             <a href=""
                class="btn btn-danger btn-sm btn-action"
@@ -2477,18 +2776,131 @@ Logout
 
 
 
+{% elif section == "result_detail" %}
+
+
+
+    <div class="card-body">
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Student</th>
+                <td>{{ mark.student.user.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Student ID</th>
+                <td>{{ mark.student.student_id }}</td>
+            </tr>
+
+            <tr>
+                <th>Course</th>
+                <td>{{ mark.course.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Marks Obtained</th>
+                <td>{{ mark.marks_obtained }}</td>
+            </tr>
+
+            <tr>
+                <th>Maximum Marks</th>
+                <td>{{ mark.max_marks }}</td>
+            </tr>
+
+            <tr>
+                <th>Grade</th>
+                <td>{{ mark.grade }}</td>
+            </tr>
+
+        </table>
+
+        <div style="display:flex; justify-content:end; margin-top:20px;">
+    <a href="?section=results" class="btn-back">
+        Cancel
+    </a>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+{% elif section == "result_update" %}
+
+<div class="card shadow border-0 rounded-4">
+
+    <div class="card-header bg-warning">
+        <h4>Edit Result</h4>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label>Student</label>
+                    {{ form.student }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Course</label>
+                    {{ form.course }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Marks Obtained</label>
+                    {{ form.marks_obtained }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Maximum Marks</label>
+                    {{ form.max_marks }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Grade</label>
+                    {{ form.grade }}
+                </div>
+
+            </div>
+
+            
+
+
+            <div class="button-group">
+                <a href="?section=results" class="btn-back">
+                    Cancel
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Update Result
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+
 {% elif section == "result_create" %}
 
 <div class="container py-4">
 
     <div class="card shadow border-0 rounded-4">
 
-        <div class="card-header bg-primary text-white">
-            <h4>
-                <i class="fa-solid fa-file-circle-plus me-2"></i>
-                Add Result
-            </h4>
-        </div>
+        
 
         <div class="card-body">
 
@@ -2525,15 +2937,16 @@ Logout
 
                 </div>
 
-                <button type="submit" class="btn btn-success">
-    <i class="fa-solid fa-floppy-disk"></i>
-    Save
-</button>
 
-                <a href="?section=results"
-                   class="btn btn-secondary">
-                    Cancel
+                <div class="button-group">
+                    <a href="?section=results" class="btn btn-cancel">
+                    Back
                 </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Save Result
+                </button>
+                </div>
 
             </form>
 
@@ -2549,11 +2962,16 @@ Logout
 
 <h2>Placements</h2>
 
-<a href="?section=placement_create"
-   class="btn btn-primary mb-3">
-    <i class="fa-solid fa-plus"></i>
-    Add Placement
-</a>
+
+<div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+    <a href="?section=placement_create" class="btn btn-primary">
+        <i class="fa-solid fa-user-plus"></i>
+        Add
+    </a>
+</div>
+
+
+
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -2606,15 +3024,15 @@ Logout
 
         <td>
 
-            <a href=""
-               class="btn btn-info btn-sm btn-action"
-               title="View">
+            <a href="?section=placement_detail&id={{ placement.id }}"
+                class="btn btn-info btn-sm btn-action"
+                title="View">
                 <i class="fa-solid fa-eye"></i>
             </a>
 
-            <a href=""
-               class="btn btn-warning btn-sm btn-action"
-               title="Edit">
+            <a href="?section=placement_update&id={{ placement.id }}"
+                class="btn btn-warning btn-sm btn-action"
+                title="Edit">
                 <i class="fa-solid fa-pen-to-square"></i>
             </a>
 
@@ -2645,18 +3063,121 @@ Logout
 
 
 
+
+
+
+{% elif section == "placement_detail" %}
+
+
+
+    <div class="card-body">
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Student</th>
+                <td>{{ placement.student.user.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Student ID</th>
+                <td>{{ placement.student.student_id }}</td>
+            </tr>
+
+            <tr>
+                <th>Company</th>
+                <td>{{ placement.company.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Job Role</th>
+                <td>{{ placement.job_role }}</td>
+            </tr>
+
+            <tr>
+                <th>Package</th>
+                <td>₹ {{ placement.package }}</td>
+            </tr>
+
+            <tr>
+                <th>Placement Date</th>
+                <td>{{ placement.placement_date|date:"d M Y" }}</td>
+            </tr>
+
+            <tr>
+                <th>Status</th>
+                <td>{{ placement.status }}</td>
+            </tr>
+
+            <tr>
+                <th>Remarks</th>
+                <td>{{ placement.remarks }}</td>
+            </tr>
+
+        </table>
+
+        <div style="display:flex; justify-content:end; margin-top:20px;">
+    <a href="?section=placements" class="btn-back">
+        Cancel
+    </a>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+{% elif section == "placement_update" %}
+
+<div class="card shadow">
+
+    <div class="card-header bg-warning">
+        <h4>Edit Placement</h4>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            
+
+
+            <div class="button-group">
+                <a href="?section=placements" class="btn-back">
+                    Cancel
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Update Result
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+
+
 {% elif section == "placement_create" %}
 
 <div class="container py-4">
 
     <div class="card shadow border-0 rounded-4">
 
-        <div class="card-header bg-primary text-white">
-            <h4>
-                <i class="fa-solid fa-briefcase me-2"></i>
-                Add Placement
-            </h4>
-        </div>
+        
 
         <div class="card-body">
 
@@ -2711,16 +3232,19 @@ Logout
 
                 <hr>
 
-                <button type="submit" class="btn btn-success">
-                    <i class="fa-solid fa-floppy-disk me-2"></i>
-                    Save
-                </button>
+                
 
-                <a href="?section=placements"
-                   class="btn btn-secondary ms-2">
-                    <i class="fa-solid fa-arrow-left me-2"></i>
-                    Cancel
+
+
+                <div class="button-group">
+                    <a href="?section=placements" class="btn btn-cancel">
+                    Back
                 </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Save Placement
+                </button>
+                </div>
 
             </form>
 
@@ -2736,11 +3260,15 @@ Logout
 
 <h2>Companies</h2>
 
-<a href="?section=company_create"
-   class="btn btn-primary mb-3">
-    <i class="fa-solid fa-plus"></i>
-    Add Company
-</a>
+
+
+
+<div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+    <a href="?section=company_create" class="btn btn-primary">
+        <i class="fa-solid fa-user-plus"></i>
+        Add
+    </a>
+</div>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -2775,15 +3303,15 @@ Logout
 
         <td>
 
-            <a href=""
-               class="btn btn-info btn-sm btn-action"
-               title="View">
+            <a href="?section=company_detail&id={{ company.id }}"
+                class="btn btn-info btn-sm btn-action"
+                title="View">
                 <i class="fa-solid fa-eye"></i>
             </a>
 
-            <a href=""
-               class="btn btn-warning btn-sm btn-action"
-               title="Edit">
+            <a href="?section=company_update&id={{ company.id }}"
+                class="btn btn-warning btn-sm btn-action"
+                title="Edit">
                 <i class="fa-solid fa-pen-to-square"></i>
             </a>
 
@@ -2821,12 +3349,7 @@ Logout
 
     <div class="card shadow border-0 rounded-4">
 
-        <div class="card-header bg-primary text-white">
-            <h4>
-                <i class="fa-solid fa-building me-2"></i>
-                Add Company
-            </h4>
-        </div>
+        
 
         <div class="card-body">
 
@@ -2869,15 +3392,16 @@ Logout
 
                 </div>
 
-                <button type="submit" class="btn btn-success">
-                    <i class="fa-solid fa-floppy-disk me-2"></i>
-                    Save
-                </button>
-
-                <a href="?section=company"
-                   class="btn btn-secondary">
-                    Cancel
+                
+                <div class="button-group">
+                    <a href="?section=company" class="btn btn-cancel">
+                    Back
                 </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Save Company
+                </button>
+                </div>
 
             </form>
 
@@ -2890,15 +3414,102 @@ Logout
 
 
 
+{% elif section == "company_update" %}
+
+<div class="card shadow">
+
+    <div class="card-header bg-warning">
+        <h4>Edit Company</h4>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+
+
+            <div class="button-group">
+                <a href="?section=company" class="btn-back">
+                    Cancel
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Update Result
+                </button>
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+
+{% elif section == "company_detail" %}
+
+
+
+    <div class="card-body">
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Company Name</th>
+                <td>{{ company.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Location</th>
+                <td>{{ company.location }}</td>
+            </tr>
+
+            <tr>
+                <th>Website</th>
+                <td>{{ company.website }}</td>
+            </tr>
+
+            <tr>
+                <th>Email</th>
+                <td>{{ company.email }}</td>
+            </tr>
+
+            <tr>
+                <th>Phone</th>
+                <td>{{ company.phone }}</td>
+            </tr>
+
+        </table>
+
+        <div style="display:flex; justify-content:end; margin-top:20px;">
+    <a href="?section=company" class="btn-back">
+        Cancel
+    </a>
+
+    </div>
+
+</div>
+
+
+
+
 {% elif section == "reports" %}
 
 <h2>Reports</h2>
 
-<a href="?section=report_create"
-   class="btn btn-primary mb-3">
-    <i class="fa-solid fa-plus"></i>
-    Add Report
-</a>
+
+
+<div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+    <a href="?section=report_create" class="btn btn-primary">
+        <i class="fa-solid fa-user-plus"></i>
+        Add
+    </a>
+</div>
 
 <table class="table table-bordered table-hover">
     <thead>
@@ -2942,15 +3553,15 @@ Logout
 
         <td>
 
-            <a href=""
-               class="btn btn-info btn-sm btn-action"
-               title="View">
+            <a href="?section=report_detail&id={{ report.id }}"
+                class="btn btn-info btn-sm btn-action"
+                title="View">
                 <i class="fa-solid fa-eye"></i>
             </a>
 
-            <a href=""
-               class="btn btn-warning btn-sm btn-action"
-               title="Edit">
+            <a href="?section=report_update&id={{ report.id }}"
+                class="btn btn-warning btn-sm btn-action"
+                title="Edit">
                 <i class="fa-solid fa-pen-to-square"></i>
             </a>
 
@@ -2986,12 +3597,7 @@ Logout
 
     <div class="card shadow border-0 rounded-4">
 
-        <div class="card-header bg-primary text-white">
-            <h4>
-                <i class="fa-solid fa-file-arrow-up me-2"></i>
-                Add Report
-            </h4>
-        </div>
+        
 
         <div class="card-body">
 
@@ -3032,17 +3638,18 @@ Logout
 
                 <hr>
 
-                <button type="submit"
-                        class="btn btn-success">
-                    <i class="fa-solid fa-floppy-disk me-2"></i>
-                    Save
-                </button>
+                
 
-                <a href="?section=reports"
-                   class="btn btn-secondary ms-2">
-                    <i class="fa-solid fa-arrow-left me-2"></i>
-                    Cancel
+
+                <div class="button-group">
+                    <a href="?section=reports" class="btn btn-cancel">
+                    Back
                 </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Save Report
+                </button>
+                </div>
 
             </form>
 
@@ -3051,6 +3658,309 @@ Logout
     </div>
 
 </div>
+
+
+
+
+
+
+{% elif section == "report_detail" %}
+
+
+
+    
+
+    <div class="card-body">
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Report Type</th>
+                <td>{{ report.report_type }}</td>
+            </tr>
+
+            <tr>
+                <th>Generated By</th>
+                <td>{{ report.generated_by.name }}</td>
+            </tr>
+
+            <tr>
+                <th>Generated On</th>
+                <td>{{ report.generated_on|date:"d M Y H:i" }}</td>
+            </tr>
+
+            <tr>
+                <th>File</th>
+                <td>
+                    {% if report.file %}
+                        <a href="{{ report.file.url }}"
+                           target="_blank"
+                           class="btn btn-primary btn-sm">
+                            Download File
+                        </a>
+                    {% else %}
+                        No File Uploaded
+                    {% endif %}
+                </td>
+            </tr>
+
+        </table>
+
+        <div style="display:flex; justify-content:end; margin-top:20px;">
+    <a href="?section=reports" class="btn-back">
+        Cancel
+    </a>
+
+    </div>
+
+</div>
+
+
+
+
+
+{% elif section == "report_update" %}
+
+<div class="card shadow">
+
+    <div class="card-header bg-warning">
+        <h4>Edit Report</h4>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <div class="button-group">
+                    <a href="?section=reports" class="btn btn-cancel">
+                    Back
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Save Report
+                </button>
+                </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+
+{% elif section == "events" %}
+
+<h2>Events</h2>
+<div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+    <a href="?section=event_create" class="btn btn-primary">
+        <i class="fa-solid fa-user-plus"></i>
+        Add
+    </a>
+</div>
+
+
+    <div class="card-body">
+
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-primary">
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Organized By</th>
+                    <th width="180">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for event in events %}
+
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ event.title }}</td>
+                    <td>{{ event.event_date }}</td>
+                    <td>{{ event.organized_by }}</td>
+
+                    <td>
+    <div class="d-flex gap-2">
+
+        <!-- View -->
+        <a href="?section=event_detail&id={{ event.id }}"
+           class="btn btn-info btn-action"
+           title="View">
+            <i class="fa-solid fa-eye"></i>
+        </a>
+
+        <!-- Edit -->
+        <a href="?section=event_update&id={{ event.id }}"
+           class="btn btn-warning btn-action"
+           title="Edit">
+            <i class="fa-solid fa-pen-to-square"></i>
+        </a>
+
+        <!-- Delete -->
+        <a href="?section=event_delete&id={{ event.id }}"
+           class="btn btn-danger btn-action"
+           title="Delete"
+           onclick="return confirm('Delete this event?')">
+            <i class="fa-solid fa-trash"></i>
+        </a>
+
+    </div>
+</td>
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="5" class="text-center">
+                        No Events Found
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+
+
+
+
+
+{% elif section == "event_create" %}
+
+<div class="card shadow">
+
+    <div class="card-header bg-primary text-white">
+        <h4>Add Event</h4>
+    </div>
+
+    <div class="card-body">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+           
+            <div class="button-group">
+                    <a href="?section=events" class="btn btn-cancel">
+                    Cancel
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Save Report
+                </button>
+                </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+
+{% elif section == "event_detail" %}
+
+
+
+<table class="table table-bordered">
+
+    <tr>
+        <th width="30%">Title</th>
+        <td>{{ event.title }}</td>
+    </tr>
+
+    <tr>
+        <th>Description</th>
+        <td>{{ event.description }}</td>
+    </tr>
+
+    <tr>
+        <th>Event Date</th>
+        <td>{{ event.event_date }}</td>
+    </tr>
+
+    <tr>
+        <th>Organized By</th>
+        <td>{{ event.organized_by }}</td>
+    </tr>
+
+</table>
+
+
+<div style="display:flex; justify-content:end; margin-top:20px;">
+    <a href="?section=events" class="btn-back">
+        Cancel
+    </a>
+
+
+
+    
+
+{% elif section == "event_update" %}
+
+<h2>Update Event</h2>
+
+<div class="student-card">
+
+    <div class="card-body">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="row g-4">
+
+                <div class="col-lg-6">
+                    <label class="form-label">Title</label>
+                    {{ form.title }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Event Date</label>
+                    {{ form.event_date }}
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Description</label>
+                    {{ form.description }}
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label">Organized By</label>
+                    {{ form.organized_by }}
+                </div>
+
+            </div>
+
+            <div class="button-group">
+                <a href="?section=events" class="btn btn-cancel">
+                    Cancel
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Update Event
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>    
 
 
 
@@ -3103,17 +4013,9 @@ Logout
 
         <td>
 
-            <a href=""
-               class="btn btn-info btn-sm btn-action"
-               title="View">
-                <i class="fa-solid fa-eye"></i>
-            </a>
 
-            <a href=""
-               class="btn btn-warning btn-sm btn-action"
-               title="Edit">
-                <i class="fa-solid fa-pen-to-square"></i>
-            </a>
+
+       
 
             <a href=""
                class="btn btn-danger btn-sm btn-action"
@@ -3144,6 +4046,10 @@ Logout
 
 
 
+
+
+
+
 {% endif %}
 
 
@@ -3151,42 +4057,97 @@ Logout
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </div>
 
 </div>
 
 </div>
 
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
+
+
+<script>
+const barCtx = document.getElementById('dashboardChart');
+
+new Chart(barCtx, {
+    type: 'bar',
+    data: {
+        labels: [
+            'Students',
+            'Teachers',
+            'Courses',
+            'Departments',
+            'Placements',
+            'Companies',
+            'Reports'
+        ],
+        datasets: [{
+            label: 'Total Count',
+            data: [
+                {{ students_count }},
+                {{ teacher_count }},
+                {{ course_count }},
+                {{ department_count }},
+                {{ placement_count }},
+                {{ company_count }},
+                {{ report_count }}
+            ],
+            backgroundColor: [
+                '#4e73df',
+                '#1cc88a',
+                '#36b9cc',
+                '#f6c23e',
+                '#e74a3b',
+                '#6f42c1',
+                '#fd7e14'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+
+
+const pieCtx = document.getElementById('pieChart');
+
+new Chart(pieCtx, {
+    type: 'doughnut',
+    data: {
+        labels: [
+            'Students',
+            'Teachers',
+            'Courses',
+            'Departments'
+        ],
+        datasets: [{
+            data: [
+                {{ students_count }},
+                {{ teacher_count }},
+                {{ course_count }},
+                {{ department_count }}
+            ],
+            backgroundColor: [
+                '#4e73df',
+                '#1cc88a',
+                '#f6c23e',
+                '#e74a3b'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+        
+    }
+});
+</script>
 </html>

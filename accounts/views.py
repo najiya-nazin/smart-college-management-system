@@ -1,6 +1,7 @@
 import random
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib import messages
+from django.contrib.auth import logout
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import update_last_login
@@ -39,6 +40,9 @@ from marks.forms import MarksForm
 from placement.forms import CompanyForm
 from placement.forms import PlacementForm
 from reports.forms import ReportForm
+from event.models import Event
+from event.forms import EventForm
+
 
 
 def register(request):
@@ -76,7 +80,7 @@ def login_view(request):
 
             update_last_login(None, user)
 
-            messages.success(request, "Login Successful")
+            
 
             if user.role == "ADMIN":
                 return redirect("admin_dashboard")
@@ -114,7 +118,11 @@ def admin_dashboard(request):
         "department_count": Department.objects.count(),
         "attendance_count": Attendance.objects.count(),
         "report_count": Report.objects.count(),
+        "company_count": Company.objects.count(),
+        "placement_count": Placement.objects.count(),
     }
+
+    context["recent_users"] = User.objects.order_by("-id")[:5]
 
     if section == "students":
         context["students"] = Student.objects.select_related(
@@ -177,7 +185,31 @@ def admin_dashboard(request):
 
 
     elif section == "users":
-        context["users"] = User.objects.all().order_by("name") 
+        context["users"] = User.objects.all().order_by("name")   
+
+
+    elif section == "events":
+
+        context["events"] = Event.objects.select_related(
+            "organized_by"
+    ).order_by("-event_date")
+        
+
+    elif section == "event_create":
+
+        if request.method == "POST":
+
+            form = EventForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Event created successfully.")
+                return redirect("/admin_dashboard/?section=events")
+
+        else:
+            form = EventForm()
+
+        context["form"] = form
 
 
 
@@ -507,6 +539,11 @@ def admin_dashboard(request):
         context["attendance"] = attendance
 
 
+
+      
+
+
+
     elif section == "exam_create":
 
 
@@ -610,7 +647,238 @@ def admin_dashboard(request):
 
             form = ReportForm()
 
-        context["form"] = form                   
+        context["form"] = form
+
+
+    elif section == "exam_detail":
+
+        exam = Exam.objects.select_related(
+            "course"
+        ).get(id=request.GET.get("id"))
+
+        context["exam"] = exam  
+
+
+
+    elif section == "exam_update":
+
+        exam = Exam.objects.select_related(
+            "course"
+        ).get(id=request.GET.get("id"))
+
+
+        if request.method == "POST":
+
+            form = ExamForm(
+                request.POST,
+                instance=exam
+            )
+
+            if form.is_valid():
+                form.save()
+                return redirect("/admin_dashboard/?section=exams")
+
+        else:
+            form = ExamForm(instance=exam)
+
+        context["form"] = form
+        context["exam"] = exam
+
+
+
+    elif section == "result_detail":
+
+        mark = Marks.objects.select_related(
+            "student",
+            "student__user",
+            "course"
+        ).get(id=request.GET.get("id"))
+
+        context["mark"] = mark
+
+
+
+
+    elif section == "result_update":
+
+        mark = Marks.objects.select_related(
+            "student",
+            "course"
+        ).get(id=request.GET.get("id"))
+
+        if request.method == "POST":
+
+            form = MarksForm(
+                request.POST,
+                instance=mark
+            )
+
+            if form.is_valid():
+                form.save()
+                return redirect("/admin_dashboard/?section=results")
+
+        else:
+            form = MarksForm(instance=mark)
+
+        context["form"] = form
+        context["mark"] = mark 
+
+
+    elif section == "placement_detail":
+
+        placement = Placement.objects.select_related(
+            "student",
+            "student__user",
+            "company"
+        ).get(id=request.GET.get("id"))
+
+        context["placement"] = placement 
+
+
+
+    elif section == "placement_update":
+
+        placement = Placement.objects.select_related(
+            "student",
+            "company"
+        ).get(id=request.GET.get("id"))
+
+        if request.method == "POST":
+
+            form = PlacementForm(
+                request.POST,
+                instance=placement
+            )
+
+            if form.is_valid():
+                form.save()
+                return redirect("/admin_dashboard/?section=placements")
+
+        else:
+            form = PlacementForm(instance=placement)
+
+        context["form"] = form
+        context["placement"] = placement
+
+
+
+    elif section == "company_detail":
+
+        company = Company.objects.get(
+            id=request.GET.get("id")
+        )
+
+        context["company"] = company
+
+
+    elif section == "company_update":
+
+        company = Company.objects.get(
+            id=request.GET.get("id")
+        )
+
+        if request.method == "POST":
+
+            form = CompanyForm(
+                request.POST,
+                instance=company
+            )
+
+            if form.is_valid():
+                form.save()
+                return redirect("/admin_dashboard/?section=company")
+
+        else:
+
+            form = CompanyForm(instance=company)
+
+        context["form"] = form
+        context["company"] = company
+
+
+
+    elif section == "report_detail":
+
+        report = Report.objects.select_related(
+            "generated_by"
+        ).get(id=request.GET.get("id"))
+
+        context["report"] = report
+
+
+    elif section == "report_update":
+
+        report = Report.objects.select_related(
+            "generated_by"
+        ).get(id=request.GET.get("id"))
+
+        if request.method == "POST":
+
+            form = ReportForm(
+                request.POST,
+                request.FILES,
+                instance=report
+            )
+
+            if form.is_valid():
+                form.save()
+                return redirect("/admin_dashboard/?section=reports")
+
+        else:
+
+            form = ReportForm(instance=report)
+
+        context["form"] = form
+        context["report"] = report
+
+
+
+    elif section == "student_delete":
+
+        student = get_object_or_404(
+            Student.objects.select_related("user"),
+            id=request.GET.get("id")
+        )
+
+        student.user.delete()
+
+        return redirect("/admin_dashboard/?section=students")  
+
+
+
+
+    elif section == "event_detail":
+
+        event = Event.objects.select_related(
+            "organized_by"
+        ).get(id=request.GET.get("id"))
+
+        context["event"] = event
+
+
+
+    elif section == "event_update":
+
+        event = Event.objects.select_related(
+            "organized_by"
+        ).get(id=request.GET.get("id"))
+
+        if request.method == "POST":
+
+            form = EventForm(
+                request.POST,
+                instance=event
+            )
+
+            if form.is_valid():
+                form.save()
+                return redirect("/admin_dashboard/?section=events")
+
+        else:
+            form = EventForm(instance=event)
+
+        context["form"] = form
+        context["event"] = event                                                               
                                
 
 
@@ -641,26 +909,7 @@ def admin_dashboard(request):
 
 
 
-# @login_required
-# def admin_dashboard(request):
 
-#     student_count = User.objects.filter(role="STUDENT").count()
-#     students = Student.objects.all()
-
-#     form = StudentForm()
-
-#     if request.method == "POST":
-#         form = StudentForm(request.POST)
-
-#         if form.is_valid():
-#             form.save()
-#             return redirect("admin_dashboard")
-
-#     return render(request, "accounts/admin_dashboard.html", {
-#         "students_count": student_count,
-#         "students": students,
-#         "form": form,
-#     })
 
 
 @login_required
@@ -704,7 +953,6 @@ def forgot_password(request):
                 fail_silently=False,
             )
 
-            messages.success(request, "OTP Sent Successfully")
 
             return redirect("verify-otp")
 
@@ -800,3 +1048,10 @@ def reset_password(request):
         "accounts/reset_password.html",
         {"form": form},
     )
+
+
+
+
+def logout_view(request):
+    logout(request)
+    return redirect("login")

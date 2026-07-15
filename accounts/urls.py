@@ -10,5 +10,7 @@ urlpatterns = [
     path("forgot-password/", views.forgot_password, name="forgot-password",),
     path("verify-otp/", views.verify_otp, name="verify-otp",),
     path("reset-password/", views.reset_password, name="reset-password",),
+    path("logout_view/", views.logout_view, name="logout_view"),
+
 
 ]

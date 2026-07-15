@@ -6,6 +6,7 @@ from .views import (
     edit_teacher,
     delete_teacher,
     teacher_dashboard,
+    logout_view,
 )
 
 urlpatterns = [
@@ -15,4 +16,5 @@ urlpatterns = [
     path("detail/<int:pk>/", teacher_detail, name="teacher_detail"),
     path("update/<int:pk>/", edit_teacher, name="edit_teacher"),
     path("delete/<int:pk>/", delete_teacher, name="delete_teacher"),
+    path("logout/", logout_view, name="logout"),
 ]
