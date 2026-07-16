@@ -1,274 +1,502 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Marks Details</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
+     /* ===================================
+   MARKS DETAIL PAGE
+=================================== */
 
-        body{
-            background:#f4f7fc;
-            font-family:'Segoe UI',sans-serif;
-        }
+.marks-container{
+    max-width:1100px;
+    margin:0 auto;
+}
 
-        .card{
-            border:none;
-            border-radius:18px;
-            overflow:hidden;
-            box-shadow:0 12px 35px rgba(0,0,0,.08);
-        }
+/* ===================================
+   PAGE HEADER
+=================================== */
 
-        .card-header{
-            background:linear-gradient(135deg,#0d6efd,#4b86ff);
-            color:#fff;
-            padding:22px 30px;
-        }
+.page-header{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:#fff;
+    border-radius:16px;
+    padding:16px 24px;
 
-        .card-header h3{
-            margin:0;
-            font-weight:700;
-        }
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-        .card-body{
-            padding:35px;
-        }
+    margin-bottom:20px;
+}
 
-        .info-box{
-            background:#f8f9fa;
-            border:1px solid #dee2e6;
-            border-radius:12px;
-            padding:18px;
-            height:100%;
-        }
+.page-header h2{
+    margin:0;
+    font-size:24px;
+    font-weight:700;
 
-        .info-title{
-            font-size:13px;
-            color:#6c757d;
-            font-weight:700;
-            text-transform:uppercase;
-            margin-bottom:8px;
-        }
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
 
-        .info-value{
-            font-size:18px;
-            font-weight:600;
-            color:#212529;
-        }
+/* ===================================
+   PROFILE CARD
+=================================== */
 
-        .badge-course{
-            background:#6f42c1;
-            color:#fff;
-            padding:8px 15px;
-            border-radius:20px;
-            font-size:14px;
-        }
+.profile-card{
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
+}
 
-        .badge-grade{
-            background:#198754;
-            color:#fff;
-            padding:8px 15px;
-            border-radius:20px;
-            font-size:14px;
-        }
+/* ===================================
+   PROFILE HEADER
+=================================== */
 
-        .btn{
-            border-radius:10px;
-            padding:10px 22px;
-            font-weight:600;
-        }
+.profile-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
+    padding:24px 30px;
+
+    border-bottom:1px solid #eef2f7;
+}
+
+.header-left h2{
+    margin:0;
+
+    font-size:28px;
+    font-weight:700;
+
+    color:#1e293b;
+}
+
+.marks-meta{
+    display:flex;
+    gap:10px;
+    margin-top:12px;
+    flex-wrap:wrap;
+}
+
+/* ===================================
+   BADGES
+=================================== */
+
+.student-id,
+.department{
+    display:inline-flex;
+    align-items:center;
+
+    padding:7px 15px;
+
+    border-radius:25px;
+
+    font-size:13px;
+    font-weight:600;
+}
+
+.student-id{
+    background:#eef4ff;
+    color:#2563eb;
+}
+
+.department{
+    background:#dcfce7;
+    color:#15803d;
+}
+
+/* ===================================
+   STATUS
+=================================== */
+
+.status-badge{
+    padding:10px 22px;
+
+    border-radius:30px;
+
+    font-size:14px;
+    font-weight:700;
+}
+
+.pass{
+    background:#dcfce7;
+    color:#15803d;
+}
+
+.fail{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+/* ===================================
+   GRID
+=================================== */
+
+.profile-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+
+    gap:20px;
+
+    padding:24px;
+}
+
+/* ===================================
+   INFO CARD
+=================================== */
+
+.info-card{
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:14px;
+
+    padding:22px;
+}
+
+.info-card h3{
+    margin:0 0 20px;
+
+    color:#1e293b;
+
+    font-size:17px;
+    font-weight:700;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.info-card h3 i{
+    color:#2563eb;
+}
+
+/* ===================================
+   INFO ROW
+=================================== */
+
+.info-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:14px 0;
+
+    border-bottom:1px solid #edf2f7;
+}
+
+.info-row:last-child{
+    border-bottom:none;
+}
+
+.info-row span{
+    color:#64748b;
+    font-size:14px;
+}
+
+.info-row strong{
+    color:#1e293b;
+    font-size:15px;
+    font-weight:600;
+}
+
+/* ===================================
+   BUTTONS
+=================================== */
+
+.form-buttons{
+    display:flex;
+    justify-content:flex-end;
+    gap:12px;
+
+    padding:20px 24px;
+
+    border-top:1px solid #eef2f7;
+}
+
+.btn-cancel,
+.btn-save{
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    gap:8px;
+
+    padding:11px 22px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-size:14px;
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.btn-cancel{
+    background:#f1f5f9;
+    color:#334155;
+}
+
+.btn-cancel:hover{
+    background:#e2e8f0;
+    color:#0f172a;
+}
+
+.btn-save{
+    background:#2563eb;
+    color:#fff;
+}
+
+.btn-save:hover{
+    background:#1d4ed8;
+    color:#fff;
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media(max-width:768px){
+
+    .profile-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .profile-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-buttons{
+        flex-direction:column;
+    }
+
+    .btn-cancel,
+    .btn-save{
+        width:100%;
+        justify-content:center;
+    }
+
+}
     </style>
 
-</head>
+<div class="marks-container">
 
-<body>
+    <!-- Header -->
 
-<div class="container py-5">
+    <div class="page-header">
 
-    <div class="row justify-content-center">
+        <div>
 
-        <div class="col-lg-8">
+            <h2>
 
-            <div class="card">
+                <i class="fa-solid fa-square-poll-vertical"></i>
 
-                <!-- Header -->
+                Marks Details
 
-                <div class="card-header d-flex justify-content-between align-items-center">
+            </h2>
 
-                    <div>
+        </div>
 
-                        <h3>
-                            <i class="bi bi-journal-check me-2"></i>
-                            Marks Details
-                        </h3>
+    </div>
 
-                        <small class="opacity-75">
-                            Student Marks Information
-                        </small>
+    <!-- Profile Card -->
 
-                    </div>
+    <div class="profile-card">
 
-                    <i class="bi bi-award-fill fs-1 opacity-50"></i>
+        <!-- Header -->
+
+        <div class="profile-header">
+
+            <div class="header-left">
+
+                <h2>
+
+                    {{ marks.student.user.name }}
+
+                </h2>
+
+                <div class="marks-meta">
+
+                    <span class="student-id">
+
+                        {{ marks.student.student_id }}
+
+                    </span>
+
+                    <span class="department">
+
+                        {{ marks.student.department.name }}
+
+                    </span>
 
                 </div>
 
-                <!-- Body -->
+            </div>
 
-                <div class="card-body">
+            <div class="header-right">
 
-                    <div class="row g-4">
+                {% if marks.result == "Pass" %}
 
-                        <div class="col-md-6">
+                    <span class="status-badge pass">
 
-                            <div class="info-box">
+                        Pass
 
-                                <div class="info-title">
-                                    Student Name
-                                </div>
+                    </span>
 
-                                <div class="info-value">
-                                    {{ marks.student.user.name }}
-                                </div>
+                {% else %}
 
-                            </div>
+                    <span class="status-badge fail">
 
-                        </div>
+                        Fail
 
-                        <div class="col-md-6">
+                    </span>
 
-                            <div class="info-box">
+                {% endif %}
 
-                                <div class="info-title">
-                                    Student ID
-                                </div>
+            </div>
 
-                                <div class="info-value">
-                                    {{ marks.student.student_id }}
-                                </div>
+        </div>
 
-                            </div>
+        <!-- Information -->
 
-                        </div>
+        <div class="profile-grid">
 
-                        <div class="col-md-6">
+            <!-- Student Information -->
 
-                            <div class="info-box">
+            <div class="info-card">
 
-                                <div class="info-title">
-                                    Course
-                                </div>
+                <h3>
 
-                                <div class="info-value">
+                    <i class="fa-solid fa-user-graduate"></i>
 
-                                    <span class="badge-course">
-                                        {{ marks.course.name }}
-                                    </span>
+                    Student Information
 
-                                </div>
+                </h3>
 
-                            </div>
+                <div class="info-row">
 
-                        </div>
+                    <span>Student Name</span>
 
-                        <div class="col-md-6">
+                    <strong>
 
-                            <div class="info-box">
+                        {{ marks.student.user.name }}
 
-                                <div class="info-title">
-                                    Grade
-                                </div>
+                    </strong>
 
-                                <div class="info-value">
+                </div>
 
-                                    <span class="badge-grade">
-                                        {{ marks.grade }}
-                                    </span>
+                <div class="info-row">
 
-                                </div>
+                    <span>Student ID</span>
 
-                            </div>
+                    <strong>
 
-                        </div>
+                        {{ marks.student.student_id }}
 
-                        <div class="col-md-6">
+                    </strong>
 
-                            <div class="info-box">
+                </div>
 
-                                <div class="info-title">
-                                    Marks Obtained
-                                </div>
+                <div class="info-row">
 
-                                <div class="info-value text-primary">
-                                    {{ marks.marks_obtained }}
-                                </div>
+                    <span>Department</span>
 
-                            </div>
+                    <strong>
 
-                        </div>
+                        {{ marks.student.department.name }}
 
-                        <div class="col-md-6">
+                    </strong>
 
-                            <div class="info-box">
+                </div>
 
-                                <div class="info-title">
-                                    Maximum Marks
-                                </div>
+                <div class="info-row">
 
-                                <div class="info-value">
-                                    {{ marks.max_marks }}
-                                </div>
+                    <span>Course</span>
 
-                            </div>
+                    <strong>
 
-                        </div>
+                        {{ marks.course.name }}
 
-                        <div class="col-12">
+                    </strong>
 
-                            <div class="info-box">
+                </div>
 
-                                <div class="info-title">
-                                    Percentage
-                                </div>
+            </div>
 
-                                <div class="info-value text-success">
+            <!-- Result Information -->
 
-                                    {% widthratio marks.marks_obtained marks.max_marks 100 %}%
+            <div class="info-card">
 
-                                </div>
+                <h3>
 
-                            </div>
+                    <i class="fa-solid fa-award"></i>
 
-                        </div>
+                    Result Information
 
-                    </div>
+                </h3>
 
-                    <hr class="my-4">
+                <div class="info-row">
 
-                    <div class="d-flex justify-content-end gap-2">
+                    <span>Marks Obtained</span>
 
-                        <a href="#" class="btn btn-secondary">
-                            <i class="bi bi-arrow-left-circle me-1"></i>
-                            Back
-                        </a>
+                    <strong>
 
-                       
+                        {{ marks.marks_obtained }}
 
-                        <a href="" class="btn btn-danger">
-                            <i class="bi bi-trash-fill me-1"></i>
-                            Delete
-                        </a>
+                    </strong>
 
-                    </div>
+                </div>
+
+                <div class="info-row">
+
+                    <span>Maximum Marks</span>
+
+                    <strong>
+
+                        {{ marks.max_marks }}
+
+                    </strong>
+
+                </div>
+
+                <div class="info-row">
+
+                    <span>Percentage</span>
+
+                    <strong>
+
+                        {{ marks.percentage }}%
+
+                    </strong>
+
+                </div>
+
+                <div class="info-row">
+
+                    <span>Grade</span>
+
+                    <strong>
+
+                        {{ marks.grade }}
+
+                    </strong>
+
+                </div>
+
+                <div class="info-row">
+
+                    <span>Result</span>
+
+                    <strong>
+
+                        {{ marks.result }}
+
+                    </strong>
 
                 </div>
 
@@ -276,9 +504,30 @@
 
         </div>
 
+        <!-- Buttons -->
+
+        <div class="form-buttons">
+
+            <a href="?section=marks"
+               class="btn-cancel">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Back
+
+            </a>
+
+            <a href="?section=marks_update&id={{ marks.id }}"
+               class="btn-save">
+
+                <i class="fa-solid fa-pen"></i>
+
+                Edit Marks
+
+            </a>
+
+        </div>
+
     </div>
 
 </div>
-
-</body>
-</html>

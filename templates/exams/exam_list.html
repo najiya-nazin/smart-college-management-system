@@ -1,412 +1,766 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Exam Management</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet">
-
 <style>
+/* ===================================
+   EXAM PAGE
+=================================== */
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Segoe UI,sans-serif;
-}
+.page-header{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:#fff;
+    border-radius:16px;
+    padding:16px 24px;
 
-body{
-    background:#f4f7fb;
-}
-
-.container{
-    width:95%;
-    margin:40px auto;
-}
-
-.header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:25px;
-}
 
-.header h2{
-    color:#0d6efd;
-    font-weight:700;
-}
-
-.add-btn{
-    background:#0d6efd;
-    color:white;
-    text-decoration:none;
-    padding:10px 20px;
-    border-radius:8px;
-    transition:.3s;
-}
-
-.add-btn:hover{
-    background:#084fc7;
-    color:white;
-}
-
-.search-box{
     margin-bottom:20px;
 }
 
-.search-box input{
-    width:350px;
-    max-width:100%;
-    padding:10px;
-    border-radius:8px;
-    border:1px solid #ccc;
+.page-header h2{
+    margin:0;
+    font-size:24px;
+    font-weight:700;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
+
+/* ===================================
+   ADD BUTTON
+=================================== */
+
+.btn-add{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    padding:10px 18px;
+
+    background:#fff;
+    color:#2563eb;
+
+    text-decoration:none;
+
+    border-radius:10px;
+
+    font-size:14px;
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.btn-add:hover{
+
+    background:#eef4ff;
+    color:#2563eb;
+
+}
+
+/* ===================================
+   CARD
+=================================== */
 
 .table-card{
-    background:white;
-    border-radius:12px;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
-    overflow:hidden;
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:20px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.05);
+
 }
 
-table{
-    margin-bottom:0;
+/* ===================================
+   TOOLBAR
+=================================== */
+
+.toolbar{
+
+    display:flex;
+    gap:15px;
+    align-items:center;
+    flex-wrap:wrap;
+
+    margin-bottom:20px;
+
 }
 
-thead{
-    background:#0d6efd;
-    color:white;
+.search-box{
+
+    flex:1;
+    min-width:280px;
+
+    position:relative;
+
 }
 
-tbody tr:hover{
-    background:#f2f8ff;
+.search-box i{
+
+    position:absolute;
+
+    left:15px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#94a3b8;
+
 }
 
-th,
-td{
-    text-align:center;
-    vertical-align:middle;
-}
+.search-input{
 
-.action{
-    padding:6px 12px;
-    text-decoration:none;
-    border-radius:5px;
-    color:white;
+    width:100%;
+    height:44px;
+
+    border:1px solid #dbe3ef;
+
+    border-radius:10px;
+
+    padding-left:42px;
+    padding-right:15px;
+
     font-size:14px;
-    margin:2px;
+
+    transition:.3s;
+
+}
+
+.search-input:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 3px rgba(37,99,235,.08);
+
+}
+
+.filter-select{
+
+    width:180px;
+    height:44px;
+
+    border:1px solid #dbe3ef;
+
+    border-radius:10px;
+
+    padding:0 14px;
+
+    background:#fff;
+
+    font-size:14px;
+
+}
+
+.filter-select:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 3px rgba(37,99,235,.08);
+
+}
+
+/* ===================================
+   TABLE
+=================================== */
+
+.exam-table{
+
+    width:100%;
+    border-collapse:collapse;
+
+}
+
+.exam-table thead{
+
+    background:#2563eb;
+
+}
+
+.exam-table thead th{
+
+    color:#fff;
+
+    padding:14px;
+
+    text-align:left;
+
+    font-size:14px;
+    font-weight:600;
+
+}
+
+.exam-table tbody td{
+
+    padding:16px 14px;
+
+    border-bottom:1px solid #edf2f7;
+
+    vertical-align:middle;
+
+    font-size:14px;
+
+}
+
+.exam-table tbody tr:hover{
+
+    background:#f8fbff;
+
+}
+
+/* ===================================
+   EXAM INFO
+=================================== */
+
+.exam-info{
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+}
+
+.avatar{
+
+    width:42px;
+    height:42px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+    color:#fff;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:16px;
+
+}
+
+.exam-info strong{
+
+    color:#1e293b;
+    font-size:15px;
+    font-weight:600;
+
+}
+
+/* ===================================
+   MARKS BADGE
+=================================== */
+
+.marks-badge{
+
     display:inline-block;
+
+    background:#eef4ff;
+    color:#2563eb;
+
+    padding:6px 14px;
+
+    border-radius:30px;
+
+    font-size:13px;
+    font-weight:600;
+
+}
+
+/* ===================================
+   STATUS
+=================================== */
+
+.status{
+
+    display:inline-block;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    font-size:13px;
+    font-weight:600;
+
+}
+
+.upcoming{
+
+    background:#dbeafe;
+    color:#1d4ed8;
+
+}
+
+.completed{
+
+    background:#dcfce7;
+    color:#15803d;
+
+}
+
+/* ===================================
+   ACTION BUTTONS
+=================================== */
+
+.actions{
+
+    display:flex;
+    justify-content:center;
+    gap:8px;
+
+}
+
+.actions a{
+
+    min-width:65px;
+    height:34px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    text-decoration:none;
+
+    color:#fff;
+
+    border-radius:8px;
+
+    font-size:13px;
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.actions a:hover{
+
+    transform:translateY(-2px);
+
 }
 
 .view{
-    background:#198754;
+
+    background:#2563eb;
+
 }
 
 .edit{
-    background:#ffc107;
-    color:black;
+
+    background:#f59e0b;
+
 }
 
 .delete{
-    background:#dc3545;
-    border:none;
-    cursor:pointer;
+
+    background:#ef4444;
+
 }
 
-.delete:hover{
-    background:#bb2d3b;
-}
+/* ===================================
+   EMPTY STATE
+=================================== */
 
-.no-data{
+.empty-state{
+
     text-align:center;
-    padding:20px;
-    font-weight:600;
+
+    padding:60px 20px;
+
 }
 
+.empty-state i{
+
+    font-size:60px;
+
+    color:#94a3b8;
+
+    margin-bottom:15px;
+
+}
+
+.empty-state h3{
+
+    font-size:22px;
+
+    color:#334155;
+
+    margin-bottom:8px;
+
+}
+
+.empty-state p{
+
+    color:#64748b;
+
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media(max-width:992px){
+
+    .page-header{
+
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+
+    }
+
+    .toolbar{
+
+        flex-direction:column;
+        align-items:stretch;
+
+    }
+
+    .search-box{
+
+        width:100%;
+
+    }
+
+    .filter-select{
+
+        width:100%;
+
+    }
+
+    .exam-table{
+
+        min-width:1100px;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .actions{
+
+        flex-direction:column;
+
+    }
+
+}
 </style>
 
-</head>
+<div class="page-header">
 
-<body>
+    <div>
 
-<div class="container">
+        <h2>
+            <i class="fa-solid fa-file-pen"></i>
+            Exam Management
+        </h2>
 
-<div class="header">
+    </div>
 
-<h2>Exam Management</h2>
+    <a href="?section=exam_create"
+       class="btn-add">
 
-<a
-href="{% url 'exam-create' %}"
-class="add-btn">
+        <i class="fa-solid fa-plus"></i>
 
-+ Add Exam
+        Add
 
-</a>
-
-</div>
-
-<div class="search-box">
-
-<input
-type="text"
-id="searchInput"
-placeholder="Search Exam..."
-onkeyup="searchExam()">
+    </a>
 
 </div>
 
 <div class="table-card">
 
-<table class="table table-hover table-bordered">
+    <form method="GET"
+          class="toolbar">
 
-<thead>
+        <input
+            type="hidden"
+            name="section"
+            value="exams">
 
-<tr>
+        <!-- Search -->
 
-<th>Exam Name</th>
-<th>Course</th>
-<th>Exam Date</th>
-<th>Total Marks</th>
-<th>Actions</th>
+        <div class="search-box">
 
-</tr>
+            <i class="fa-solid fa-magnifying-glass"></i>
 
-</thead>
+            <input
+                type="text"
+                name="search"
+                class="search-input"
+                value="{{ search }}"
+                placeholder="Search Exam or Course">
 
-<tbody id="examTable">
+        </div>
 
-{% for exam in exams %}
+        <!-- Department -->
 
-<tr>
+        <select
+            name="department"
+            class="filter-select">
 
-<td>{{ exam.name }}</td>
+            <option value="">
+                All Departments
+            </option>
 
-<td>{{ exam.course.name }}</td>
+            {% for department in departments %}
 
-<td>{{ exam.exam_date }}</td>
+            <option
+                value="{{ department.id }}"
+                {% if selected_department == department.id|stringformat:"s" %}
+                selected
+                {% endif %}>
 
-<td>{{ exam.total_marks }}</td>
+                {{ department.name }}
 
-<td>
+            </option>
 
-<a
-href="{% url 'exam-detail' exam.id %}"
-class="action view">
+            {% endfor %}
 
-View
+        </select>
 
-</a>
+        <!-- Course -->
 
-<a
-href="{% url 'exam-update' exam.id %}"
-class="action edit">
+        <select
+            name="course"
+            class="filter-select">
 
-Edit
+            <option value="">
+                All Courses
+            </option>
 
-</a>
+            {% for course in courses %}
 
-<button
-type="button"
-class="action delete"
-data-bs-toggle="modal"
-data-bs-target="#deleteModal{{ exam.id }}">
+            <option
+                value="{{ course.id }}"
+                {% if selected_course == course.id|stringformat:"s" %}
+                selected
+                {% endif %}>
 
-Delete
+                {{ course.name }}
 
-</button>
+            </option>
 
-</td>
+            {% endfor %}
 
-</tr>
+        </select>
 
-<!-- Delete Modal -->
+        <!-- Date -->
 
-<div
-class="modal fade"
-id="deleteModal{{ exam.id }}"
-tabindex="-1"
-aria-hidden="true">
+        <input
+            type="date"
+            name="date"
+            value="{{ selected_date }}"
+            class="filter-select">
 
-<div class="modal-dialog modal-dialog-centered">
+    </form>
 
-<div class="modal-content">
+    <div class="table-responsive">
 
-<div class="modal-header bg-danger text-white">
+        <table class="exam-table">
 
-<h5 class="modal-title">
+            <thead>
 
-Delete Exam
+                <tr>
 
-</h5>
+                    <th>Exam</th>
+                    <th>Course</th>
+                    <th>Department</th>
+                    <th>Exam Date</th>
+                    <th>Total Marks</th>
+                    <th>Status</th>
+                    <th>Actions</th>
 
-<button
-type="button"
-class="btn-close btn-close-white"
-data-bs-dismiss="modal">
+                </tr>
 
-</button>
+            </thead>
 
-</div>
+            <tbody>
 
-<div class="modal-body text-center">
+            {% for exam in exams %}
 
-<div style="font-size:55px;">
+                <tr>
 
-⚠️
+                    <td>
 
-</div>
+                        <div class="exam-info">
 
-<h5 class="mt-3">
+                            <div class="avatar">
 
-Are you sure?
+                                <i class="fa-solid fa-file-signature"></i>
 
-</h5>
+                            </div>
 
-<p>
+                            <div>
 
-Do you really want to delete
+                                <strong>
 
-<strong>
+                                    {{ exam.name }}
 
-{{ exam.name }}
+                                </strong>
 
-</strong>
+                            </div>
 
-?
+                        </div>
 
-</p>
+                    </td>
 
-<p>
+                    <td>
 
-Course :
+                        {{ exam.course.name }}
 
-<strong>
+                    </td>
 
-{{ exam.course.name }}
+                    <td>
 
-</strong>
+                        {{ exam.course.department.name }}
 
-</p>
+                    </td>
 
-<p>
+                    <td>
 
-Exam Date :
+                        {{ exam.exam_date|date:"d M Y" }}
 
-<strong>
+                    </td>
 
-{{ exam.exam_date }}
+                    <td>
 
-</strong>
+                        <span class="marks-badge">
 
-</p>
+                            {{ exam.total_marks }}
 
-<p>
+                        </span>
 
-Total Marks :
+                    </td>
 
-<strong>
+                    <td>
 
-{{ exam.total_marks }}
+                        {% now "Y-m-d" as today %}
 
-</strong>
+                        {% if exam.exam_date|date:"Y-m-d" > today %}
 
-</p>
+                            <span class="status upcoming">
 
-<small class="text-danger">
+                                Upcoming
 
-This action cannot be undone.
+                            </span>
 
-</small>
+                        {% else %}
 
-</div>
+                            <span class="status completed">
 
-<div class="modal-footer">
+                                Completed
 
-<button
-type="button"
-class="btn btn-secondary"
-data-bs-dismiss="modal">
+                            </span>
 
-Cancel
+                        {% endif %}
 
-</button>
+                    </td>
 
-<form
-method="POST"
-action="{% url 'exam-delete' exam.id %}">
+                    <td>
 
-{% csrf_token %}
+                        <div class="actions">
 
-<button
-type="submit"
-class="btn btn-danger">
+                            <a href="?section=exam_detail&id={{ exam.id }}"
+                               class="view">
 
-Delete
+                                View
 
-</button>
+                            </a>
 
-</form>
+                            <a href="?section=exam_update&id={{ exam.id }}"
+                               class="edit">
 
-</div>
+                                Edit
 
-</div>
+                            </a>
 
-</div>
+                            <a href="?section=exam_delete&id={{ exam.id }}"
+                               class="delete"
+                               onclick="return confirm('Delete this exam?')">
 
-</div>
+                                Delete
 
-{% empty %}
+                            </a>
 
-<tr>
+                        </div>
 
-<td colspan="5"
-class="no-data">
+                    </td>
 
-No Exams Found
+                </tr>
 
-</td>
+            {% empty %}
 
-</tr>
+                <tr>
 
-{% endfor %}
+                    <td colspan="7">
 
-</tbody>
+                        <div class="empty-state">
 
-</table>
+                            <i class="fa-solid fa-file-circle-xmark"></i>
 
-</div>
+                            <h3>
+
+                                No Exams Found
+
+                            </h3>
+
+                            <p>
+
+                                No exam records available.
+
+                            </p>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
 
 </div>
 
 <script>
 
-function searchExam(){
+const search = document.querySelector(".search-input");
 
-let input=document.getElementById("searchInput").value.toLowerCase();
+const filters = document.querySelectorAll(".filter-select");
 
-let rows=document.querySelectorAll("#examTable tr");
+let timer;
 
-rows.forEach(function(row){
+search.addEventListener("keyup", function(){
 
-let text=row.innerText.toLowerCase();
+    clearTimeout(timer);
 
-row.style.display=text.includes(input) ? "" : "none";
+    timer = setTimeout(() => {
+
+        this.form.submit();
+
+    }, 500);
 
 });
 
-}
+filters.forEach(filter => {
+
+    filter.addEventListener("change", function(){
+
+        this.form.submit();
+
+    });
+
+});
 
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-
-</html>

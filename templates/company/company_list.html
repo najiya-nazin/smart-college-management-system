@@ -1,392 +1,754 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Company Management</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet">
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI,sans-serif;
+    /* ==========================================
+   COMPANY MANAGEMENT
+========================================== */
+
+.company-container{
+    max-width:1400px;
+    margin:auto;
 }
 
-body{
-background:#f4f7fb;
+/* ==========================================
+   PAGE HEADER
+========================================== */
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:20px 28px;
+
+    margin-bottom:25px;
+
+    background:linear-gradient(135deg,#2d63e3,#4a84f4);
+
+    border-radius:18px;
 }
 
-.container{
-width:95%;
-margin:40px auto;
+.page-header h2{
+
+    margin:0;
+
+    color:#fff;
+
+    font-size:28px;
+
+    font-weight:700;
 }
 
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:25px;
-}
-
-.header h2{
-color:#0d6efd;
-font-weight:700;
-}
-
-.add-btn{
-background:#0d6efd;
-color:white;
-padding:10px 20px;
-text-decoration:none;
-border-radius:8px;
-transition:.3s;
-}
-
-.add-btn:hover{
-background:#084fc7;
-color:white;
-}
-
-.search-box{
-margin-bottom:20px;
-}
-
-.search-box input{
-width:350px;
-max-width:100%;
-padding:10px;
-border-radius:8px;
-border:1px solid #ccc;
-}
+/* ==========================================
+   TABLE CARD
+========================================== */
 
 .table-card{
-background:white;
-border-radius:12px;
-overflow:hidden;
-box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:28px;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+}
+
+/* ==========================================
+   TOOLBAR
+========================================== */
+
+.toolbar{
+    margin-bottom:25px;
+}
+
+.toolbar-form{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    width:100%;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.toolbar-left{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.toolbar-right{
+    margin-left:auto;
+}
+
+/* ==========================================
+   FILTER
+========================================== */
+
+.filter-select{
+
+    width:300px;
+
+    height:48px;
+
+    border:1px solid #dbe3ef;
+
+    border-radius:12px;
+
+    padding:0 15px;
+
+    font-size:15px;
+
+    background:#fff;
+
+    cursor:pointer;
+
+}
+
+.filter-select:focus{
+
+    outline:none;
+
+    border-color:#2d63e3;
+
+    box-shadow:0 0 0 3px rgba(45,99,227,.12);
+
+}
+
+/* ==========================================
+   SEARCH
+========================================== */
+
+.search-box{
+
+    flex:1;
+
+}
+
+.search-input{
+
+    width:810px;
+
+    height:48px;
+
+    border:1px solid #dbe3ef;
+
+    border-radius:12px;
+
+    padding:0 18px;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+
+.search-input:focus{
+
+    outline:none;
+
+    border-color:#2d63e3;
+
+    box-shadow:0 0 0 3px rgba(45,99,227,.12);
+
+}
+
+
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.btn-search,
+
+    height:48px;
+
+    padding:0 25px;
+
+    border:none;
+
+    border-radius:12px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    text-decoration:none;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.btn-search{
+
+    background:#44536a;
+
+    color:#fff;
+
+}
+
+.btn-search:hover{
+
+    background:#374151;
+
+}
+
+.btn-add{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    padding:10px 18px;
+
+    background:#fff;
+    color:#2563eb;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-size:14px;
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.btn-add:hover{
+
+    background:#eef4ff;
+
+    color:#2563eb;
+
+}
+
+/* ==========================================
+   TABLE
+========================================== */
+
+.table-responsive{
+
+    overflow-x:auto;
+
 }
 
 table{
-margin-bottom:0;
+
+    width:100%;
+
+    border-collapse:collapse;
+
 }
 
 thead{
-background:#0d6efd;
-color:white;
+
+    background:#2d63e3;
+
+}
+
+thead th{
+
+    color:#fff;
+
+    padding:18px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    text-align:left;
+
+}
+
+tbody td{
+
+    padding:22px 18px;
+
+    border-bottom:1px solid #edf2f7;
+
+    font-size:15px;
+
+    color:#475569;
+
 }
 
 tbody tr:hover{
-background:#f2f8ff;
+
+    background:#f8fbff;
+
 }
 
-th,
-td{
-text-align:center;
-vertical-align:middle;
+/* ==========================================
+   COMPANY NAME
+========================================== */
+
+tbody td:nth-child(2){
+
+    font-size:17px;
+
+    font-weight:600;
+
+    color:#1e293b;
+
 }
 
-.action{
-display:inline-block;
-padding:6px 12px;
-margin:2px;
-border-radius:5px;
-text-decoration:none;
-color:white;
-font-size:14px;
+/* ==========================================
+   WEBSITE
+========================================== */
+
+.website-link{
+
+    color:#2d63e3;
+
+    text-decoration:none;
+
+    font-weight:600;
+
 }
 
-.view{
-background:#198754;
+.website-link:hover{
+
+    color:#1d4ed8;
+
 }
 
-.edit{
-background:#ffc107;
-color:black;
+/* ==========================================
+   ACTION BUTTONS
+========================================== */
+
+.actions{
+
+    display:flex;
+
+    gap:10px;
+
 }
 
-.delete{
-background:#dc3545;
-border:none;
-cursor:pointer;
+.btn-view,
+.btn-edit,
+.btn-delete{
+
+    width:80px;
+
+    height:40px;
+
+    border:none;
+
+    border-radius:10px;
+
+    color:#fff;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    text-decoration:none;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    cursor:pointer;
+
+    transition:.3s;
+
 }
 
-.delete:hover{
-background:#bb2d3b;
+.btn-view{
+
+    background:#2563eb;
+
 }
 
-.no-data{
-text-align:center;
-padding:20px;
-font-weight:600;
+.btn-view:hover{
+
+    background:#1d4ed8;
+
+    color:#fff;
+
 }
 
+.btn-edit{
+
+    background:#f59e0b;
+
+}
+
+.btn-edit:hover{
+
+    background:#d97706;
+
+    color:#fff;
+
+}
+
+.btn-delete{
+
+    background:#ef4444;
+
+}
+
+.btn-delete:hover{
+
+    background:#dc2626;
+
+    color:#fff;
+
+}
+
+/* ==========================================
+   EMPTY STATE
+========================================== */
+
+.empty-state{
+
+    text-align:center;
+
+    padding:60px 20px;
+
+    color:#94a3b8;
+
+}
+
+.empty-state p{
+
+    margin-top:10px;
+
+    font-size:16px;
+
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:992px){
+
+    .toolbar{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+    .toolbar-form{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+    .search-input,
+    .filter-select,
+    .btn-search,
+    .btn-add{
+
+        width:100%;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .page-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:15px;
+
+    }
+
+    .page-header h2{
+
+        font-size:28px;
+
+    }
+
+    table{
+
+        min-width:900px;
+
+    }
+
+}
 </style>
+<div class="company-container">
 
-</head>
+    <div class="page-header">
 
-<body>
+       <h2>
+        Company Management
+       </h2>
 
-<div class="container">
+        <a href="?section=company_create"
+       class="btn-add">
 
-<div class="header">
+        <i class="fa-solid fa-plus"></i>
 
-<h2>Company Management</h2>
+        Add
 
-<a
-href="{% url 'company_create' %}"
-class="add-btn">
+       </a>
 
-+ Add Company
+    </div>
 
-</a>
+    <!-- Table Card -->
+
+    <div class="table-card">
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+
+    <form method="get" class="toolbar-form">
+
+        <input type="hidden" name="section" value="companies">
+
+        <div class="toolbar-left">
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    name="search"
+                    class="search-input"
+                    placeholder="Search company, location or email..."
+                    value="{{ search }}"
+                >
+
+            </div>
+
+        </div>
+
+        <div class="toolbar-right">
+
+            <select
+                name="location"
+                class="filter-select"
+                onchange="this.form.submit()"
+            >
+
+                <option value="">All Locations</option>
+
+                {% for location in locations %}
+
+                <option
+                    value="{{ location }}"
+                    {% if selected_location == location %}
+                    selected
+                    {% endif %}
+                >
+                    {{ location }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+    </form>
+
+   </div>
+
+
+        <!-- Table -->
+
+        <div class="table-responsive">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Company</th>
+
+                        <th>Location</th>
+
+                        <th>Email</th>
+
+                        <th>Phone</th>
+
+                        <th>Website</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for company in companies %}
+
+                    <tr>
+
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>
+
+                            <strong>{{ company.name }}</strong>
+
+                        </td>
+
+                        <td>
+
+                            {{ company.location }}
+
+                        </td>
+
+                        <td>
+
+                            {{ company.email }}
+
+                        </td>
+
+                        <td>
+
+                            {{ company.phone }}
+
+                        </td>
+
+                        <td>
+
+                            {% if company.website %}
+
+                                <a
+                                    href="{{ company.website }}"
+                                    target="_blank"
+                                >
+
+                                    Visit
+
+                                </a>
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <div class="actions">
+
+                                <a
+                                    href="?section=company_detail&id={{ company.id }}"
+                                    class="btn-view"
+                                >
+
+                                    View
+
+                                </a>
+
+                                <a
+                                    href="?section=company_update&id={{ company.id }}"
+                                    class="btn-edit"
+                                >
+
+                                   Edit
+
+                                </a>
+
+                                <form
+                                    method="post"
+                                    action="?section=company_delete&id={{ company.id }}"
+                                    style="display:inline;"
+                                    onsubmit="return confirm('Delete this company?');"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="btn-delete"
+                                    >
+
+                                       Delete
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td colspan="7" class="empty-state">
+
+                            <i class="fas fa-building fa-3x"></i>
+
+                            <p>No companies found.</p>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 
 </div>
-
-<div class="search-box">
-
-<input
-type="text"
-id="searchInput"
-placeholder="Search Company..."
-onkeyup="searchCompany()">
-
-</div>
-
-<div class="table-card">
-
-<table class="table table-hover table-bordered">
-
-<thead>
-
-<tr>
-
-<th>Company</th>
-
-<th>Location</th>
-
-<th>Email</th>
-
-<th>Phone</th>
-
-<th>Actions</th>
-
-</tr>
-
-</thead>
-
-<tbody id="companyTable">
-
-{% for company in companies %}
-
-<tr>
-
-<td>{{ company.name }}</td>
-
-<td>{{ company.location }}</td>
-
-<td>{{ company.email }}</td>
-
-<td>{{ company.phone }}</td>
-
-<td>
-
-<a
-href="{% url 'company_detail' company.id %}"
-class="action view">
-
-View
-
-</a>
-
-<a
-href="{% url 'company_update' company.id %}"
-class="action edit">
-
-Edit
-
-</a>
-
-<button
-type="button"
-class="action delete"
-data-bs-toggle="modal"
-data-bs-target="#deleteModal{{ company.id }}">
-
-Delete
-
-</button>
-
-</td>
-
-</tr>
-
-<!-- Delete Modal -->
-
-<div
-class="modal fade"
-id="deleteModal{{ company.id }}"
-tabindex="-1">
-
-<div class="modal-dialog modal-dialog-centered">
-
-<div class="modal-content">
-
-<div class="modal-header bg-danger text-white">
-
-<h5 class="modal-title">
-
-Delete Company
-
-</h5>
-
-<button
-type="button"
-class="btn-close btn-close-white"
-data-bs-dismiss="modal">
-
-</button>
-
-</div>
-
-<div class="modal-body text-center">
-
-<div style="font-size:55px;">
-
-⚠️
-
-</div>
-
-<h5 class="mt-3">
-
-Are you sure?
-
-</h5>
-
-<p>
-
-Delete
-
-<strong>
-
-{{ company.name }}
-
-</strong>
-
-?
-
-</p>
-
-<p>
-
-Location :
-
-<strong>
-
-{{ company.location }}
-
-</strong>
-
-</p>
-
-<small class="text-danger">
-
-This action cannot be undone.
-
-</small>
-
-</div>
-
-<div class="modal-footer">
-
-<button
-type="button"
-class="btn btn-secondary"
-data-bs-dismiss="modal">
-
-Cancel
-
-</button>
-
-<form
-method="POST"
-action="{% url 'company_delete' company.id %}">
-
-{% csrf_token %}
-
-<button
-type="submit"
-class="btn btn-danger">
-
-Delete
-
-</button>
-
-</form>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-{% empty %}
-
-<tr>
-
-<td
-colspan="5"
-class="no-data">
-
-No Companies Found
-
-</td>
-
-</tr>
-
-{% endfor %}
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
 <script>
 
-function searchCompany(){
+const search = document.querySelector(".search-input");
 
-let input=document.getElementById("searchInput").value.toLowerCase();
+const filters = document.querySelectorAll(".filter-select");
 
-let rows=document.querySelectorAll("#companyTable tr");
+let timer;
 
-rows.forEach(function(row){
+search.addEventListener("keyup", function(){
 
-let text=row.innerText.toLowerCase();
+    clearTimeout(timer);
 
-row.style.display=text.includes(input) ? "" : "none";
+    timer = setTimeout(() => {
+
+        this.form.submit();
+
+    }, 500);
 
 });
 
-}
+filters.forEach(filter => {
+
+    filter.addEventListener("change", function(){
+
+        this.form.submit();
+
+    });
+
+});
 
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-
-</html>

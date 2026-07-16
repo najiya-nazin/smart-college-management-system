@@ -54,7 +54,6 @@ class PlacementForm(forms.ModelForm):
             "remarks",
         ]
 
-
         widgets = {
             "student": forms.Select(attrs={
                 "class": "form-select"
@@ -83,3 +82,54 @@ class PlacementForm(forms.ModelForm):
                 "placeholder": "Enter Remarks"
             }),
         }
+
+        def clean_job_role(self):
+            job_role = self.cleaned_data.get("job_role")
+
+            if len(job_role.strip()) < 3:
+                raise forms.ValidationError(
+                    "Job role must contain at least 3 characters."
+                )
+
+            return job_role.title()
+
+        def clean_package(self):
+
+            package = self.cleaned_data.get("package")
+
+            if package <= 0:
+                raise forms.ValidationError(
+                    "Package must be greater than zero."
+                )
+
+            return package
+
+        def clean(self):
+
+            cleaned_data = super().clean()
+
+            student = cleaned_data.get("student")
+            company = cleaned_data.get("company")
+            job_role = cleaned_data.get("job_role")
+
+            if student and company and job_role:
+
+                duplicate = Placement.objects.filter(
+
+                    student=student,
+                    company=company,
+                    job_role__iexact=job_role
+
+                )
+
+                if self.instance.pk:
+                    duplicate = duplicate.exclude(pk=self.instance.pk)
+
+                if duplicate.exists():
+                    raise forms.ValidationError(
+
+                        "This student already has a placement record for this company and job role."
+
+                    )
+
+            return cleaned_data

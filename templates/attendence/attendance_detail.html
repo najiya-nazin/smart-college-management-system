@@ -1,221 +1,496 @@
-<!DOCTYPE html>
-<html lang="en">
+<style>
+    /* ===================================
+   ATTENDANCE DETAIL PAGE
+=================================== */
 
-<head>
+.attendance-container{
+    max-width:1100px;
+    margin:0 auto;
+}
 
-    <meta charset="UTF-8">
+/* ===================================
+   PAGE HEADER
+=================================== */
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+.page-header{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:#fff;
+    border-radius:16px;
+    padding:16px 24px;
 
-    <title>Attendance Details</title>
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    margin-bottom:20px;
+}
 
-    <style>
+.page-header h2{
+    margin:0;
+    font-size:24px;
+    font-weight:700;
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:"Segoe UI",sans-serif;
-        }
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
 
-        body{
-            background:#f4f7fb;
-        }
+/* ===================================
+   PROFILE CARD
+=================================== */
 
-        .container{
-            max-width:850px;
-            margin:50px auto;
-        }
+.profile-card{
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
+}
 
-        .card{
-            border:none;
-            border-radius:15px;
-            overflow:hidden;
-            box-shadow:0 8px 20px rgba(0,0,0,.08);
-        }
+/* ===================================
+   PROFILE HEADER
+=================================== */
 
-        .card-header{
-            background:#0d6efd;
-            color:#fff;
-            padding:20px;
-        }
+.profile-header{
 
-        .card-header h3{
-            margin:0;
-        }
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-        .card-body{
-            padding:30px;
-        }
+    padding:24px 30px;
 
-        .detail-row{
-            display:flex;
-            margin-bottom:18px;
-            padding-bottom:12px;
-            border-bottom:1px solid #e9ecef;
-        }
+    border-bottom:1px solid #eef2f7;
+}
 
-        .detail-title{
-            width:220px;
-            font-weight:600;
-            color:#495057;
-        }
+.header-left h2{
 
-        .detail-value{
-            flex:1;
-            color:#212529;
-        }
+    margin:0;
+    font-size:26px;
+    font-weight:700;
+    color:#1e293b;
 
-        .status{
+}
 
-            display:inline-block;
-            padding:6px 15px;
-            border-radius:20px;
-            color:#fff;
-            font-weight:600;
+.attendance-meta{
 
-        }
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+    flex-wrap:wrap;
 
-        .present{
-            background:#198754;
-        }
+}
 
-        .absent{
-            background:#dc3545;
-        }
+.student-id,
+.department{
 
-        .late{
-            background:#fd7e14;
-        }
+    display:inline-flex;
+    align-items:center;
 
-        .button-group{
-            display:flex;
-            justify-content:space-between;
-            margin-top:30px;
-        }
+    padding:6px 14px;
 
-        .btn{
-            min-width:140px;
-            border-radius:8px;
-        }
+    border-radius:20px;
 
-    </style>
+    font-size:13px;
+    font-weight:600;
 
-</head>
+}
 
-<body>
+.student-id{
 
-<div class="container">
+    background:#eef4ff;
+    color:#2563eb;
 
-    <div class="card">
+}
 
-        <div class="card-header">
+.department{
 
-            <h3>Attendance Details</h3>
+    background:#ecfdf5;
+    color:#15803d;
+
+}
+
+/* ===================================
+   STATUS BADGES
+=================================== */
+
+.status-badge{
+
+    padding:10px 22px;
+
+    border-radius:30px;
+
+    font-size:14px;
+    font-weight:700;
+
+}
+
+.present{
+
+    background:#dcfce7;
+    color:#15803d;
+
+}
+
+.absent{
+
+    background:#fee2e2;
+    color:#dc2626;
+
+}
+
+.late{
+
+    background:#fef3c7;
+    color:#b45309;
+
+}
+
+/* ===================================
+   GRID
+=================================== */
+
+.profile-grid{
+
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+
+    padding:24px;
+
+}
+
+/* ===================================
+   INFO CARD
+=================================== */
+
+.info-card{
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:14px;
+
+    padding:22px;
+
+}
+
+.info-card h3{
+
+    margin:0 0 20px;
+
+    color:#1e293b;
+
+    font-size:17px;
+    font-weight:700;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+}
+
+.info-card h3 i{
+
+    color:#2563eb;
+
+}
+
+/* ===================================
+   INFO ROW
+=================================== */
+
+.info-row{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:14px 0;
+
+    border-bottom:1px solid #edf2f7;
+
+}
+
+.info-row:last-child{
+
+    border-bottom:none;
+
+}
+
+.info-row span{
+
+    color:#64748b;
+    font-size:14px;
+
+}
+
+.info-row strong{
+
+    color:#1e293b;
+    font-size:15px;
+    font-weight:600;
+
+}
+
+/* ===================================
+   DESCRIPTION
+=================================== */
+
+.description-text{
+
+    margin:0;
+
+    color:#475569;
+
+    line-height:1.8;
+
+    font-size:14px;
+
+    min-height:90px;
+
+}
+
+/* ===================================
+   BUTTONS
+=================================== */
+
+.form-buttons{
+
+    display:flex;
+    justify-content:flex-end;
+    gap:12px;
+
+    padding:20px 24px;
+
+    border-top:1px solid #eef2f7;
+
+}
+
+.btn-cancel,
+.btn-save{
+
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    padding:11px 20px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-size:14px;
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.btn-cancel{
+
+    background:#f1f5f9;
+    color:#334155;
+
+}
+
+.btn-cancel:hover{
+
+    background:#e2e8f0;
+    color:#0f172a;
+
+}
+
+.btn-save{
+
+    background:#2563eb;
+    color:#fff;
+
+}
+
+.btn-save:hover{
+
+    background:#1d4ed8;
+    color:#fff;
+
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media(max-width:768px){
+
+    .profile-header{
+
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+
+    }
+
+    .profile-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .form-buttons{
+
+        flex-direction:column;
+
+    }
+
+    .btn-cancel,
+    .btn-save{
+
+        justify-content:center;
+
+    }
+
+}
+
+</style>
+<div class="attendance-container">
+
+    <!-- Header -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h2>
+
+                <i class="fa-solid fa-calendar-check"></i>
+
+                Attendance Details
+
+            </h2>
 
         </div>
 
-        <div class="card-body">
+    </div>
 
-            <div class="detail-row">
+    <!-- Profile Card -->
 
-                <div class="detail-title">
+    <div class="profile-card">
 
-                    Student ID
+        <!-- Header -->
 
-                </div>
+        <div class="profile-header">
 
-                <div class="detail-value">
+            <div class="header-left">
 
-                    {{ attendance.student.student_id }}
-
-                </div>
-
-            </div>
-
-            <div class="detail-row">
-
-                <div class="detail-title">
-
-                    Student Name
-
-                </div>
-
-                <div class="detail-value">
+                <h2>
 
                     {{ attendance.student.user.name }}
 
-                </div>
+                </h2>
 
-            </div>
+                <div class="attendance-meta">
 
-            <div class="detail-row">
+                    <span class="student-id">
 
-                <div class="detail-title">
+                        {{ attendance.student.student_id }}
 
-                    Attendance Date
+                    </span>
 
-                </div>
+                    <span class="department">
 
-                <div class="detail-value">
+                        {{ attendance.student.department.name }}
 
-                    {{ attendance.date }}
-
-                </div>
-
-            </div>
-
-            <div class="detail-row">
-
-                <div class="detail-title">
-
-                    Status
-
-                </div>
-
-                <div class="detail-value">
-
-                    {% if attendance.status == "Present" %}
-
-                        <span class="status present">
-
-                            {{ attendance.status }}
-
-                        </span>
-
-                    {% elif attendance.status == "Absent" %}
-
-                        <span class="status absent">
-
-                            {{ attendance.status }}
-
-                        </span>
-
-                    {% else %}
-
-                        <span class="status late">
-
-                            {{ attendance.status }}
-
-                        </span>
-
-                    {% endif %}
+                    </span>
 
                 </div>
 
             </div>
 
-            <div class="detail-row">
+            <div class="header-right">
 
-                <div class="detail-title">
+                {% if attendance.status == "Present" %}
+
+                    <span class="status-badge present">
+
+                        Present
+
+                    </span>
+
+                {% elif attendance.status == "Late" %}
+
+                    <span class="status-badge late">
+
+                        Late
+
+                    </span>
+
+                {% else %}
+
+                    <span class="status-badge absent">
+
+                        Absent
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <!-- Information Grid -->
+
+        <div class="profile-grid">
+
+            <!-- Attendance Information -->
+
+            <div class="info-card">
+
+                <h3>
+
+                    <i class="fa-solid fa-calendar-day"></i>
+
+                    Attendance Information
+
+                </h3>
+
+                <div class="info-row">
+
+                    <span>Date</span>
+
+                    <strong>
+
+                        {{ attendance.date|date:"d M Y" }}
+
+                    </strong>
+
+                </div>
+
+                <div class="info-row">
+
+                    <span>Status</span>
+
+                    <strong>
+
+                        {{ attendance.status }}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <!-- Remarks -->
+
+            <div class="info-card">
+
+                <h3>
+
+                    <i class="fa-solid fa-note-sticky"></i>
 
                     Remarks
 
-                </div>
+                </h3>
 
-                <div class="detail-value">
+                <p class="description-text">
 
                     {% if attendance.remarks %}
 
@@ -223,33 +498,37 @@
 
                     {% else %}
 
-                        <span class="text-muted">
-
-                            No remarks available.
-
-                        </span>
+                        No remarks available.
 
                     {% endif %}
 
-                </div>
+                </p>
 
             </div>
 
-            <div class="button-group">
+        </div>
 
-                <a href="{% url 'attendance_update' attendance.id %}" class="btn btn-warning">
+        <!-- Buttons -->
 
-                    Edit
+        <div class="form-buttons">
 
-                </a>
+            <a href="?section=attendances"
+               class="btn-cancel">
 
-                <a href="{% url 'attendance_list' %}" class="btn btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i>
 
-                    Back
+                Back
 
-                </a>
+            </a>
 
-            </div>
+<!--            <a href="?section=attendance_update&id={{ attendance.id }}"-->
+<!--               class="btn-save">-->
+
+<!--                <i class="fa-solid fa-pen"></i>-->
+
+<!--                Edit Attendance-->
+
+<!--            </a>-->
 
         </div>
 
@@ -257,6 +536,3 @@
 
 </div>
 
-</body>
-
-</html>

@@ -3,8 +3,6 @@ from .models import Company, Placement
 from .forms import CompanyForm, PlacementForm
 
 
-
-
 def company_create(request):
 
     form = CompanyForm()

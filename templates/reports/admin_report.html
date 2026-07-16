@@ -1,11 +1,14 @@
 <style>
-    /* ==========================================
-   EVENT MANAGEMENT
+/* ==========================================
+   REPORT MANAGEMENT
 ========================================== */
 
-.event-container{
+.report-container{
+
     max-width:1400px;
+
     margin:auto;
+
 }
 
 /* ==========================================
@@ -13,63 +16,48 @@
 ========================================== */
 
 .page-header{
+
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
-    padding:20px 28px;
-    margin-bottom:25px;
+
+    padding:18px 24px;
+
+    margin-bottom:20px;
+
     background:linear-gradient(135deg,#2d63e3,#4a84f4);
-    border-radius:18px;
+
+    border-radius:16px;
+
 }
 
 .page-header h2{
+
     margin:0;
+
     color:#fff;
+
     font-size:28px;
+
     font-weight:700;
-}
-
-/* ==========================================
-   ADD BUTTON
-========================================== */
-
-.page-header .btn-add{
-
-    background:#fff;
-    color:#2d63e3;
-
-    padding:12px 22px;
-
-    border-radius:10px;
-
-    text-decoration:none;
-
-    font-size:15px;
-
-    font-weight:600;
-
-    transition:.3s;
-}
-
-.page-header .btn-add:hover{
-
-    background:#eef4ff;
 
 }
 
 /* ==========================================
-   CARD
+   TABLE CARD
 ========================================== */
 
 .table-card{
 
     background:#fff;
 
-    border-radius:18px;
+    border-radius:16px;
 
-    padding:25px;
+    padding:20px;
 
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
 
 }
 
@@ -79,7 +67,7 @@
 
 .toolbar{
 
-    margin-bottom:25px;
+    margin-bottom:20px;
 
 }
 
@@ -93,7 +81,7 @@
 
     flex-wrap:wrap;
 
-    gap:20px;
+    gap:15px;
 
 }
 
@@ -101,7 +89,7 @@
 
     display:flex;
 
-    gap:15px;
+    gap:12px;
 
     align-items:center;
 
@@ -119,17 +107,17 @@
 
 .search-input{
 
-    width:800px;
+    width:780px;
 
-    height:48px;
+    height:42px;
 
     border:1px solid #dbe3ef;
 
-    border-radius:10px;
+    border-radius:8px;
 
-    padding:0 15px;
+    padding:0 14px;
 
-    font-size:15px;
+    font-size:14px;
 
     transition:.3s;
 
@@ -151,19 +139,19 @@
 
 .filter-select{
 
-    width:320px;
+    width:350px;
 
-    height:48px;
+    height:42px;
 
     border:1px solid #dbe3ef;
 
-    border-radius:10px;
+    border-radius:8px;
 
-    padding:0 15px;
-
-    font-size:15px;
+    padding:0 14px;
 
     background:#fff;
+
+    font-size:14px;
 
 }
 
@@ -176,24 +164,24 @@
 }
 
 /* ==========================================
-   BUTTONS
+   BUTTON
 ========================================== */
 
 .btn-search{
 
-    height:48px;
+    height:42px;
 
-    padding:0 24px;
+    padding:0 18px;
 
     border:none;
 
-    border-radius:10px;
+    border-radius:8px;
 
     background:#44536a;
 
     color:#fff;
 
-    font-size:15px;
+    font-size:14px;
 
     font-weight:600;
 
@@ -235,27 +223,31 @@ thead{
 
 thead th{
 
+    padding:14px;
+
     color:#fff;
 
-    padding:18px;
+    text-align:left;
 
-    font-size:15px;
+    font-size:14px;
 
     font-weight:600;
-
-    text-align:left;
 
 }
 
 tbody td{
 
-    padding:18px;
+    padding:14px;
 
     border-bottom:1px solid #edf2f7;
 
     color:#475569;
 
     vertical-align:middle;
+
+    font-size:14px;
+
+    line-height:1.5;
 
 }
 
@@ -271,6 +263,8 @@ tbody td:nth-child(2){
 
     color:#1f2937;
 
+    font-size:15px;
+
 }
 
 /* ==========================================
@@ -281,31 +275,37 @@ tbody td:nth-child(2){
 
     display:flex;
 
-    gap:10px;
+    gap:8px;
+
+    align-items:center;
+
+    flex-wrap:wrap;
 
 }
 
 .btn-view,
-.btn-edit,
+.btn-download,
 .btn-delete{
 
     min-width:75px;
 
-    height:38px;
+    height:34px;
+
+    padding:0 12px;
 
     border:none;
 
-    border-radius:8px;
+    border-radius:6px;
 
     display:flex;
 
-    justify-content:center;
-
     align-items:center;
+
+    justify-content:center;
 
     text-decoration:none;
 
-    font-size:14px;
+    font-size:13px;
 
     font-weight:600;
 
@@ -329,17 +329,17 @@ tbody td:nth-child(2){
 
 }
 
-.btn-edit{
+.btn-download{
 
-    background:#f59e0b;
+    background:#16a34a;
 
     color:#fff;
 
 }
 
-.btn-edit:hover{
+.btn-download:hover{
 
-    background:#d97706;
+    background:#15803d;
 
 }
 
@@ -358,6 +358,22 @@ tbody td:nth-child(2){
 }
 
 /* ==========================================
+   FILE NAME
+========================================== */
+
+tbody td:nth-child(5){
+
+    max-width:220px;
+
+    color:#334155;
+
+    font-size:13px;
+
+    word-break:break-word;
+
+}
+
+/* ==========================================
    EMPTY STATE
 ========================================== */
 
@@ -365,11 +381,11 @@ tbody td:nth-child(2){
 
     text-align:center;
 
-    padding:50px;
+    padding:35px;
 
     color:#94a3b8;
 
-    font-size:16px;
+    font-size:15px;
 
 }
 
@@ -391,11 +407,15 @@ tbody td:nth-child(2){
 
         flex-direction:column;
 
+        width:100%;
+
     }
 
     .toolbar-right{
 
         margin-left:0;
+
+        width:100%;
 
     }
 
@@ -415,43 +435,37 @@ tbody td:nth-child(2){
 
         flex-direction:column;
 
-        gap:15px;
-
         align-items:flex-start;
+
+        gap:12px;
 
     }
 
     .page-header h2{
 
-        font-size:26px;
+        font-size:24px;
 
     }
 
     table{
 
-        min-width:950px;
+        min-width:900px;
 
     }
 
 }
 </style>
-
-<div class="event-container">
+<div class="report-container">
 
     <!-- Page Header -->
 
     <div class="page-header">
 
-        <h2>Event Management</h2>
+        <h2>
 
-        <a href="?section=event_create"
-       class="btn-add">
+            Report Management
 
-        <i class="fa-solid fa-plus"></i>
-
-        Add
-
-    </a>
+        </h2>
 
     </div>
 
@@ -468,48 +482,42 @@ tbody td:nth-child(2){
                 <input
                     type="hidden"
                     name="section"
-                    value="events"
+                    value="reports"
                 >
 
                 <div class="toolbar-left">
 
-                    <div class="search-box">
-
-                        <input
-                            type="text"
-                            name="search"
-                            class="search-input"
-                            placeholder="Search event or department..."
-                            value="{{ search }}"
-                        >
-
-                    </div>
-
+                 <input
+    type="text"
+    name="search"
+    value="{{ search }}"
+    placeholder="Search by report type or teacher..."
+    class="search-input"
+    onchange="this.form.submit()"
+>
 
                 </div>
 
                 <div class="toolbar-right">
 
                     <select
-                        name="department"
+                        name="report_type"
                         class="filter-select"
                         onchange="this.form.submit()"
                     >
 
                         <option value="">
-                            All Departments
+                            All Report Types
                         </option>
 
-                        {% for department in departments %}
+                        {% for type in report_types %}
 
-                        <option
-                            value="{{ department.id }}"
-                            {% if selected_department == department.id|stringformat:"s" %}
-                            selected
-                            {% endif %}
-                        >
-                            {{ department.name }}
-                        </option>
+                            <option
+                                value="{{ type }}"
+                                {% if selected_report_type == type %}selected{% endif %}
+                            >
+                                {{ type }}
+                            </option>
 
                         {% endfor %}
 
@@ -532,10 +540,13 @@ tbody td:nth-child(2){
                     <tr>
 
                         <th>ID</th>
-                        <th>Event Title</th>
-                        <th>Description</th>
-                        <th>Event Date</th>
-                        <th>Department</th>
+
+                        <th>Report Type</th>
+
+                        <th>Uploaded By</th>
+
+                        <th>Generated On</th>
+
                         <th>Actions</th>
 
                     </tr>
@@ -544,57 +555,62 @@ tbody td:nth-child(2){
 
                 <tbody>
 
-                    {% for event in events %}
+                    {% for report in reports %}
 
                     <tr>
 
-                        <td>{{ forloop.counter }}</td>
-
-                        <td>
-                            <strong>{{ event.title }}</strong>
-                        </td>
-
                         <td>
 
-                            {{ event.description|truncatechars:50 }}
+                            {{ forloop.counter }}
 
                         </td>
 
                         <td>
 
-                            {{ event.event_date }}
+                            {{ report.report_type }}
 
                         </td>
 
                         <td>
 
-                            {{ event.organized_by.name }}
+                            {{ report.generated_by.name }}
 
                         </td>
+
+                        <td>
+
+                            {{ report.generated_on|date:"d M Y, h:i A" }}
+
+                        </td>
+
 
                         <td>
 
                             <div class="actions">
 
                                 <a
-                                    href="?section=event_detail&id={{ event.id }}"
+                                    href="?section=report_detail&id={{ report.id }}"
                                     class="btn-view"
                                 >
                                     View
                                 </a>
 
+                                {% if report.file %}
+
                                 <a
-                                    href="?section=event_update&id={{ event.id }}"
-                                    class="btn-edit"
+                                    href="{{ report.file.url }}"
+                                    class="btn-download"
+                                    target="_blank"
                                 >
-                                    Edit
+                                    Download
                                 </a>
+
+                                {% endif %}
 
                                 <form
                                     method="POST"
-                                    action="?section=event_delete&id={{ event.id }}"
+                                    action="?section=report_delete&id={{ report.id }}"
                                     style="display:inline;"
-                                    onsubmit="return confirm('Delete this event?');"
                                 >
 
                                     {% csrf_token %}
@@ -602,6 +618,7 @@ tbody td:nth-child(2){
                                     <button
                                         type="submit"
                                         class="btn-delete"
+                                        onclick="return confirm('Delete this report?')"
                                     >
                                         Delete
                                     </button>
@@ -623,7 +640,7 @@ tbody td:nth-child(2){
                             class="empty-state"
                         >
 
-                            No events found.
+                            No reports found.
 
                         </td>
 
@@ -640,34 +657,3 @@ tbody td:nth-child(2){
     </div>
 
 </div>
-<script>
-
-const search = document.querySelector(".search-input");
-
-const filters = document.querySelectorAll(".filter-select");
-
-let timer;
-
-search.addEventListener("keyup", function(){
-
-    clearTimeout(timer);
-
-    timer = setTimeout(() => {
-
-        this.form.submit();
-
-    }, 500);
-
-});
-
-filters.forEach(filter => {
-
-    filter.addEventListener("change", function(){
-
-        this.form.submit();
-
-    });
-
-});
-
-</script>

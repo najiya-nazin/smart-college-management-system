@@ -1,197 +1,467 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-
-{% if form.instance.pk %}
-
-Update Placement
-
-{% else %}
-
-Add Placement
-
-{% endif %}
-
-</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet">
 
 <style>
+/* ===================================
+   PLACEMENT FORM PAGE
+=================================== */
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI,sans-serif;
+.placement-container{
+    max-width:1100px;
+    margin:0 auto;
 }
 
-body{
-background:#f4f7fb;
+/* ===================================
+   PAGE HEADER
+=================================== */
+
+.page-header{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:#fff;
+
+    border-radius:16px;
+
+    padding:16px 24px;
+
+    display:flex;
+    align-items:center;
+
+    margin-bottom:20px;
 }
 
-.container{
-max-width:900px;
-margin:50px auto;
+.page-header h2{
+    margin:0;
+
+    font-size:24px;
+    font-weight:700;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 
-.card{
-border:none;
-border-radius:15px;
-box-shadow:0 8px 20px rgba(0,0,0,.08);
+/* ===================================
+   FORM CARD
+=================================== */
+
+.form-card{
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:24px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
 }
 
-.card-header{
-background:#0d6efd;
-color:white;
-padding:20px 25px;
-border-radius:15px 15px 0 0;
+/* ===================================
+   GRID
+=================================== */
+
+.placement-form-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:24px;
 }
 
-.card-header h3{
-margin:0;
+/* ===================================
+   INFO CARD
+=================================== */
+
+.info-card{
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:14px;
+
+    padding:24px;
 }
 
-.card-body{
-padding:30px;
+.info-card h3{
+    margin:0 0 24px;
+
+    color:#1e293b;
+
+    font-size:18px;
+    font-weight:700;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 
-form p{
-margin-bottom:20px;
+.info-card h3 i{
+    color:#2563eb;
 }
 
-form label{
-display:block;
-margin-bottom:8px;
-font-weight:600;
-color:#495057;
+/* ===================================
+   FORM GRID
+=================================== */
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
 }
 
-form input,
-form select,
-form textarea{
-
-width:100%;
-padding:10px 15px;
-border:1px solid #ced4da;
-border-radius:8px;
-outline:none;
-transition:.3s;
-
+.full-width{
+    grid-column:1/-1;
 }
 
-form input:focus,
-form select:focus,
-form textarea:focus{
+/* ===================================
+   FORM GROUP
+=================================== */
 
-border-color:#0d6efd;
-box-shadow:0 0 8px rgba(13,110,253,.2);
-
+.form-group{
+    display:flex;
+    flex-direction:column;
 }
 
-textarea{
+.form-group label{
+    margin-bottom:8px;
 
-resize:vertical;
-min-height:120px;
+    color:#334155;
 
+    font-size:14px;
+    font-weight:600;
 }
 
-.button-group{
+/* ===================================
+   INPUTS
+=================================== */
 
-display:flex;
-justify-content:space-between;
-margin-top:30px;
+.form-group input,
+.form-group select,
+.form-group textarea{
 
+    width:100%;
+
+    border:1px solid #dbe3ef;
+
+    border-radius:10px;
+
+    background:#fff;
+
+    font-size:14px;
+
+    transition:.3s;
 }
 
-.btn{
+/* Input & Select */
 
-min-width:150px;
-border-radius:8px;
-font-weight:500;
+.form-group input,
+.form-group select{
 
+    height:46px;
+
+    padding:0 14px;
 }
 
+/* Textarea */
+
+.form-group textarea{
+
+    min-height:120px;
+
+    padding:14px;
+
+    resize:vertical;
+}
+
+/* ===================================
+   FOCUS
+=================================== */
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 3px rgba(37,99,235,.08);
+}
+
+/* ===================================
+   ERROR LIST
+=================================== */
+
+.errorlist{
+
+    list-style:none;
+
+    margin:8px 0 0;
+
+    padding:0;
+}
+
+.errorlist li{
+
+    color:#dc2626;
+
+    font-size:13px;
+}
+
+/* ===================================
+   BUTTONS
+=================================== */
+
+.form-buttons{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    margin-top:30px;
+}
+
+.btn-cancel,
+.btn-save{
+
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:8px;
+
+    padding:11px 22px;
+
+    border:none;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    cursor:pointer;
+
+    font-size:14px;
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.btn-cancel{
+
+    background:#f1f5f9;
+
+    color:#334155;
+}
+
+.btn-cancel:hover{
+
+    background:#e2e8f0;
+
+    color:#0f172a;
+}
+
+.btn-save{
+
+    background:#2563eb;
+
+    color:#fff;
+}
+
+.btn-save:hover{
+
+    background:#1d4ed8;
+
+    color:#fff;
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media(max-width:768px){
+
+    .info-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-buttons{
+        flex-direction:column;
+    }
+
+    .btn-cancel,
+    .btn-save{
+        width:100%;
+    }
+
+}
 </style>
 
-</head>
+<div class="placement-container">
 
-<body>
+    <!-- Header -->
 
-<div class="container">
+    <div class="page-header">
 
-<div class="card">
+        <div>
 
-<div class="card-header">
+            <h2>
 
-<h3>
+                <i class="fa-solid fa-briefcase"></i>
 
-{% if form.instance.pk %}
+                {% if form.instance.pk %}
+                    Edit Placement
+                {% else %}
+                    Add Placement
+                {% endif %}
 
-Update Placement
+            </h2>
 
-{% else %}
+        </div>
 
-Add Placement
+    </div>
 
-{% endif %}
+    <!-- Form Card -->
 
-</h3>
+    <div class="form-card">
+
+        <form method="POST" novalidate>
+
+            {% csrf_token %}
+
+            <div class="placement-form-grid">
+
+                <!-- Placement Information -->
+
+                <div class="info-card">
+
+                    <h3>
+
+                        <i class="fa-solid fa-building"></i>
+
+                        Placement Information
+
+                    </h3>
+
+                    <div class="info-grid">
+
+                        <!-- Student -->
+
+                        <div class="form-group">
+
+                            <label>Student</label>
+
+                            {{ form.student }}
+
+                            {{ form.student.errors }}
+
+                        </div>
+
+                        <!-- Company -->
+
+                        <div class="form-group">
+
+                            <label>Company</label>
+
+                            {{ form.company }}
+
+                            {{ form.company.errors }}
+
+                        </div>
+
+                        <!-- Job Role -->
+
+                        <div class="form-group">
+
+                            <label>Job Role</label>
+
+                            {{ form.job_role }}
+
+                            {{ form.job_role.errors }}
+
+                        </div>
+
+                        <!-- Package -->
+
+                        <div class="form-group">
+
+                            <label>Package (LPA)</label>
+
+                            {{ form.package }}
+
+                            {{ form.package.errors }}
+
+                        </div>
+
+                        <!-- Placement Date -->
+
+                        <div class="form-group">
+
+                            <label>Placement Date</label>
+
+                            {{ form.placement_date }}
+
+                            {{ form.placement_date.errors }}
+
+                        </div>
+
+                        <!-- Status -->
+
+                        <div class="form-group">
+
+                            <label>Status</label>
+
+                            {{ form.status }}
+
+                            {{ form.status.errors }}
+
+                        </div>
+
+                        <!-- Remarks -->
+
+                        <div class="form-group full-width">
+
+                            <label>Remarks</label>
+
+                            {{ form.remarks }}
+
+                            {{ form.remarks.errors }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Buttons -->
+
+            <div class="form-buttons">
+
+                <a href="?section=placements"
+                   class="btn-cancel">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Back
+
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn-save">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    {% if form.instance.pk %}
+                        Update Placement
+                    {% else %}
+                        Save Placement
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
 
 </div>
-
-<div class="card-body">
-
-<form method="POST">
-
-{% csrf_token %}
-
-{{ form.as_p }}
-
-<div class="button-group">
-
-<button
-type="submit"
-class="btn btn-primary">
-
-{% if form.instance.pk %}
-
-Update Placement
-
-{% else %}
-
-Save Placement
-
-{% endif %}
-
-</button>
-
-<a
-href="{% url 'placement_list' %}"
-class="btn btn-secondary">
-
-Back
-
-</a>
-
-</div>
-
-</form>
-
-</div>
-
-</div>
-
-</div>
-
-</body>
-
-</html>

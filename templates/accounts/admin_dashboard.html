@@ -325,16 +325,16 @@ tr:hover{
     </li>
 
     <li>
-        <a href="?section=timetable"
-           {% if section == "timetable" %}class="active"{% endif %}>
-            <i class="fa-solid fa-clock"></i>
-            Timetable
-        </a>
-    </li>
+      <a href="?section=timetables"
+       {% if section == "timetables" %}class="active"{% endif %}>
+        <i class="fa-solid fa-clock"></i>
+        Timetable
+      </a>
+   </li>
 
     <li>
-        <a href="?section=attendance"
-           {% if section == "attendance" %}class="active"{% endif %}>
+        <a href="?section=attendances"
+           {% if section == "attendances" %}class="active"{% endif %}>
             <i class="fa-solid fa-calendar-check"></i>
             Attendance
         </a>
@@ -349,7 +349,7 @@ tr:hover{
     </li>
 
     <li>
-        <a href="?section=results"
+        <a href="?section=marks"
            {% if section == "results" %}class="active"{% endif %}>
             <i class="fa-solid fa-square-poll-vertical"></i>
             Results
@@ -365,7 +365,7 @@ tr:hover{
     </li>
 
     <li>
-        <a href="?section=company"
+        <a href="?section=companies"
            {% if section == "company" %}class="active"{% endif %}>
             <i class="fa-solid fa-building"></i>
             Companies
@@ -463,13 +463,43 @@ tr:hover{
         {% elif section == "course_update" %}
              {% include "courses/course_form.html" %}
 
-        {% elif section == "attendance" %}
+        {% elif section == "attendances" %}
             {% include "attendence/attendance_list.html" %}
 
-        {% elif section == "results" %}
-            {% include "marks/marks_list.html" %}
+<!--        {% elif section == "attendance_create" %}-->
+<!--             {% include "attendence/attendance_form.html" %}-->
 
-        {% elif section == "timetable" %}
+<!--        {% elif section == "attendance_update" %}-->
+<!--             {% include "attendence/attendance_form.html" %}-->
+
+        {% elif section == "attendance_detail" %}
+            {% include "attendence/attendance_detail.html" %}
+
+        {% elif section == "exams" %}
+            {% include "exams/exam_list.html" %}
+
+        {% elif section == "exam_create" %}
+            {% include "exams/exam_form.html" %}
+
+        {% elif section == "exam_update" %}
+            {% include "exams/exam_form.html" %}
+
+        {% elif section == "exam_detail" %}
+            {% include "exams/exam_detail.html" %}
+
+        {% elif section == "marks" %}
+           {% include "marks/marks_list.html" %}
+
+        {% elif section == "marks_create" %}
+           {% include "marks/marks_form.html" %}
+
+        {% elif section == "marks_update" %}
+            {% include "marks/marks_form.html" %}
+
+        {% elif section == "marks_detail" %}
+           {% include "marks/marks_detail.html" %}
+
+        {% elif section == "timetables" %}
            {% include "timetables/timetable_list.html" %}
 
         {% elif section == "timetable_create" %}
@@ -484,17 +514,47 @@ tr:hover{
         {% elif section == "placements" %}
             {% include "company/placement_list.html" %}
 
-        {% elif section == "company" %}
+        {% elif section == "placement_create" %}
+            {% include "company/placement_form.html" %}
+
+        {% elif section == "placement_update" %}
+             {% include "company/placement_form.html" %}
+
+        {% elif section == "placement_detail" %}
+            {% include "company/placement_detail.html" %}
+
+        {% elif section == "companies" %}
             {% include "company/company_list.html" %}
 
+        {% elif section == "company_create" %}
+            {% include "company/company_form.html" %}
+
+        {% elif section == "company_update" %}
+            {% include "company/company_form.html" %}
+
+        {% elif section == "company_detail" %}
+             {% include "company/company_detail.html" %}
+
         {% elif section == "reports" %}
-            {% include "reports/report_list.html" %}
+            {% include "reports/admin_report.html" %}
+
+        {% elif section == "report_detail" %}
+            {% include "reports/admin_detail.html" %}
 
         {% elif section == "exams" %}
             {% include "exams/exam_list.html" %}
 
         {% elif section == "events" %}
             {% include "events/event_list.html" %}
+
+        {% elif section == "event_create" %}
+            {% include "events/event_form.html" %}
+
+        {% elif section == "event_update" %}
+             {% include "events/event_form.html" %}
+
+        {% elif section == "event_detail" %}
+            {% include "events/event_detail.html" %}
 
         {% endif %}
 

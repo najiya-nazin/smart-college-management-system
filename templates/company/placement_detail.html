@@ -1,335 +1,657 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Placement Details</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet">
 
 <style>
+/* ===================================
+   PLACEMENT DETAIL PAGE
+=================================== */
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI,sans-serif;
+.placement-container{
+    max-width:1100px;
+    margin:0 auto;
 }
 
-body{
-background:#f4f7fb;
+/* ===================================
+   PAGE HEADER
+=================================== */
+
+.page-header{
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:#fff;
+
+    border-radius:16px;
+
+    padding:16px 24px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:20px;
+
 }
 
-.container{
-max-width:900px;
-margin:50px auto;
+.page-header h2{
+
+    margin:0;
+
+    font-size:24px;
+    font-weight:700;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
 }
 
-.card{
-border:none;
-border-radius:15px;
-overflow:hidden;
-box-shadow:0 8px 20px rgba(0,0,0,.08);
+/* ===================================
+   PROFILE CARD
+=================================== */
+
+.profile-card{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
+
 }
 
-.card-header{
-background:#0d6efd;
-color:white;
-padding:20px;
+/* ===================================
+   PROFILE HEADER
+=================================== */
+
+.profile-header{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:24px 30px;
+
+    border-bottom:1px solid #eef2f7;
+
 }
 
-.card-header h3{
-margin:0;
-font-size:24px;
+.header-left h2{
+
+    margin:0;
+
+    font-size:28px;
+    font-weight:700;
+
+    color:#1e293b;
+
 }
 
-.card-body{
-padding:30px;
+.placement-meta{
+
+    display:flex;
+    gap:10px;
+
+    margin-top:12px;
+
+    flex-wrap:wrap;
+
 }
 
-.detail-row{
-display:flex;
-margin-bottom:18px;
-padding-bottom:12px;
-border-bottom:1px solid #e9ecef;
+/* ===================================
+   BADGES
+=================================== */
+
+.student-id,
+.department{
+
+    display:inline-flex;
+    align-items:center;
+
+    padding:7px 15px;
+
+    border-radius:25px;
+
+    font-size:13px;
+    font-weight:600;
+
 }
 
-.detail-title{
-width:220px;
-font-weight:600;
-color:#495057;
+.student-id{
+
+    background:#eef4ff;
+    color:#2563eb;
+
 }
 
-.detail-value{
-flex:1;
-color:#212529;
+.department{
+
+    background:#dcfce7;
+    color:#15803d;
+
 }
 
-.status{
+/* ===================================
+   STATUS BADGES
+=================================== */
 
-display:inline-block;
-padding:6px 15px;
-border-radius:20px;
-color:white;
-font-weight:600;
+.status-badge{
+
+    padding:10px 22px;
+
+    border-radius:30px;
+
+    font-size:14px;
+    font-weight:700;
 
 }
 
 .placed{
-background:#198754;
+
+    background:#dcfce7;
+    color:#15803d;
+
 }
 
 .pending{
-background:#fd7e14;
+
+    background:#fef3c7;
+    color:#b45309;
+
 }
 
 .rejected{
-background:#dc3545;
-}
 
-.remarks{
-
-background:#f8f9fa;
-border:1px solid #dee2e6;
-border-radius:8px;
-padding:15px;
-min-height:100px;
+    background:#fee2e2;
+    color:#dc2626;
 
 }
 
-.button-group{
-display:flex;
-justify-content:space-between;
-margin-top:35px;
+/* ===================================
+   GRID
+=================================== */
+
+.profile-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:20px;
+
+    padding:24px;
+
 }
 
-.btn{
-min-width:140px;
-border-radius:8px;
+/* ===================================
+   INFO CARD
+=================================== */
+
+.info-card{
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:14px;
+
+    padding:22px;
+
 }
 
+.info-card h3{
+
+    margin:0 0 20px;
+
+    color:#1e293b;
+
+    font-size:17px;
+    font-weight:700;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+}
+
+.info-card h3 i{
+
+    color:#2563eb;
+
+}
+
+/* ===================================
+   INFO ROW
+=================================== */
+
+.info-row{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:20px;
+
+    padding:14px 0;
+
+    border-bottom:1px solid #edf2f7;
+
+}
+
+.info-row:last-child{
+
+    border-bottom:none;
+
+}
+
+.info-row span{
+
+    color:#64748b;
+
+    font-size:14px;
+
+    min-width:140px;
+
+}
+
+.info-row strong{
+
+    color:#1e293b;
+
+    font-size:15px;
+    font-weight:600;
+
+    text-align:right;
+
+    word-break:break-word;
+
+}
+
+/* ===================================
+   BUTTONS
+=================================== */
+
+.form-buttons{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    padding:20px 24px;
+
+    border-top:1px solid #eef2f7;
+
+}
+
+.btn-cancel,
+.btn-save{
+
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:8px;
+
+    padding:11px 22px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-size:14px;
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.btn-cancel{
+
+    background:#f1f5f9;
+
+    color:#334155;
+
+}
+
+.btn-cancel:hover{
+
+    background:#e2e8f0;
+
+    color:#0f172a;
+
+}
+
+.btn-save{
+
+    background:#2563eb;
+
+    color:#fff;
+
+}
+
+.btn-save:hover{
+
+    background:#1d4ed8;
+
+    color:#fff;
+
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media(max-width:768px){
+
+    .profile-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:15px;
+
+    }
+
+    .profile-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .info-row{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:6px;
+
+    }
+
+    .info-row strong{
+
+        text-align:left;
+
+    }
+
+    .form-buttons{
+
+        flex-direction:column;
+
+    }
+
+    .btn-cancel,
+    .btn-save{
+
+        width:100%;
+
+    }
+
+}
 </style>
+<div class="placement-container">
 
-</head>
+    <!-- Header -->
 
-<body>
+    <div class="page-header">
 
-<div class="container">
+        <div>
 
-<div class="card">
+            <h2>
 
-<div class="card-header">
+                <i class="fa-solid fa-briefcase"></i>
 
-<h3>
+                Placement Details
 
-Placement Details
+            </h2>
 
-</h3>
+        </div>
+
+    </div>
+
+    <!-- Profile Card -->
+
+    <div class="profile-card">
+
+        <!-- Header -->
+
+        <div class="profile-header">
+
+            <div class="header-left">
+
+                <h2>
+
+                    {{ placement.student.user.name }}
+
+                </h2>
+
+                <div class="placement-meta">
+
+                    <span class="student-id">
+
+                        {{ placement.student.student_id }}
+
+                    </span>
+
+                    <span class="department">
+
+                        {{ placement.student.department.name }}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="header-right">
+
+                {% if placement.status == "Placed" %}
+
+                    <span class="status-badge placed">
+
+                        Placed
+
+                    </span>
+
+                {% elif placement.status == "Pending" %}
+
+                    <span class="status-badge pending">
+
+                        Pending
+
+                    </span>
+
+                {% else %}
+
+                    <span class="status-badge rejected">
+
+                        Rejected
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <!-- Details -->
+
+        <div class="profile-grid">
+
+            <!-- Student Information -->
+
+            <div class="info-card">
+
+                <h3>
+
+                    <i class="fa-solid fa-user-graduate"></i>
+
+                    Student Information
+
+                </h3>
+
+                <div class="info-row">
+
+                    <span>Student Name</span>
+
+                    <strong>
+
+                        {{ placement.student.user.name }}
+
+                    </strong>
+
+                </div>
+
+                <div class="info-row">
+
+                    <span>Student ID</span>
+
+                    <strong>
+
+                        {{ placement.student.student_id }}
+
+                    </strong>
+
+                </div>
+
+                <div class="info-row">
+
+                    <span>Department</span>
+
+                    <strong>
+
+                        {{ placement.student.department.name }}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <!-- Placement Information -->
+
+            <div class="info-card">
+
+                <h3>
+
+                    <i class="fa-solid fa-building"></i>
+
+                    Placement Information
+
+                </h3>
+
+                <div class="info-row">
+
+                    <span>Company</span>
+
+                    <strong>
+
+                        {{ placement.company.name }}
+
+                    </strong>
+
+                </div>
+
+                <div class="info-row">
+
+                    <span>Job Role</span>
+
+                    <strong>
+
+                        {{ placement.job_role }}
+
+                    </strong>
+
+                </div>
+
+                <div class="info-row">
+
+                    <span>Package</span>
+
+                    <strong>
+
+                        ₹ {{ placement.package }}
+
+                    </strong>
+
+                </div>
+
+                <div class="info-row">
+
+                    <span>Placement Date</span>
+
+                    <strong>
+
+                        {{ placement.placement_date|date:"d M Y" }}
+
+                    </strong>
+
+                </div>
+
+                <div class="info-row">
+
+                    <span>Status</span>
+
+                    <strong>
+
+                        {{ placement.status }}
+
+                    </strong>
+
+                </div>
+
+                <div class="info-row">
+
+                    <span>Remarks</span>
+
+                    <strong>
+
+                        {% if placement.remarks %}
+
+                            {{ placement.remarks }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Buttons -->
+
+        <div class="form-buttons">
+
+            <a href="?section=placements"
+               class="btn-cancel">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Back
+
+            </a>
+
+            <a href="?section=placement_update&id={{ placement.id }}"
+               class="btn-save">
+
+                <i class="fa-solid fa-pen"></i>
+
+                Edit Placement
+
+            </a>
+
+        </div>
+
+    </div>
 
 </div>
-
-<div class="card-body">
-
-<div class="detail-row">
-
-<div class="detail-title">
-
-Student ID
-
-</div>
-
-<div class="detail-value">
-
-{{ placement.student.student_id }}
-
-</div>
-
-</div>
-
-<div class="detail-row">
-
-<div class="detail-title">
-
-Student Name
-
-</div>
-
-<div class="detail-value">
-
-{{ placement.student.user.name }}
-
-</div>
-
-</div>
-
-<div class="detail-row">
-
-<div class="detail-title">
-
-Company
-
-</div>
-
-<div class="detail-value">
-
-{{ placement.company.name }}
-
-</div>
-
-</div>
-
-<div class="detail-row">
-
-<div class="detail-title">
-
-Job Role
-
-</div>
-
-<div class="detail-value">
-
-{{ placement.job_role }}
-
-</div>
-
-</div>
-
-<div class="detail-row">
-
-<div class="detail-title">
-
-Package
-
-</div>
-
-<div class="detail-value">
-
-₹ {{ placement.package }}
-
-</div>
-
-</div>
-
-<div class="detail-row">
-
-<div class="detail-title">
-
-Placement Date
-
-</div>
-
-<div class="detail-value">
-
-{{ placement.placement_date }}
-
-</div>
-
-</div>
-
-<div class="detail-row">
-
-<div class="detail-title">
-
-Status
-
-</div>
-
-<div class="detail-value">
-
-{% if placement.status == "Placed" %}
-
-<span class="status placed">
-
-{{ placement.status }}
-
-</span>
-
-{% elif placement.status == "Pending" %}
-
-<span class="status pending">
-
-{{ placement.status }}
-
-</span>
-
-{% else %}
-
-<span class="status rejected">
-
-{{ placement.status }}
-
-</span>
-
-{% endif %}
-
-</div>
-
-</div>
-
-<div class="detail-row">
-
-<div class="detail-title">
-
-Remarks
-
-</div>
-
-<div class="detail-value">
-
-<div class="remarks">
-
-{% if placement.remarks %}
-
-{{ placement.remarks }}
-
-{% else %}
-
-<span class="text-muted">
-
-No remarks available.
-
-</span>
-
-{% endif %}
-
-</div>
-
-</div>
-
-</div>
-
-<div class="button-group">
-
-<a
-href="{% url 'placement_update' placement.id %}"
-class="btn btn-warning">
-
-Edit
-
-</a>
-
-<a
-href="{% url 'placement_list' %}"
-class="btn btn-secondary">
-
-Back
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</body>
-
-</html>

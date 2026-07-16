@@ -11,6 +11,7 @@ class AttendanceForm(forms.ModelForm):
             "student",
             "date",
             "status",
+            "remarks",
         ]
 
         widgets = {
@@ -27,6 +28,15 @@ class AttendanceForm(forms.ModelForm):
             "status": forms.Select(attrs={
                 "class": "form-select form-select-lg"
             }),
+
+            "remarks": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 4,
+                    "placeholder": "Enter remarks",
+                }
+            ),
+
         }
 
 

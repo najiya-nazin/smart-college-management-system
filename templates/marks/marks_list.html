@@ -1,232 +1,863 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Marks List</title>
-
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
     <style>
+       /* ===================================
+   MARKS PAGE
+=================================== */
 
-        body{
-            background:#f4f7fc;
-            font-family:'Segoe UI',sans-serif;
-        }
+.page-header{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:#fff;
+    border-radius:16px;
+    padding:16px 24px;
 
-        .card{
-            border:none;
-            border-radius:18px;
-            overflow:hidden;
-            box-shadow:0 10px 30px rgba(0,0,0,.08);
-        }
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-        .card-header{
-            background:linear-gradient(135deg,#0d6efd,#3f7bff);
-            color:#fff;
-            padding:18px 25px;
-        }
+    margin-bottom:20px;
+}
 
-        .card-header h3{
-            margin:0;
-            font-weight:700;
-        }
+.page-header h2{
+    margin:0;
+    font-size:24px;
+    font-weight:700;
 
-        .btn-add{
-            background:#198754;
-            color:#fff;
-            border:none;
-            border-radius:10px;
-            padding:10px 18px;
-            font-weight:600;
-        }
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
 
-        .btn-add:hover{
-            background:#157347;
-            color:#fff;
-        }
+/* ===================================
+   ADD BUTTON
+=================================== */
 
-        table th{
-            background:#0d6efd;
-            color:#fff;
-            text-align:center;
-            vertical-align:middle;
-        }
+.btn-add{
 
-        table td{
-            text-align:center;
-            vertical-align:middle;
-        }
+    display:flex;
+    align-items:center;
+    gap:8px;
 
-        .badge-course{
-            background:#6f42c1;
-            color:#fff;
-            padding:7px 12px;
-            border-radius:20px;
-        }
+    padding:10px 18px;
 
-        .badge-grade{
-            background:#198754;
-            color:#fff;
-            padding:7px 12px;
-            border-radius:20px;
-            font-size:14px;
-        }
+    background:#fff;
+    color:#2563eb;
 
-        .btn-action{
-            width:38px;
-            height:38px;
-            border-radius:50%;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-        }
+    border-radius:10px;
 
+    text-decoration:none;
+
+    font-size:14px;
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.btn-add:hover{
+
+    background:#eef4ff;
+
+    color:#2563eb;
+
+}
+
+/* ===================================
+   CARD
+=================================== */
+
+.table-card{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:20px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.05);
+
+}
+
+/* ===================================
+   TOOLBAR
+=================================== */
+
+.toolbar{
+
+    display:flex;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+.search-box{
+
+    flex:1;
+
+    min-width:280px;
+
+    position:relative;
+
+}
+
+.search-box i{
+
+    position:absolute;
+
+    left:15px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#94a3b8;
+
+}
+
+.search-input{
+
+    width:100%;
+
+    height:44px;
+
+    border:1px solid #dbe3ef;
+
+    border-radius:10px;
+
+    padding-left:42px;
+
+    padding-right:15px;
+
+    font-size:14px;
+
+    transition:.3s;
+
+}
+
+.search-input:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 3px rgba(37,99,235,.08);
+
+}
+
+.filter-select{
+
+    width:170px;
+
+    height:44px;
+
+    border:1px solid #dbe3ef;
+
+    border-radius:10px;
+
+    background:#fff;
+
+    padding:0 12px;
+
+    font-size:14px;
+
+}
+
+.filter-select:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 3px rgba(37,99,235,.08);
+
+}
+
+/* ===================================
+   TABLE
+=================================== */
+
+.marks-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.marks-table thead{
+
+    background:#2563eb;
+
+}
+
+.marks-table thead th{
+
+    color:#fff;
+
+    padding:14px;
+
+    text-align:left;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.marks-table tbody td{
+
+    padding:16px 14px;
+
+    border-bottom:1px solid #edf2f7;
+
+    vertical-align:middle;
+
+    font-size:14px;
+
+}
+
+.marks-table tbody tr:hover{
+
+    background:#f8fbff;
+
+}
+
+/* ===================================
+   STUDENT INFO
+=================================== */
+
+.marks-info{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.avatar{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    color:#fff;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:16px;
+
+}
+
+.marks-info strong{
+
+    display:block;
+
+    color:#1e293b;
+
+    font-size:15px;
+
+    font-weight:600;
+
+}
+
+.marks-info span{
+
+    font-size:12px;
+
+    color:#64748b;
+
+}
+
+/* ===================================
+   BADGES
+=================================== */
+
+.marks-badge{
+
+    display:inline-block;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    background:#eef4ff;
+
+    color:#2563eb;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+.grade-badge{
+
+    display:inline-block;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    background:#ede9fe;
+
+    color:#6d28d9;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+/* ===================================
+   RESULT
+=================================== */
+
+.status{
+
+    display:inline-block;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+.pass{
+
+    background:#dcfce7;
+
+    color:#15803d;
+
+}
+
+.fail{
+
+    background:#fee2e2;
+
+    color:#dc2626;
+
+}
+
+/* ===================================
+   ACTION BUTTONS
+=================================== */
+
+.actions{
+
+    display:flex;
+
+    gap:8px;
+
+}
+
+.actions a{
+
+    min-width:65px;
+
+    height:34px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-radius:8px;
+
+    text-decoration:none;
+
+    color:#fff;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.actions a:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.view{
+
+    background:#2563eb;
+
+}
+
+.edit{
+
+    background:#f59e0b;
+
+}
+
+.delete{
+
+    background:#ef4444;
+
+}
+
+/* ===================================
+   EMPTY STATE
+=================================== */
+
+.empty-state{
+
+    text-align:center;
+
+    padding:60px 20px;
+
+}
+
+.empty-state i{
+
+    font-size:60px;
+
+    color:#94a3b8;
+
+    margin-bottom:15px;
+
+}
+
+.empty-state h3{
+
+    font-size:22px;
+
+    color:#334155;
+
+    margin-bottom:8px;
+
+}
+
+.empty-state p{
+
+    color:#64748b;
+
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media(max-width:992px){
+
+    .page-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:15px;
+
+    }
+
+    .toolbar{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+    .search-box{
+
+        width:100%;
+
+    }
+
+    .filter-select{
+
+        width:100%;
+
+    }
+
+    .marks-table{
+
+        min-width:1200px;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .actions{
+
+        flex-direction:column;
+
+    }
+
+}
     </style>
 
-</head>
 
-<body>
+<div class="page-header">
 
-<div class="container py-5">
+    <div>
 
-    <div class="card">
+        <h2>
 
-        <div class="card-header d-flex justify-content-between align-items-center">
+            <i class="fa-solid fa-graduation-cap"></i>
 
-            <h3>
-                <i class="bi bi-journal-check"></i>
-                Student Marks List
-            </h3>
+            Marks Management
 
-            <a href="{% url 'marks-create' %}" class="btn btn-add">
-                <i class="bi bi-plus-circle-fill"></i>
-                Add Marks
-            </a>
+        </h2>
+
+    </div>
+
+    <a href="?section=marks_create"
+       class="btn-add">
+
+        <i class="fa-solid fa-plus"></i>
+
+        Add
+
+    </a>
+
+</div>
+
+<div class="table-card">
+
+    <form method="GET"
+          class="toolbar">
+
+        <input
+            type="hidden"
+            name="section"
+            value="marks">
+
+        <!-- Search -->
+
+        <div class="search-box">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="text"
+                name="search"
+                class="search-input"
+                value="{{ search }}"
+                placeholder="Search Student Name or Student ID">
 
         </div>
 
-        <div class="card-body">
+        <!-- Department -->
 
-            <div class="table-responsive">
+        <select
+            name="department"
+            class="filter-select">
 
-                <table class="table table-bordered table-hover">
+            <option value="">
+                All Departments
+            </option>
 
-                    <thead>
+            {% for department in departments %}
 
-                    <tr>
+                <option
+                    value="{{ department.id }}"
+                    {% if selected_department == department.id|stringformat:"s" %}
+                        selected
+                    {% endif %}>
 
-                        <th>#</th>
-                        <th>Student ID</th>
-                        <th>Student Name</th>
-                        <th>Course</th>
-                        <th>Marks Obtained</th>
-                        <th>Maximum Marks</th>
-                        <th>Grade</th>
-                        <th width="180">Action</th>
+                    {{ department.name }}
 
-                    </tr>
+                </option>
 
-                    </thead>
+            {% endfor %}
 
-                    <tbody>
+        </select>
 
-                    {% for mark in marks %}
+        <!-- Course -->
 
-                    <tr>
+        <select
+            name="course"
+            class="filter-select">
 
-                        <td>{{ forloop.counter }}</td>
+            <option value="">
+                All Courses
+            </option>
 
-                        <td>{{ mark.student.student_id }}</td>
+            {% for course in courses %}
 
-                        <td>{{ mark.student.user.name }}</td>
+                <option
+                    value="{{ course.id }}"
+                    {% if selected_course == course.id|stringformat:"s" %}
+                        selected
+                    {% endif %}>
 
-                        <td>
-                            <span class="badge-course">
-                                {{ mark.course.name }}
-                            </span>
-                        </td>
+                    {{ course.name }}
 
-                        <td>
-                            <strong>{{ mark.marks_obtained }}</strong>
-                        </td>
+                </option>
 
-                        <td>{{ mark.max_marks }}</td>
+            {% endfor %}
 
-                        <td>
-                            <span class="badge-grade">
-                                {{ mark.grade }}
-                            </span>
-                        </td>
+        </select>
 
-                        <td>
+        <!-- Grade -->
 
-                            <div class="d-flex justify-content-center gap-2">
+        <select
+            name="grade"
+            class="filter-select">
 
-                                <a href="{% url 'marks-detail' mark.id %}"
-                                   class="btn btn-info btn-sm btn-action"
-                                   title="View">
-                                    <i class="bi bi-eye-fill"></i>
-                                </a>
+            <option value="">
+                All Grades
+            </option>
 
-                                <a href="{% url 'marks-update' mark.id %}"
-                                   class="btn btn-warning btn-sm btn-action"
-                                   title="Edit">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
+            {% for grade in grades %}
 
-                                <a href=""
-                                   class="btn btn-danger btn-sm btn-action"
-                                   title="Delete">
-                                    <i class="bi bi-trash-fill"></i>
-                                </a>
+                <option
+                    value="{{ grade }}"
+                    {% if selected_grade == grade %}
+                        selected
+                    {% endif %}>
+
+                    {{ grade }}
+
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+    </form>
+
+    <div class="table-responsive">
+
+        <table class="marks-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Student</th>
+                    <th>Course</th>
+                    <th>Department</th>
+                    <th>Marks</th>
+                    <th>Percentage</th>
+                    <th>Grade</th>
+                    <th>Result</th>
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for mark in marks %}
+
+                <tr>
+
+                    <td>
+
+                        <div class="marks-info">
+
+                            <div class="avatar">
+
+                                <i class="fa-solid fa-user-graduate"></i>
 
                             </div>
 
-                        </td>
+                            <div>
 
-                    </tr>
+                                <strong>
 
-                    {% empty %}
+                                    {{ mark.student.user.name }}
 
-                    <tr>
+                                </strong>
 
-                        <td colspan="8">
+                                <span>
 
-                            <div class="alert alert-warning mb-0">
+                                    {{ mark.student.student_id }}
 
-                                <i class="bi bi-exclamation-circle"></i>
-
-                                No Marks Found.
+                                </span>
 
                             </div>
 
-                        </td>
+                        </div>
 
-                    </tr>
+                    </td>
 
-                    {% endfor %}
+                    <td>
 
-                    </tbody>
+                        {{ mark.course.name }}
 
-                </table>
+                    </td>
 
-            </div>
+                    <td>
 
-        </div>
+                        {{ mark.student.department.name }}
+
+                    </td>
+
+                    <td>
+
+                        <span class="marks-badge">
+
+                            {{ mark.marks_obtained }}/{{ mark.max_marks }}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        {{ mark.percentage }}%
+
+                    </td>
+
+                    <td>
+
+                        <span class="grade-badge">
+
+                            {{ mark.grade }}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        {% if mark.result == "Pass" %}
+
+                            <span class="status pass">
+
+                                Pass
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="status fail">
+
+                                Fail
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        <div class="actions">
+
+                            <a href="?section=marks_detail&id={{ mark.id }}"
+                               class="view">
+
+                                View
+
+                            </a>
+
+                            <a href="?section=marks_update&id={{ mark.id }}"
+                               class="edit">
+
+                                Edit
+
+                            </a>
+
+                            <a href="?section=marks_delete&id={{ mark.id }}"
+                               class="delete"
+                               onclick="return confirm('Delete this mark record?')">
+
+                                Delete
+
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td colspan="8">
+
+                        <div class="empty-state">
+
+                            <i class="fa-solid fa-square-poll-vertical"></i>
+
+                            <h3>
+
+                                No Marks Found
+
+                            </h3>
+
+                            <p>
+
+                                No marks records available.
+
+                            </p>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
 
     </div>
 
 </div>
 
-</body>
+<script>
 
-</html>
+const search = document.querySelector(".search-input");
+
+const filters = document.querySelectorAll(".filter-select");
+
+let timer;
+
+search.addEventListener("keyup", function(){
+
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+
+        this.form.submit();
+
+    }, 500);
+
+});
+
+filters.forEach(filter => {
+
+    filter.addEventListener("change", function(){
+
+        this.form.submit();
+
+    });
+
+});
+
+</script>

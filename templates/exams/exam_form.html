@@ -1,190 +1,474 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-
-{% if form.instance.pk %}
-
-Update Exam
-
-{% else %}
-
-Add Exam
-
-{% endif %}
-
-</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet">
-
 <style>
+/* ===================================
+   EXAM FORM PAGE
+=================================== */
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Segoe UI,sans-serif;
+.exam-container{
+    max-width:1100px;
+    margin:0 auto;
 }
 
-body{
-    background:#f4f7fb;
-}
+/* ===================================
+   PAGE HEADER
+=================================== */
 
-.container{
-    max-width:850px;
-    margin:50px auto;
-}
+.page-header{
 
-.card{
-    border:none;
-    border-radius:15px;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
-}
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:#fff;
 
-.card-header{
-    background:#0d6efd;
-    color:white;
-    padding:18px 25px;
-    border-radius:15px 15px 0 0;
-}
+    border-radius:16px;
 
-.card-header h3{
-    margin:0;
-}
+    padding:16px 24px;
 
-.card-body{
-    padding:30px;
-}
+    display:flex;
+    align-items:center;
 
-form p{
     margin-bottom:20px;
 }
 
-form label{
-    display:block;
-    margin-bottom:8px;
-    font-weight:600;
-    color:#495057;
+.page-header h2{
+
+    margin:0;
+
+    font-size:24px;
+    font-weight:700;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 
-form input,
-form select,
-form textarea{
+/* ===================================
+   FORM CARD
+=================================== */
+
+.form-card{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:24px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
+
+}
+
+/* ===================================
+   GRID
+=================================== */
+
+.exam-form-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr;
+
+    gap:24px;
+
+}
+
+/* ===================================
+   INFO CARD
+=================================== */
+
+.info-card{
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:14px;
+
+    padding:24px;
+
+}
+
+.info-card h3{
+
+    margin:0 0 24px;
+
+    color:#1e293b;
+
+    font-size:18px;
+    font-weight:700;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+}
+
+.info-card h3 i{
+
+    color:#2563eb;
+
+}
+
+/* ===================================
+   FORM GRID
+=================================== */
+
+.info-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:20px;
+
+}
+
+.full-width{
+
+    grid-column:1/-1;
+
+}
+
+/* ===================================
+   FORM GROUP
+=================================== */
+
+.form-group{
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+.form-group label{
+
+    margin-bottom:8px;
+
+    color:#334155;
+
+    font-size:14px;
+    font-weight:600;
+
+}
+
+/* ===================================
+   INPUTS
+=================================== */
+
+.form-group input,
+.form-group select,
+.form-group textarea{
 
     width:100%;
-    padding:10px 15px;
-    border:1px solid #ced4da;
-    border-radius:8px;
-    outline:none;
+
+    height:46px;
+
+    border:1px solid #dbe3ef;
+
+    border-radius:10px;
+
+    padding:0 14px;
+
+    background:#fff;
+
+    font-size:14px;
+
     transition:.3s;
 
 }
 
-form input:focus,
-form select:focus,
-form textarea:focus{
+.form-group textarea{
 
-    border-color:#0d6efd;
-    box-shadow:0 0 8px rgba(13,110,253,.2);
+    min-height:120px;
+
+    padding:14px;
+
+    resize:vertical;
 
 }
 
-.button-group{
+/* ===================================
+   FOCUS
+=================================== */
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 3px rgba(37,99,235,.08);
+
+}
+
+/* ===================================
+   ERROR LIST
+=================================== */
+
+.errorlist{
+
+    list-style:none;
+
+    margin:8px 0 0;
+
+    padding:0;
+
+}
+
+.errorlist li{
+
+    color:#dc2626;
+
+    font-size:13px;
+
+}
+
+/* ===================================
+   BUTTONS
+=================================== */
+
+.form-buttons{
 
     display:flex;
-    justify-content:space-between;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
     margin-top:30px;
 
 }
 
-.btn{
+.btn-cancel,
+.btn-save{
 
-    min-width:150px;
-    border-radius:8px;
-    font-weight:500;
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    padding:11px 22px;
+
+    border:none;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    cursor:pointer;
+
+    font-size:14px;
+    font-weight:600;
+
+    transition:.3s;
 
 }
 
+.btn-cancel{
+
+    background:#f1f5f9;
+
+    color:#334155;
+
+}
+
+.btn-cancel:hover{
+
+    background:#e2e8f0;
+
+    color:#0f172a;
+
+}
+
+.btn-save{
+
+    background:#2563eb;
+
+    color:#fff;
+
+}
+
+.btn-save:hover{
+
+    background:#1d4ed8;
+
+    color:#fff;
+
+}
+
+/* ===================================
+   INVALID FIELDS
+=================================== */
+
+.form-group input:invalid,
+.form-group select:invalid{
+
+    border-color:#e2e8f0;
+
+}
+
+.errorlist + input,
+.errorlist + select{
+
+    border-color:#dc2626;
+
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media(max-width:768px){
+
+    .info-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .form-buttons{
+
+        flex-direction:column;
+
+    }
+
+    .btn-cancel,
+    .btn-save{
+
+        width:100%;
+
+    }
+
+}
 </style>
 
-</head>
+<div class="exam-container">
 
-<body>
+    <!-- Header -->
 
-<div class="container">
+    <div class="page-header">
 
-<div class="card">
+        <div>
 
-<div class="card-header">
+            <h2>
 
-<h3>
+                <i class="fa-solid fa-file-pen"></i>
 
-{% if form.instance.pk %}
+                {% if form.instance.pk %}
+                    Edit Exam
+                {% else %}
+                    Add Exam
+                {% endif %}
 
-Update Exam
+            </h2>
 
-{% else %}
+        </div>
 
-Add Exam
+    </div>
 
-{% endif %}
+    <!-- Form Card -->
 
-</h3>
+    <div class="form-card">
+
+        <form method="POST" novalidate>
+
+            {% csrf_token %}
+
+            <div class="exam-form-grid">
+
+                <!-- Exam Information -->
+
+                <div class="info-card">
+
+                    <h3>
+
+                        <i class="fa-solid fa-file-circle-check"></i>
+
+                        Exam Information
+
+                    </h3>
+
+                    <div class="info-grid">
+
+                        <div class="form-group">
+
+                            <label>Exam Name</label>
+
+                            {{ form.name }}
+
+                            {{ form.name.errors }}
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Course</label>
+
+                            {{ form.course }}
+
+                            {{ form.course.errors }}
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Exam Date</label>
+
+                            {{ form.exam_date }}
+
+                            {{ form.exam_date.errors }}
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Total Marks</label>
+
+                            {{ form.total_marks }}
+
+                            {{ form.total_marks.errors }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Buttons -->
+
+            <div class="form-buttons">
+
+                <a href="?section=exams"
+                   class="btn-cancel">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Back
+
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn-save">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    {% if form.instance.pk %}
+                        Update Exam
+                    {% else %}
+                        Save Exam
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
 
 </div>
-
-<div class="card-body">
-
-<form method="POST">
-
-{% csrf_token %}
-
-{{ form.as_p }}
-
-<div class="button-group">
-
-<button
-type="submit"
-class="btn btn-primary">
-
-{% if form.instance.pk %}
-
-Update Exam
-
-{% else %}
-
-Save Exam
-
-{% endif %}
-
-</button>
-
-<a
-href="{% url 'exam-list' %}"
-class="btn btn-secondary">
-
-Back
-
-</a>
-
-</div>
-
-</form>
-
-</div>
-
-</div>
-
-</div>
-
-</body>
-
-</html>

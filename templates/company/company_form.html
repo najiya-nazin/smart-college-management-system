@@ -1,190 +1,476 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-
-{% if form.instance.pk %}
-
-Update Company
-
-{% else %}
-
-Add Company
-
-{% endif %}
-
-</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet">
 
 <style>
+/* ==========================================
+   COMPANY FORM
+========================================== */
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI,sans-serif;
+.company-container{
+    max-width:1100px;
+    margin:auto;
 }
 
-body{
-background:#f4f7fb;
+/* ==========================================
+   PAGE HEADER
+========================================== */
+
+.page-header{
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+
+    color:#fff;
+
+    border-radius:15px;
+
+    padding:18px 25px;
+
+    margin-bottom:20px;
 }
 
-.container{
-max-width:900px;
-margin:50px auto;
+.page-header h2{
+
+    margin:0;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-size:24px;
+
+    font-weight:700;
 }
 
-.card{
-border:none;
-border-radius:15px;
-box-shadow:0 8px 20px rgba(0,0,0,.08);
+/* ==========================================
+   FORM CARD
+========================================== */
+
+.form-card{
+
+    background:#fff;
+
+    border-radius:15px;
+
+    padding:30px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
 }
 
-.card-header{
-background:#0d6efd;
-color:white;
-padding:20px 25px;
-border-radius:15px 15px 0 0;
+/* ==========================================
+   GRID
+========================================== */
+
+.company-form-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr;
+
+    gap:25px;
 }
 
-.card-header h3{
-margin:0;
+/* ==========================================
+   INFO CARD
+========================================== */
+
+.info-card{
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:14px;
+
+    padding:25px;
 }
 
-.card-body{
-padding:30px;
+.info-card h3{
+
+    margin:0 0 25px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    color:#1e293b;
+
+    font-size:20px;
+
+    font-weight:700;
 }
 
-form p{
-margin-bottom:20px;
+.info-card h3 i{
+
+    color:#2563eb;
 }
 
-form label{
-display:block;
-margin-bottom:8px;
-font-weight:600;
-color:#495057;
+/* ==========================================
+   FORM GRID
+========================================== */
+
+.info-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:20px;
 }
 
-form input,
-form select,
-form textarea{
+.full-width{
 
-width:100%;
-padding:10px 15px;
-border:1px solid #ced4da;
-border-radius:8px;
-outline:none;
-transition:.3s;
-
+    grid-column:1/-1;
 }
 
-form input:focus,
-form select:focus,
-form textarea:focus{
+/* ==========================================
+   FORM GROUP
+========================================== */
 
-border-color:#0d6efd;
-box-shadow:0 0 8px rgba(13,110,253,.2);
+.form-group{
 
+    display:flex;
+
+    flex-direction:column;
 }
 
-.button-group{
+.form-group label{
 
-display:flex;
-justify-content:space-between;
-margin-top:30px;
+    margin-bottom:8px;
 
+    color:#334155;
+
+    font-size:14px;
+
+    font-weight:600;
 }
 
-.btn{
+/* ==========================================
+   INPUTS
+========================================== */
 
-min-width:150px;
-border-radius:8px;
-font-weight:500;
+.form-group input,
+.form-group select,
+.form-group textarea{
 
+    width:100%;
+
+    border:1px solid #dbe3ef;
+
+    border-radius:10px;
+
+    background:#fff;
+
+    font-size:14px;
+
+    transition:.3s;
 }
 
+/* Input & Select */
+
+.form-group input,
+.form-group select{
+
+    height:46px;
+
+    padding:0 14px;
+}
+
+/* Textarea */
+
+.form-group textarea{
+
+    min-height:120px;
+
+    padding:14px;
+
+    resize:vertical;
+}
+
+/* ==========================================
+   FOCUS
+========================================== */
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+
+/* ==========================================
+   ERRORS
+========================================== */
+
+.errorlist{
+
+    list-style:none;
+
+    margin:6px 0 0;
+
+    padding:0;
+}
+
+.errorlist li{
+
+    color:#dc2626;
+
+    font-size:13px;
+
+    font-weight:500;
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.form-buttons{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:15px;
+
+    margin-top:30px;
+}
+
+.btn-cancel,
+.btn-save{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    padding:12px 24px;
+
+    border:none;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.btn-cancel{
+
+    background:#f1f5f9;
+
+    color:#334155;
+}
+
+.btn-cancel:hover{
+
+    background:#e2e8f0;
+}
+
+.btn-save{
+
+    background:#2563eb;
+
+    color:#fff;
+}
+
+.btn-save:hover{
+
+    background:#1d4ed8;
+
+    color:#fff;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:768px){
+
+    .info-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .full-width{
+
+        grid-column:auto;
+    }
+
+    .form-buttons{
+
+        flex-direction:column;
+    }
+
+    .btn-cancel,
+    .btn-save{
+
+        width:100%;
+    }
+
+}
 </style>
+<div class="company-container">
 
-</head>
+    <!-- Page Header -->
 
-<body>
+    <div class="page-header">
 
-<div class="container">
+        <h2>
 
-<div class="card">
+            <i class="fas fa-building"></i>
 
-<div class="card-header">
+            {% if company %}
 
-<h3>
+                Edit Company
 
-{% if form.instance.pk %}
+            {% else %}
 
-Update Company
+                Add Company
 
-{% else %}
+            {% endif %}
 
-Add Company
+        </h2>
 
-{% endif %}
+    </div>
 
-</h3>
+    <!-- Form Card -->
+
+    <div class="form-card">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <div class="company-form-grid">
+
+                <div class="info-card">
+
+                    <h3>
+
+                        <i class="fas fa-circle-info"></i>
+
+                        Company Information
+
+                    </h3>
+
+                    <div class="info-grid">
+
+                        <!-- Company Name -->
+
+                        <div class="form-group">
+
+                            <label>Company Name</label>
+
+                            {{ form.name }}
+
+                            {{ form.name.errors }}
+
+                        </div>
+
+                        <!-- Location -->
+
+                        <div class="form-group">
+
+                            <label>Location</label>
+
+                            {{ form.location }}
+
+                            {{ form.location.errors }}
+
+                        </div>
+
+                        <!-- Email -->
+
+                        <div class="form-group">
+
+                            <label>Email Address</label>
+
+                            {{ form.email }}
+
+                            {{ form.email.errors }}
+
+                        </div>
+
+                        <!-- Phone -->
+
+                        <div class="form-group">
+
+                            <label>Phone Number</label>
+
+                            {{ form.phone }}
+
+                            {{ form.phone.errors }}
+
+                        </div>
+
+                        <!-- Website -->
+
+                        <div class="form-group full-width">
+
+                            <label>Website</label>
+
+                            {{ form.website }}
+
+                            {{ form.website.errors }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="form-buttons">
+
+                <a
+                    href="?section=companies"
+                    class="btn-cancel"
+                >
+
+                    <i class="fas fa-arrow-left"></i>
+
+                    Back
+
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn-save"
+                >
+
+                    <i class="fas fa-save"></i>
+
+                    {% if company %}
+
+                        Update Company
+
+                    {% else %}
+
+                        Save Company
+
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
 
 </div>
-
-<div class="card-body">
-
-<form method="POST">
-
-{% csrf_token %}
-
-{{ form.as_p }}
-
-<div class="button-group">
-
-<button
-type="submit"
-class="btn btn-primary">
-
-{% if form.instance.pk %}
-
-Update Company
-
-{% else %}
-
-Save Company
-
-{% endif %}
-
-</button>
-
-<a
-href="{% url 'company_list' %}"
-class="btn btn-secondary">
-
-Back
-
-</a>
-
-</div>
-
-</form>
-
-</div>
-
-</div>
-
-</div>
-
-</body>
-
-</html>

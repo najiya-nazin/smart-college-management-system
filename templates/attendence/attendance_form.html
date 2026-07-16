@@ -1,193 +1,462 @@
-<!DOCTYPE html>
-<html lang="en">
+<style>
 
-<head>
+    /* ===================================
+   ATTENDANCE FORM PAGE
+=================================== */
 
-    <meta charset="UTF-8">
+.attendance-container{
+    max-width:1100px;
+    margin:0 auto;
+}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+/* ===================================
+   PAGE HEADER
+=================================== */
 
-    <title>
+.page-header{
 
-        {% if form.instance.pk %}
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
 
-            Update Attendance
+    color:#fff;
 
-        {% else %}
+    border-radius:16px;
 
-            Mark Attendance
+    padding:16px 24px;
 
-        {% endif %}
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-    </title>
+    margin-bottom:20px;
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+}
 
-    <style>
+.page-header h2{
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:"Segoe UI",sans-serif;
-        }
+    margin:0;
 
-        body{
-            background:#f4f7fb;
-        }
+    font-size:24px;
+    font-weight:700;
 
-        .container{
-            max-width:800px;
-            margin:50px auto;
-        }
+    display:flex;
+    align-items:center;
+    gap:10px;
 
-        .card{
-            border:none;
-            border-radius:15px;
-            box-shadow:0 8px 20px rgba(0,0,0,.08);
-        }
+}
 
-        .card-header{
-            background:#0d6efd;
-            color:#fff;
-            padding:18px 25px;
-            border-radius:15px 15px 0 0;
-        }
+/* ===================================
+   FORM CARD
+=================================== */
 
-        .card-header h3{
-            margin:0;
-        }
+.form-card{
 
-        .card-body{
-            padding:30px;
-        }
+    background:#fff;
 
-        form p{
-            margin-bottom:20px;
-        }
+    border-radius:18px;
 
-        form label{
-            display:block;
-            margin-bottom:8px;
-            font-weight:600;
-            color:#495057;
-        }
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
 
-        form input,
-        form select,
-        form textarea{
+    padding:25px;
 
-            width:100%;
-            padding:10px 15px;
-            border:1px solid #ced4da;
-            border-radius:8px;
-            outline:none;
-            transition:.3s;
+}
 
-        }
+/* ===================================
+   GRID
+=================================== */
 
-        form input:focus,
-        form select:focus,
-        form textarea:focus{
+.attendance-form-grid{
 
-            border-color:#0d6efd;
-            box-shadow:0 0 8px rgba(13,110,253,.2);
+    display:grid;
 
-        }
+    grid-template-columns:1fr;
 
-        textarea{
-            resize:vertical;
-            min-height:100px;
-        }
+    gap:24px;
 
-        .button-group{
+}
 
-            display:flex;
-            justify-content:space-between;
-            margin-top:30px;
+/* ===================================
+   INFO CARD
+=================================== */
 
-        }
+.info-card{
 
-        .btn{
+    background:#f8fafc;
 
-            min-width:150px;
-            border-radius:8px;
-            font-weight:500;
+    border:1px solid #e2e8f0;
 
-        }
+    border-radius:14px;
 
-    </style>
+    padding:24px;
 
-</head>
+}
 
-<body>
+.info-card h3{
 
-<div class="container">
+    margin:0 0 24px;
 
-    <div class="card">
+    font-size:18px;
+    font-weight:700;
 
-        <div class="card-header">
+    color:#1e293b;
 
-            <h3>
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+}
+
+.info-card h3 i{
+
+    color:#2563eb;
+
+}
+
+/* ===================================
+   FORM GRID
+=================================== */
+
+.info-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:20px;
+
+}
+
+.full-width{
+
+    grid-column:1 / -1;
+
+}
+
+/* ===================================
+   FORM GROUP
+=================================== */
+
+.form-group{
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+.form-group label{
+
+    margin-bottom:8px;
+
+    color:#334155;
+
+    font-size:14px;
+    font-weight:600;
+
+}
+
+/* ===================================
+   INPUTS
+=================================== */
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+
+    width:100%;
+
+    height:46px;
+
+    border:1px solid #dbe3ef;
+
+    border-radius:10px;
+
+    padding:0 14px;
+
+    font-size:14px;
+
+    transition:.3s;
+
+    background:#fff;
+
+}
+
+.form-group textarea{
+
+    min-height:120px;
+
+    padding:14px;
+
+    resize:vertical;
+
+}
+
+/* ===================================
+   FOCUS
+=================================== */
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 3px rgba(37,99,235,.08);
+
+}
+
+/* ===================================
+   ERRORS
+=================================== */
+
+.errorlist{
+
+    margin-top:8px;
+
+    padding-left:0;
+
+    list-style:none;
+
+}
+
+.errorlist li{
+
+    color:#dc2626;
+
+    font-size:13px;
+
+}
+
+/* ===================================
+   BUTTONS
+=================================== */
+
+.form-buttons{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    margin-top:30px;
+
+}
+
+.btn-cancel,
+.btn-save{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:11px 20px;
+
+    border:none;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-size:14px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.btn-cancel{
+
+    background:#f1f5f9;
+
+    color:#334155;
+
+}
+
+.btn-cancel:hover{
+
+    background:#e2e8f0;
+
+    color:#0f172a;
+
+}
+
+.btn-save{
+
+    background:#2563eb;
+
+    color:#fff;
+
+}
+
+.btn-save:hover{
+
+    background:#1d4ed8;
+
+    color:#fff;
+
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media(max-width:768px){
+
+    .info-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .form-buttons{
+
+        flex-direction:column;
+
+    }
+
+    .btn-cancel,
+    .btn-save{
+
+        width:100%;
+
+        justify-content:center;
+
+    }
+
+}
+
+
+</style>
+<div class="attendance-container">
+
+    <!-- Header -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h2>
+
+                <i class="fa-solid fa-calendar-check"></i>
 
                 {% if form.instance.pk %}
-
-                    Update Attendance
-
+                    Edit Attendance
                 {% else %}
-
-                    Mark Attendance
-
+                    Add Attendance
                 {% endif %}
 
-            </h3>
-
-        </div>
-
-        <div class="card-body">
-
-            <form method="POST">
-
-                {% csrf_token %}
-
-                {{ form.as_p }}
-
-                <div class="button-group">
-
-                    <button
-                        type="submit"
-                        class="btn btn-primary">
-
-                        {% if form.instance.pk %}
-
-                            Update Attendance
-
-                        {% else %}
-
-                            Save Attendance
-
-                        {% endif %}
-
-                    </button>
-
-                    <a
-                        href="{% url 'attendance_list' %}"
-                        class="btn btn-secondary">
-
-                        Back
-
-                    </a>
-
-                </div>
-
-            </form>
+            </h2>
 
         </div>
 
     </div>
 
+    <!-- Form Card -->
+
+    <div class="form-card">
+
+        <form method="POST" novalidate>
+
+            {% csrf_token %}
+
+            <div class="attendance-form-grid">
+
+                <!-- Attendance Information -->
+
+                <div class="info-card">
+
+                    <h3>
+
+                        <i class="fa-solid fa-user-check"></i>
+
+                        Attendance Information
+
+                    </h3>
+
+                    <div class="info-grid">
+
+                        <div class="form-group">
+
+                            <label>Student</label>
+
+                            {{ form.student }}
+
+                            {{ form.student.errors }}
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Date</label>
+
+                            {{ form.date }}
+
+                            {{ form.date.errors }}
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Status</label>
+
+                            {{ form.status }}
+
+                            {{ form.status.errors }}
+
+                        </div>
+
+                        <div class="form-group full-width">
+
+                            <label>Remarks</label>
+
+                            {{ form.remarks }}
+
+                            {{ form.remarks.errors }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Buttons -->
+
+            <div class="form-buttons">
+
+                <a href="?section=attendances"
+                   class="btn-cancel">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Back
+
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn-save">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    {% if form.instance.pk %}
+                        Update Attendance
+                    {% else %}
+                        Save Attendance
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
 </div>
-
-</body>
-
-</html>

@@ -1,12 +1,14 @@
-
-    <style>
-/* ==========================================
-   EVENT DETAIL
+<style>
+  /* ==========================================
+   REPORT DETAIL
 ========================================== */
 
-.event-container{
+.report-container{
+
     max-width:1100px;
+
     margin:auto;
+
 }
 
 /* ==========================================
@@ -106,7 +108,7 @@
 }
 
 /* ==========================================
-   GRID
+   INFO GRID
 ========================================== */
 
 .info-grid{
@@ -129,6 +131,8 @@
 
 .info-item label{
 
+    margin-bottom:8px;
+
     color:#64748b;
 
     font-size:13px;
@@ -136,8 +140,6 @@
     font-weight:600;
 
     text-transform:uppercase;
-
-    margin-bottom:8px;
 
     letter-spacing:.5px;
 
@@ -161,10 +163,6 @@
 
 }
 
-/* ==========================================
-   DESCRIPTION
-========================================== */
-
 .full-width span{
 
     background:#f8fafc;
@@ -174,8 +172,6 @@
     border-radius:12px;
 
     padding:18px;
-
-    min-height:120px;
 
 }
 
@@ -200,11 +196,11 @@
 }
 
 .btn-cancel,
-.btn-save{
+.btn-download{
 
-    min-width:130px;
+    min-width:150px;
 
-    height:45px;
+    height:46px;
 
     border:none;
 
@@ -212,9 +208,9 @@
 
     display:flex;
 
-    align-items:center;
-
     justify-content:center;
+
+    align-items:center;
 
     text-decoration:none;
 
@@ -240,17 +236,17 @@
 
 }
 
-.btn-save{
+.btn-download{
 
-    background:#2563eb;
+    background:#16a34a;
 
     color:#fff;
 
 }
 
-.btn-save:hover{
+.btn-download:hover{
 
-    background:#1d4ed8;
+    background:#15803d;
 
     color:#fff;
 
@@ -305,37 +301,44 @@
     }
 
     .btn-cancel,
-    .btn-save{
+    .btn-download{
 
         width:100%;
 
     }
 
 }
-
-    </style>
-
-<div class="event-container">
+</style><div class="report-container">
 
     <!-- Page Header -->
 
     <div class="page-header">
 
         <h2>
-            Event Details
+
+            Report Details
+
         </h2>
 
     </div>
 
-    <!-- Event Profile -->
+    <!-- Profile Card -->
 
     <div class="profile-card">
 
         <div class="profile-info">
 
-            <h3>{{ event.title }}</h3>
+            <h3>
 
-            <p>{{ event.organized_by.name }}</p>
+                {{ report.report_type }}
+
+            </h3>
+
+            <p>
+
+                Uploaded by {{ report.generated_by.name }}
+
+            </p>
 
         </div>
 
@@ -346,40 +349,98 @@
     <div class="info-card">
 
         <h3>
-            Event Information
+
+            Report Information
+
         </h3>
 
         <div class="info-grid">
 
             <div class="info-item">
 
-                <label>Event Title</label>
+                <label>
 
-                <span>{{ event.title }}</span>
+                    Report Type
+
+                </label>
+
+                <span>
+
+                    {{ report.report_type }}
+
+                </span>
 
             </div>
 
             <div class="info-item">
 
-                <label>Event Date</label>
+                <label>
 
-                <span>{{ event.event_date }}</span>
+                    Uploaded By
+
+                </label>
+
+                <span>
+
+                    {{ report.generated_by.name }}
+
+                </span>
 
             </div>
 
             <div class="info-item">
 
-                <label>Organized By</label>
+                <label>
 
-                <span>{{ event.organized_by.name }}</span>
+                    Email
+
+                </label>
+
+                <span>
+
+                    {{ report.generated_by.email }}
+
+                </span>
+
+            </div>
+
+            <div class="info-item">
+
+                <label>
+
+                    Generated On
+
+                </label>
+
+                <span>
+
+                    {{ report.generated_on|date:"d M Y, h:i A" }}
+
+                </span>
 
             </div>
 
             <div class="info-item full-width">
 
-                <label>Description</label>
+                <label>
 
-                <span>{{ event.description }}</span>
+                    Uploaded File
+
+                </label>
+
+                <span>
+
+                    {% if report.file %}
+
+                        {{ report.file.name|cut:"reports/" }}
+
+                    {% else %}
+
+                        No file uploaded.
+
+                    {% endif %}
+
+                </span>
 
             </div>
 
@@ -390,26 +451,57 @@
         <div class="card-actions">
 
             <a
-                href="?section=events"
+                href="?section=reports"
                 class="btn-cancel"
             >
-                <i class="fa-solid fa-arrow-left"></i>
                 Back
             </a>
 
+            {% if report.file %}
+
             <a
-                href="?section=event_update&id={{ event.id }}"
-                class="btn-save"
+                href="{{ report.file.url }}"
+                target="_blank"
+                class="btn-download"
             >
-                 <i class="fa-solid fa-pen"></i>
-                Edit Event
+                Download Report
             </a>
+
+            {% endif %}
 
         </div>
 
     </div>
 
 </div>
+<script>
 
+const search = document.querySelector(".search-input");
 
+const filters = document.querySelectorAll(".filter-select");
 
+let timer;
+
+search.addEventListener("keyup", function(){
+
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+
+        this.form.submit();
+
+    }, 500);
+
+});
+
+filters.forEach(filter => {
+
+    filter.addEventListener("change", function(){
+
+        this.form.submit();
+
+    });
+
+});
+
+</script>

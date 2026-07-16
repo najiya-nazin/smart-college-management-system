@@ -2,83 +2,438 @@
 
     <style>
 
-        body{
-            background:#f4f7fc;
-            font-family:'Segoe UI',sans-serif;
-        }
+        /* ===================================
+   TIMETABLE PAGE
+=================================== */
 
-        .card{
-            border:none;
-            border-radius:18px;
-            overflow:hidden;
-            box-shadow:0 12px 35px rgba(0,0,0,.08);
-        }
+.page-header{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:#fff;
+    border-radius:18px;
+    padding:18px 28px;
+    margin-bottom:24px;
 
-        .card-header{
-            background:linear-gradient(135deg,#0d6efd,#4b86ff);
-            color:#fff;
-            padding:20px 25px;
-        }
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
 
-        .table{
-            margin:0;
-        }
+.page-header h2{
+    margin:0;
+    font-size:26px;
+    font-weight:700;
 
-        .table th{
-            background:#0d6efd;
-            color:#fff;
-            vertical-align:middle;
-            text-align:center;
-        }
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
 
-        .table td{
-            vertical-align:middle;
-            text-align:center;
-        }
+/* ===================================
+   ADD BUTTON
+=================================== */
 
-        .badge-day{
-            background:#0d6efd;
-            color:#fff;
-            padding:6px 12px;
-            border-radius:20px;
-        }
+.btn-add{
+    display:flex;
+    align-items:center;
+    gap:8px;
 
-        .btn-action{
-            width:38px;
-            height:38px;
-            display:inline-flex;
-            align-items:center;
-            justify-content:center;
-            border-radius:8px;
-        }
+    background:#fff;
+    color:#2563eb;
+
+    padding:10px 20px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.btn-add:hover{
+    background:#eef4ff;
+    color:#2563eb;
+}
+
+/* ===================================
+   CARD
+=================================== */
+
+.table-card{
+    background:#fff;
+    border-radius:18px;
+    padding:24px;
+    box-shadow:0 8px 20px rgba(0,0,0,.05);
+}
+
+/* ===================================
+   TOOLBAR
+=================================== */
+
+.toolbar{
+
+    display:flex;
+    gap:15px;
+    align-items:center;
+
+    margin-bottom:22px;
+
+}
+
+.search-box{
+
+    flex:1;
+    position:relative;
+
+}
+
+.search-box i{
+
+    position:absolute;
+    left:15px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#94a3b8;
+
+}
+
+.search-input{
+
+    width:100%;
+    height:46px;
+
+    border:1px solid #dbe3ef;
+    border-radius:10px;
+
+    padding-left:42px;
+    padding-right:15px;
+
+    font-size:15px;
+
+}
+
+.search-input:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 3px rgba(37,99,235,.08);
+
+}
+
+.filter-select{
+
+    width:220px;
+    height:46px;
+
+    border:1px solid #dbe3ef;
+    border-radius:10px;
+
+    padding:0 12px;
+
+    font-size:15px;
+
+}
+
+.filter-select:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 3px rgba(37,99,235,.08);
+
+}
+
+/* ===================================
+   TABLE
+=================================== */
+
+.timetable-table{
+
+    width:100%;
+    border-collapse:collapse;
+
+}
+
+.timetable-table thead{
+
+    background:#2563eb;
+
+}
+
+.timetable-table thead th{
+
+    color:#fff;
+    padding:14px;
+
+    text-align:left;
+
+    font-size:15px;
+    font-weight:600;
+
+}
+
+.timetable-table tbody td{
+
+    padding:16px 14px;
+
+    border-bottom:1px solid #edf2f7;
+
+    vertical-align:middle;
+
+}
+
+.timetable-table tbody tr:hover{
+
+    background:#f8fbff;
+
+}
+
+/* ===================================
+   COURSE INFO
+=================================== */
+
+.timetable-info{
+
+    display:flex;
+    align-items:center;
+    gap:14px;
+
+}
+
+.avatar{
+
+    width:46px;
+    height:46px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+    color:#fff;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:18px;
+
+}
+
+.timetable-info strong{
+
+    display:block;
+
+    color:#1e293b;
+
+    font-size:15px;
+
+}
+
+.timetable-info span{
+
+    display:block;
+
+    color:#64748b;
+
+    font-size:13px;
+
+    margin-top:4px;
+
+}
+
+/* ===================================
+   BADGES
+=================================== */
+
+.room-badge{
+
+    display:inline-block;
+
+    background:#eef4ff;
+    color:#2563eb;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    font-size:13px;
+    font-weight:600;
+
+}
+
+.day-badge{
+
+    display:inline-block;
+
+    background:#dcfce7;
+    color:#15803d;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    font-size:13px;
+    font-weight:600;
+
+}
+
+/* ===================================
+   ACTIONS
+=================================== */
+
+.actions{
+
+    display:flex;
+    gap:8px;
+
+}
+
+.actions a{
+
+    min-width:70px;
+    height:34px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    text-decoration:none;
+
+    color:#fff;
+
+    border-radius:8px;
+
+    font-size:13px;
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.actions a:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.view{
+
+    background:#2563eb;
+
+}
+
+.edit{
+
+    background:#f59e0b;
+
+}
+
+.delete{
+
+    background:#ef4444;
+
+}
+.empty-state{
+
+    text-align:center;
+    padding:50px 20px;
+
+    color:#64748b;
+
+}
+
+.empty-state i{
+
+    font-size:48px;
+
+    color:#94a3b8;
+
+    margin-bottom:10px;
+
+}
+
+.empty-state h3{
+
+    color:#334155;
+    margin-bottom:8px;
+
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media(max-width:992px){
+
+    .page-header{
+
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+
+    }
+
+    .toolbar{
+
+        flex-direction:column;
+
+    }
+
+    .search-box,
+    .filter-select{
+
+        width:100%;
+
+    }
+
+    .timetable-table{
+
+        min-width:1000px;
+
+    }
+
+}
+
 
     </style>
 
 <div class="page-header">
 
     <div>
+
         <h2>
             <i class="fa-solid fa-calendar-days"></i>
             Timetable Management
         </h2>
+
     </div>
 
-    <a href="?section=timetable_create" class="btn-add">
+    <a href="?section=timetable_create"
+       class="btn-add">
+
         <i class="fa-solid fa-plus"></i>
+
         Add
+
     </a>
 
 </div>
 
-
 <div class="table-card">
 
-    <form method="GET" class="toolbar">
+    <form method="GET"
+          class="toolbar">
 
         <input
             type="hidden"
             name="section"
             value="timetables">
+
+        <!-- Search -->
 
         <div class="search-box">
 
@@ -93,6 +448,58 @@
 
         </div>
 
+        <!-- Department -->
+
+        <select
+            name="department"
+            class="filter-select">
+
+            <option value="">
+                All Departments
+            </option>
+
+            {% for department in departments %}
+
+            <option
+                value="{{ department.id }}"
+                {% if selected_department == department.id|stringformat:"s" %}
+                selected
+                {% endif %}>
+
+                {{ department.name }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <!-- Day -->
+
+        <select
+            name="day"
+            class="filter-select">
+
+            <option value="">
+                All Days
+            </option>
+
+            {% for d in days %}
+
+            <option
+                value="{{ d }}"
+                {% if selected_day == d %}
+                selected
+                {% endif %}>
+
+                {{ d }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
     </form>
 
     <div class="table-responsive">
@@ -103,7 +510,7 @@
 
                 <tr>
 
-                    <th>Schedule</th>
+                    <th>Course</th>
                     <th>Teacher</th>
                     <th>Class</th>
                     <th>Room</th>
@@ -123,7 +530,7 @@
 
                     <td>
 
-                        <div class="schedule-info">
+                        <div class="timetable-info">
 
                             <div class="avatar">
 
@@ -133,7 +540,17 @@
 
                             <div>
 
-                                <strong>{{ timetable.course.name }}</strong>
+                                <strong>
+
+                                    {{ timetable.course.name }}
+
+                                </strong>
+
+                                <span>
+
+                                    {{ timetable.course.code }}
+
+                                </span>
 
                             </div>
 
@@ -155,7 +572,7 @@
 
                     <td>
 
-                        <span class="badge">
+                        <span class="room-badge">
 
                             {{ timetable.room_no }}
 
@@ -225,9 +642,17 @@
 
                             <i class="fa-solid fa-calendar-days"></i>
 
-                            <h3>No Timetable Found</h3>
+                            <h3>
 
-                            <p>No timetable records available.</p>
+                                No Timetable Found
+
+                            </h3>
+
+                            <p>
+
+                                No timetable records available.
+
+                            </p>
 
                         </div>
 
@@ -244,4 +669,36 @@
     </div>
 
 </div>
+
+<script>
+
+const search = document.querySelector(".search-input");
+
+const filters = document.querySelectorAll(".filter-select");
+
+let timer;
+
+search.addEventListener("keyup", function(){
+
+    clearTimeout(timer);
+
+    timer = setTimeout(()=>{
+
+        this.form.submit();
+
+    },500);
+
+});
+
+filters.forEach(filter=>{
+
+    filter.addEventListener("change",function(){
+
+        this.form.submit();
+
+    });
+
+});
+
+</script>
 

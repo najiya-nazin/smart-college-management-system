@@ -51,6 +51,8 @@ from collections import OrderedDict
 from django.db.models import Count
 from django.utils import timezone
 from django.db.models import Sum
+from placement.models import PlacementStatus
+
 
 # def register(request):
 #     if request.method == "POST":
@@ -62,31 +64,6 @@ from django.db.models import Sum
 #         form = RegisterForm()
 #     return render(request, "accounts/register.html", {"form": form})
 
-
-# def login_view(request):
-#     if request.method == "POST":
-#         form = LoginForm(request.POST)
-#         if form.is_valid():
-#             user = form.get_user()
-#             login(request, user)
-#             update_last_login(None, user)
-#
-#             if user.role == "ADMIN":
-#                 return redirect("admin_dashboard")
-#
-#             elif user.role == "TEACHER":
-#                 return redirect("teacher_dashboard")
-#
-#             elif user.role == "STUDENT":
-#                 return redirect("student_dashboard")
-#
-#             else:
-#                 return redirect("login")
-#
-#     else:
-#         form = LoginForm()
-#     return render(request, "accounts/login.html", {"form": form})
-
 def login_view(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
@@ -95,9 +72,11 @@ def login_view(request):
             user = form.get_user()
             login(request, user)
             update_last_login(None, user)
+
             
 
             messages.success(request, "Login Successful")
+
 
 
             if user.role == "ADMIN":
@@ -187,24 +166,20 @@ def admin_dashboard(request):
 
             "recent_students": Student.objects.select_related(
                 "user"
-            ).order_by("-id")[:1],
+            ).order_by("-id")[:2],
 
             "recent_teachers": Teacher.objects.select_related(
                 "user"
-            ).order_by("-id")[:1],
+            ).order_by("-id")[:2],
 
             "recent_attendance": Attendance.objects.select_related(
                 "student__user"
             ).order_by("-id")[:1],
 
-            "recent_events": Event.objects.order_by(
-                "-id"
-            )[:1],
-
-            "recent_placements": Placement.objects.select_related(
-                "student__user",
-                "company"
-            ).order_by("-id")[:1],
+            # "recent_placements": Placement.objects.select_related(
+            #     "student__user",
+            #     "company"
+            # ).order_by("-id")[:1],
 
         })
 
@@ -655,11 +630,14 @@ def admin_dashboard(request):
     elif section == "timetables":
 
         search = request.GET.get("search", "")
-        day = request.GET.get("day", "")
+        selected_department = request.GET.get("department", "")
+        selected_day = request.GET.get("day", "")
 
         timetables = Timetable.objects.select_related(
             "course",
-            "teacher"
+            "course__department",
+            "teacher",
+            "teacher__user"
         )
 
         if search:
@@ -670,21 +648,31 @@ def admin_dashboard(request):
                 Q(room_no__icontains=search)
             )
 
-        if day:
-            timetables = timetables.filter(day=day)
+        if selected_department:
+            timetables = timetables.filter(
+                course__department_id=selected_department
+            )
+
+        if selected_day:
+            timetables = timetables.filter(
+                day=selected_day
+            )
 
         context.update({
             "timetables": timetables.order_by("day", "start_time"),
+            "departments": Department.objects.all().order_by("name"),
+            "selected_department": selected_department,
+            "selected_day": selected_day,
             "search": search,
-            "selected_day": day,
             "days": [
                 "Monday",
                 "Tuesday",
                 "Wednesday",
                 "Thursday",
                 "Friday",
-                "Saturday"
-            ]
+                "Saturday",
+                "Sunday",
+            ],
         })
 
     elif section == "timetable_create":
@@ -723,28 +711,975 @@ def admin_dashboard(request):
                 form.save()
 
                 return redirect(
-                    reverse("admin_dashboard")
-                    + "?section=timetables"
+                    reverse("admin_dashboard") +
+                    "?section=timetables"
                 )
 
         else:
-            form = TimetableForm(instance=timetable)
 
-        context["form"] = form
+            form = TimetableForm(
+                instance=timetable
+            )
+
+        context.update({
+            "form": form,
+            "timetable": timetable,
+        })
 
     elif section == "timetable_detail":
-
 
         timetable = get_object_or_404(
             Timetable.objects.select_related(
                 "course",
-                "teacher"
+                "course__department",
+                "teacher",
+                "teacher__user",
             ),
             pk=request.GET.get("id")
         )
 
         context["timetable"] = timetable
 
+    elif section == "attendances":
+
+        search = request.GET.get("search", "")
+        selected_department = request.GET.get("department", "")
+        selected_date = request.GET.get("date", "")
+
+        attendances = Attendance.objects.select_related(
+            "student",
+            "student__user",
+            "student__department"
+        )
+
+        # Search by Student Name or Student ID
+        if search:
+            attendances = attendances.filter(
+                Q(student__user__name__icontains=search) |
+                Q(student__student_id__icontains=search)
+            )
+
+        # Filter by Department
+        if selected_department:
+            attendances = attendances.filter(
+                student__department_id=selected_department
+            )
+
+        # Filter by Date
+        if selected_date:
+            attendances = attendances.filter(
+                date=selected_date
+            )
+
+        context.update({
+
+            "attendances": attendances.order_by(
+                "-date",
+                "student__user__name"
+            ),
+
+            "departments": Department.objects.order_by("name"),
+
+            "selected_department": selected_department,
+            "selected_date": selected_date,
+            "search": search,
+
+        })
+
+    # elif section == "attendance_create":
+    #
+    #     if request.method == "POST":
+    #
+    #         form = AttendanceForm(request.POST)
+    #
+    #         if form.is_valid():
+    #             form.save()
+    #
+    #             return redirect(
+    #                 reverse("admin_dashboard")
+    #                 + "?section=attendances"
+    #             )
+    #
+    #     else:
+    #
+    #         form = AttendanceForm()
+    #
+    #     context["form"] = form
+    #
+    # elif section == "attendance_update":
+    #
+    #     attendance = get_object_or_404(
+    #         Attendance,
+    #         pk=request.GET.get("id")
+    #     )
+    #
+    #     if request.method == "POST":
+    #
+    #         form = AttendanceForm(
+    #             request.POST,
+    #             instance=attendance
+    #         )
+    #
+    #         if form.is_valid():
+    #             form.save()
+    #
+    #             return redirect(
+    #                 reverse("admin_dashboard")
+    #                 + "?section=attendances"
+    #             )
+    #
+    #     else:
+    #
+    #         form = AttendanceForm(
+    #             instance=attendance
+    #         )
+    #
+    #     context.update({
+    #         "form": form,
+    #         "attendance": attendance,
+    #     })
+
+    elif section == "attendance_detail":
+
+        attendance = get_object_or_404(
+            Attendance.objects.select_related(
+                "student",
+                "student__user",
+                "student__department",
+            ),
+            pk=request.GET.get("id")
+        )
+
+        context["attendance"] = attendance
+
+    elif section == "exams":
+
+        search = request.GET.get("search", "")
+        selected_department = request.GET.get("department", "")
+        selected_course = request.GET.get("course", "")
+        selected_date = request.GET.get("date", "")
+
+        exams = Exam.objects.select_related(
+            "course",
+            "course__department"
+        )
+
+        # Search by Exam Name or Course
+        if search:
+            exams = exams.filter(
+                Q(name__icontains=search) |
+                Q(course__name__icontains=search)
+            )
+
+        # Filter by Department
+        if selected_department:
+            exams = exams.filter(
+                course__department_id=selected_department
+            )
+
+        # Filter by Course
+        if selected_course:
+            exams = exams.filter(
+                course_id=selected_course
+            )
+
+        # Filter by Date
+        if selected_date:
+            exams = exams.filter(
+                exam_date=selected_date
+            )
+
+        context.update({
+
+            "exams": exams.order_by(
+                "exam_date",
+                "name"
+            ),
+
+            "departments": Department.objects.order_by("name"),
+
+            "courses": Course.objects.select_related(
+                "department"
+            ).order_by("name"),
+
+            "search": search,
+            "selected_department": selected_department,
+            "selected_course": selected_course,
+            "selected_date": selected_date,
+
+        })
+
+    elif section == "exam_create":
+
+        if request.method == "POST":
+
+            form = ExamForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+
+                return redirect(
+                    reverse("admin_dashboard")
+                    + "?section=exams"
+                )
+
+        else:
+
+            form = ExamForm()
+
+        context["form"] = form
+
+    elif section == "exam_update":
+
+        exam = get_object_or_404(
+            Exam,
+            pk=request.GET.get("id")
+        )
+
+        if request.method == "POST":
+
+            form = ExamForm(
+                request.POST,
+                instance=exam
+            )
+
+            if form.is_valid():
+                form.save()
+
+                return redirect(
+                    reverse("admin_dashboard")
+                    + "?section=exams"
+                )
+
+        else:
+
+            form = ExamForm(
+                instance=exam
+            )
+
+        context.update({
+            "form": form,
+            "exam": exam,
+        })
+
+    elif section == "exam_detail":
+
+        exam = get_object_or_404(
+            Exam.objects.select_related(
+                "course",
+                "course__department",
+            ),
+            pk=request.GET.get("id")
+        )
+
+        context["exam"] = exam
+
+    elif section == "marks":
+
+        search = request.GET.get("search", "")
+        selected_department = request.GET.get("department", "")
+        selected_course = request.GET.get("course", "")
+        selected_grade = request.GET.get("grade", "")
+
+        marks = Marks.objects.select_related(
+            "student",
+            "student__user",
+            "student__department",
+            "course",
+        )
+
+        # ---------------- Search ----------------
+
+        if search:
+            marks = marks.filter(
+                Q(student__user__name__icontains=search) |
+                Q(student__student_id__icontains=search)
+            )
+
+        # ---------------- Department Filter ----------------
+
+        if selected_department:
+            marks = marks.filter(
+                student__department_id=selected_department
+            )
+
+        # ---------------- Course Filter ----------------
+
+        if selected_course:
+            marks = marks.filter(
+                course_id=selected_course
+            )
+
+        # ---------------- Grade Filter ----------------
+
+        if selected_grade:
+            marks = marks.filter(
+                grade=selected_grade
+            )
+
+        # ---------------- Percentage & Result ----------------
+
+        marks_list = []
+
+        for mark in marks.order_by(
+                "student__user__name",
+                "course__name"
+        ):
+
+            percentage = 0
+
+            if mark.max_marks > 0:
+                percentage = round(
+                    (mark.marks_obtained / mark.max_marks) * 100,
+                    1
+                )
+
+            mark.percentage = percentage
+
+            mark.result = (
+                "Pass"
+                if percentage >= 40
+                else "Fail"
+            )
+
+            marks_list.append(mark)
+
+        context.update({
+
+            "marks": marks_list,
+
+            "departments": Department.objects.order_by(
+                "name"
+            ),
+
+            "courses": Course.objects.select_related(
+                "department"
+            ).order_by(
+                "name"
+            ),
+
+            "grades": [
+                "A+",
+                "A",
+                "B+",
+                "B",
+                "C",
+                "D",
+                "F",
+            ],
+
+            "search": search,
+
+            "selected_department": selected_department,
+
+            "selected_course": selected_course,
+
+            "selected_grade": selected_grade,
+
+        })
+
+    elif section == "marks_create":
+
+        if request.method == "POST":
+
+            form = MarksForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+
+                return redirect(
+                    reverse("admin_dashboard")
+                    + "?section=marks"
+                )
+
+        else:
+
+            form = MarksForm()
+
+        context["form"] = form
+
+    elif section == "marks_update":
+
+        marks = get_object_or_404(
+            Marks,
+            pk=request.GET.get("id")
+        )
+
+        if request.method == "POST":
+
+            form = MarksForm(
+                request.POST,
+                instance=marks
+            )
+
+            if form.is_valid():
+                form.save()
+
+                return redirect(
+                    reverse("admin_dashboard")
+                    + "?section=marks"
+                )
+
+        else:
+
+            form = MarksForm(
+                instance=marks
+            )
+
+        context.update({
+
+            "form": form,
+
+            "marks": marks,
+
+        })
+
+    elif section == "marks_detail":
+
+        marks = get_object_or_404(
+
+            Marks.objects.select_related(
+                "student",
+                "student__user",
+                "student__department",
+                "course",
+            ),
+
+            pk=request.GET.get("id")
+        )
+
+        percentage = 0
+
+        if marks.max_marks > 0:
+            percentage = round(
+                (marks.marks_obtained / marks.max_marks) * 100,
+                1
+            )
+
+        marks.percentage = percentage
+
+        marks.result = (
+            "Pass"
+            if percentage >= 40
+            else "Fail"
+        )
+
+        context["marks"] = marks
+
+    elif section == "marks_delete":
+
+        marks = get_object_or_404(
+            Marks,
+            pk=request.GET.get("id")
+        )
+
+        marks.delete()
+
+        return redirect(
+            reverse("admin_dashboard")
+            + "?section=marks"
+        )
+
+    elif section == "placements":
+
+        search = request.GET.get("search", "")
+        selected_department = request.GET.get("department", "")
+        selected_company = request.GET.get("company", "")
+        selected_status = request.GET.get("status", "")
+        selected_date = request.GET.get("date", "")
+
+        placements = Placement.objects.select_related(
+            "student",
+            "student__user",
+            "student__department",
+            "company",
+        )
+
+        # Search
+
+        if search:
+            placements = placements.filter(
+                Q(student__user__name__icontains=search) |
+                Q(student__student_id__icontains=search) |
+                Q(company__name__icontains=search) |
+                Q(job_role__icontains=search)
+            )
+
+        # Department Filter
+
+        if selected_department:
+            placements = placements.filter(
+                student__department_id=selected_department
+            )
+
+        # Company Filter
+
+        if selected_company:
+            placements = placements.filter(
+                company_id=selected_company
+            )
+
+        # Status Filter
+
+        if selected_status:
+            placements = placements.filter(
+                status=selected_status
+            )
+
+        # Placement Date Filter
+
+        if selected_date:
+            placements = placements.filter(
+                placement_date=selected_date
+            )
+
+        context.update({
+
+            "placements": placements.order_by(
+                "-placement_date",
+                "student__user__name"
+            ),
+
+            "departments": Department.objects.order_by(
+                "name"
+            ),
+
+            "companies": Company.objects.order_by(
+                "name"
+            ),
+
+            "statuses": PlacementStatus.choices,
+
+            "search": search,
+
+            "selected_department": selected_department,
+
+            "selected_company": selected_company,
+
+            "selected_status": selected_status,
+
+            "selected_date": selected_date,
+
+        })
+
+    elif section == "placement_create":
+
+        if request.method == "POST":
+
+            form = PlacementForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+
+                return redirect(
+                    reverse("admin_dashboard")
+                    + "?section=placements"
+                )
+
+        else:
+
+            form = PlacementForm()
+
+        context["form"] = form
+
+    elif section == "placement_update":
+
+        placement = get_object_or_404(
+            Placement,
+            pk=request.GET.get("id")
+        )
+
+        if request.method == "POST":
+
+            form = PlacementForm(
+                request.POST,
+                instance=placement
+            )
+
+            if form.is_valid():
+                form.save()
+
+                return redirect(
+                    reverse("admin_dashboard")
+                    + "?section=placements"
+                )
+
+        else:
+
+            form = PlacementForm(
+                instance=placement
+            )
+
+        context.update({
+
+            "form": form,
+
+            "placement": placement,
+
+        })
+
+    elif section == "placement_detail":
+
+        placement = get_object_or_404(
+
+            Placement.objects.select_related(
+                "student",
+                "student__user",
+                "student__department",
+                "company",
+            ),
+
+            pk=request.GET.get("id")
+
+        )
+
+        context["placement"] = placement
+
+    elif section == "placement_delete":
+
+        placement = get_object_or_404(
+            Placement,
+            pk=request.GET.get("id")
+        )
+
+        placement.delete()
+
+        return redirect(
+            reverse("admin_dashboard")
+            + "?section=placements"
+        )
+
+    elif section == "companies":
+
+        search = request.GET.get("search", "")
+        selected_location = request.GET.get("location", "")
+
+        companies = Company.objects.all()
+
+        # Search
+
+        if search:
+            companies = companies.filter(
+
+                Q(name__icontains=search) |
+                Q(location__icontains=search) |
+                Q(email__icontains=search)
+
+            )
+
+        # Location Filter
+
+        if selected_location:
+            companies = companies.filter(
+                location=selected_location
+            )
+
+        context.update({
+
+            "companies": companies.order_by("name"),
+
+            "locations": Company.objects.values_list(
+                "location",
+                flat=True
+            ).distinct().order_by("location"),
+
+            "search": search,
+
+            "selected_location": selected_location,
+
+        })
+
+
+    elif section == "company_create":
+
+        if request.method == "POST":
+
+            form = CompanyForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+
+                return redirect(
+                    reverse("admin_dashboard")
+                    + "?section=companies"
+                )
+
+        else:
+
+            form = CompanyForm()
+
+        context["form"] = form
+
+
+    elif section == "company_update":
+
+        company = get_object_or_404(
+            Company,
+            pk=request.GET.get("id")
+        )
+
+        if request.method == "POST":
+
+            form = CompanyForm(
+                request.POST,
+                instance=company
+            )
+
+            if form.is_valid():
+                form.save()
+
+                return redirect(
+                    reverse("admin_dashboard")
+                    + "?section=companies"
+                )
+
+        else:
+
+            form = CompanyForm(
+                instance=company
+            )
+
+        context.update({
+
+            "form": form,
+
+            "company": company,
+
+        })
+
+
+    elif section == "company_detail":
+
+        company = get_object_or_404(
+            Company,
+            pk=request.GET.get("id")
+        )
+
+        context["company"] = company
+
+
+    elif section == "company_delete":
+
+        company = get_object_or_404(
+            Company,
+            pk=request.GET.get("id")
+        )
+
+        company.delete()
+
+        return redirect(
+            reverse("admin_dashboard")
+            + "?section=companies"
+        )
+
+    elif section == "events":
+
+        search = request.GET.get("search", "")
+        department = request.GET.get("department", "")
+
+        events = Event.objects.select_related(
+            "organized_by"
+        ).all()
+
+        # Search
+
+        if search:
+            events = events.filter(
+
+                Q(title__icontains=search) |
+                Q(description__icontains=search) |
+                Q(organized_by__name__icontains=search)
+
+            )
+
+        # Department Filter
+
+        if department:
+            events = events.filter(
+                organized_by_id=department
+            )
+
+        context.update({
+
+            "events": events.order_by("event_date"),
+
+            "departments": Department.objects.all(),
+
+            "search": search,
+
+            "selected_department": department,
+
+        })
+
+
+    elif section == "event_create":
+
+        if request.method == "POST":
+
+            form = EventForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+
+                messages.success(
+                    request,
+                    "Event created successfully."
+                )
+
+                return redirect(
+                    reverse("admin_dashboard")
+                    + "?section=events"
+                )
+
+        else:
+
+            form = EventForm()
+
+        context["form"] = form
+
+
+    elif section == "event_update":
+
+        event = get_object_or_404(
+            Event,
+            pk=request.GET.get("id")
+        )
+
+        if request.method == "POST":
+
+            form = EventForm(
+                request.POST,
+                instance=event
+            )
+
+            if form.is_valid():
+                form.save()
+
+                messages.success(
+                    request,
+                    "Event updated successfully."
+                )
+
+                return redirect(
+                    reverse("admin_dashboard")
+                    + "?section=events"
+                )
+
+        else:
+
+            form = EventForm(
+                instance=event
+            )
+
+        context.update({
+
+            "form": form,
+
+            "event": event,
+
+        })
+
+
+    elif section == "event_detail":
+
+        event = get_object_or_404(
+
+            Event.objects.select_related(
+                "organized_by"
+            ),
+
+            pk=request.GET.get("id")
+
+        )
+
+        context["event"] = event
+
+
+    elif section == "event_delete":
+
+        event = get_object_or_404(
+            Event,
+            pk=request.GET.get("id")
+        )
+
+        event.delete()
+
+        messages.success(
+            request,
+            "Event deleted successfully."
+        )
+
+        return redirect(
+            reverse("admin_dashboard")
+            + "?section=events"
+        )
+
+    elif section == "reports":
+
+        search = request.GET.get("search", "")
+        report_type = request.GET.get("report_type", "")
+
+        reports = Report.objects.select_related(
+            "generated_by"
+        ).all()
+
+        if search:
+            reports = reports.filter(
+
+                Q(report_type__icontains=search) |
+                Q(generated_by__name__icontains=search) |
+                Q(generated_by__email__icontains=search)
+
+            )
+
+        if report_type:
+            reports = reports.filter(
+                report_type=report_type
+            )
+
+        report_types = Report.objects.values_list(
+            "report_type",
+            flat=True
+        ).distinct()
+
+        context.update({
+
+            "reports": reports,
+            "report_types": report_types,
+            "selected_report_type": report_type,
+            "search": search,
+
+        })
+
+    elif section == "report_detail":
+
+        report = get_object_or_404(
+            Report.objects.select_related(
+                "generated_by"
+            ),
+            pk=request.GET.get("id")
+        )
+
+        context["report"] = report
+
+    elif section == "report_delete":
+
+        report = get_object_or_404(
+            Report,
+            pk=request.GET.get("id")
+        )
+
+        if request.method == "POST":
+            report.delete()
+
+            messages.success(
+                request,
+                "Report deleted successfully."
+            )
+
+            return redirect(
+                f"{reverse('admin_dashboard')}?section=reports"
+            )
 
     return render(request, "accounts/admin_dashboard.html", context)
 

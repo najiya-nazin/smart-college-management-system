@@ -1,451 +1,856 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Placement Management</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet">
 
 <style>
+/* ===================================
+   PLACEMENT PAGE
+=================================== */
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI,sans-serif;
+.page-header{
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:#fff;
+
+    border-radius:16px;
+
+    padding:16px 24px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:20px;
+
 }
 
-body{
-background:#f4f7fb;
+.page-header h2{
+
+    margin:0;
+
+    font-size:24px;
+    font-weight:700;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
 }
 
-.container{
-width:95%;
-margin:40px auto;
+/* ===================================
+   ADD BUTTON
+=================================== */
+
+.btn-add{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    padding:10px 18px;
+
+    background:#fff;
+    color:#2563eb;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-size:14px;
+    font-weight:600;
+
+    transition:.3s;
+
 }
 
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:25px;
+.btn-add:hover{
+
+    background:#eef4ff;
+
+    color:#2563eb;
+
 }
 
-.header h2{
-color:#0d6efd;
-font-weight:700;
+/* ===================================
+   CARD
+=================================== */
+
+.table-card{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:20px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.05);
+
 }
 
-.add-btn{
-background:#0d6efd;
-color:#fff;
-text-decoration:none;
-padding:10px 20px;
-border-radius:8px;
-transition:.3s;
-}
+/* ===================================
+   TOOLBAR
+=================================== */
 
-.add-btn:hover{
-background:#084fc7;
-color:#fff;
+.toolbar{
+
+    display:flex;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
 }
 
 .search-box{
-margin-bottom:20px;
+
+    flex:1;
+
+    min-width:280px;
+
+    position:relative;
+
 }
 
-.search-box input{
-width:350px;
-max-width:100%;
-padding:10px;
-border-radius:8px;
-border:1px solid #ccc;
+.search-box i{
+
+    position:absolute;
+
+    left:15px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#94a3b8;
+
 }
 
-.table-card{
-background:#fff;
-border-radius:12px;
-overflow:hidden;
-box-shadow:0 5px 15px rgba(0,0,0,.08);
+.search-input{
+
+    width:100%;
+
+    height:44px;
+
+    border:1px solid #dbe3ef;
+
+    border-radius:10px;
+
+    padding-left:42px;
+
+    padding-right:15px;
+
+    font-size:14px;
+
+    transition:.3s;
+
 }
 
-table{
-margin-bottom:0;
+.search-input:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 3px rgba(37,99,235,.08);
+
 }
 
-thead{
-background:#0d6efd;
-color:#fff;
+.filter-select{
+
+    width:170px;
+
+    height:44px;
+
+    border:1px solid #dbe3ef;
+
+    border-radius:10px;
+
+    background:#fff;
+
+    padding:0 12px;
+
+    font-size:14px;
+
 }
 
-th,
-td{
-text-align:center;
-vertical-align:middle;
+.filter-select:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 3px rgba(37,99,235,.08);
+
 }
 
-tbody tr:hover{
-background:#f2f8ff;
+/* ===================================
+   TABLE
+=================================== */
+
+.placement-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
 }
 
-.action{
-display:inline-block;
-padding:6px 12px;
-margin:2px;
-border-radius:5px;
-text-decoration:none;
-color:#fff;
-font-size:14px;
+.placement-table thead{
+
+    background:#2563eb;
+
 }
 
-.view{
-background:#198754;
+.placement-table thead th{
+
+    color:#fff;
+
+    padding:14px;
+
+    text-align:left;
+
+    font-size:14px;
+    font-weight:600;
+
 }
 
-.edit{
-background:#ffc107;
-color:#000;
+.placement-table tbody td{
+
+    padding:16px 14px;
+
+    border-bottom:1px solid #edf2f7;
+
+    vertical-align:middle;
+
+    font-size:14px;
+
 }
 
-.delete{
-background:#dc3545;
-border:none;
-cursor:pointer;
+.placement-table tbody tr:hover{
+
+    background:#f8fbff;
+
 }
 
-.delete:hover{
-background:#bb2d3b;
+/* ===================================
+   STUDENT INFO
+=================================== */
+
+.placement-info{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.avatar{
+
+    width:42px;
+    height:42px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+    color:#fff;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:16px;
+
+}
+
+.placement-info strong{
+
+    display:block;
+
+    color:#1e293b;
+
+    font-size:15px;
+    font-weight:600;
+
+}
+
+.placement-info span{
+
+    display:block;
+
+    color:#64748b;
+
+    font-size:12px;
+
+    margin-top:3px;
+
+}
+
+/* ===================================
+   PACKAGE
+=================================== */
+
+.package-badge{
+
+    display:inline-block;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    background:#eef4ff;
+
+    color:#2563eb;
+
+    font-size:13px;
+    font-weight:600;
+
+}
+
+/* ===================================
+   STATUS
+=================================== */
+
+.status{
+
+    display:inline-block;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    font-size:13px;
+    font-weight:600;
+
 }
 
 .placed{
-color:#198754;
-font-weight:bold;
+
+    background:#dcfce7;
+
+    color:#15803d;
+
 }
 
 .pending{
-color:#fd7e14;
-font-weight:bold;
+
+    background:#fef3c7;
+
+    color:#b45309;
+
 }
 
 .rejected{
-color:#dc3545;
-font-weight:bold;
+
+    background:#fee2e2;
+
+    color:#dc2626;
+
 }
 
-.no-data{
-text-align:center;
-padding:20px;
-font-weight:600;
+/* ===================================
+   ACTION BUTTONS
+=================================== */
+
+.actions{
+
+    display:flex;
+
+    gap:8px;
+
 }
 
+.actions a{
+
+    min-width:65px;
+
+    height:34px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border-radius:8px;
+
+    text-decoration:none;
+
+    color:#fff;
+
+    font-size:13px;
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.actions a:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.view{
+
+    background:#2563eb;
+
+}
+
+.edit{
+
+    background:#f59e0b;
+
+}
+
+.delete{
+
+    background:#ef4444;
+
+}
+
+/* ===================================
+   EMPTY STATE
+=================================== */
+
+.empty-state{
+
+    text-align:center;
+
+    padding:60px 20px;
+
+}
+
+.empty-state i{
+
+    font-size:60px;
+
+    color:#94a3b8;
+
+    margin-bottom:15px;
+
+}
+
+.empty-state h3{
+
+    margin-bottom:8px;
+
+    font-size:22px;
+
+    color:#334155;
+
+}
+
+.empty-state p{
+
+    color:#64748b;
+
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media(max-width:992px){
+
+    .page-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:15px;
+
+    }
+
+    .toolbar{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+    .search-box{
+
+        width:100%;
+
+    }
+
+    .filter-select{
+
+        width:100%;
+
+    }
+
+    .placement-table{
+
+        min-width:1200px;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .actions{
+
+        flex-direction:column;
+
+    }
+
+}
 </style>
+<div class="page-header">
 
-</head>
+    <div>
 
-<body>
+        <h2>
 
-<div class="container">
+            <i class="fa-solid fa-briefcase"></i>
 
-<div class="header">
+            Placement Management
 
-<h2>Placement Management</h2>
+        </h2>
 
-<a
-href="{% url 'placement_create' %}"
-class="add-btn">
+    </div>
 
-+ Add Placement
+    <a href="?section=placement_create"
+       class="btn-add">
 
-</a>
+        <i class="fa-solid fa-plus"></i>
 
-</div>
+        Add
 
-<div class="search-box">
-
-<input
-type="text"
-id="searchInput"
-placeholder="Search Student / Company..."
-onkeyup="searchPlacement()">
+    </a>
 
 </div>
 
 <div class="table-card">
 
-<table class="table table-hover table-bordered">
+    <form method="GET"
+          class="toolbar">
 
-<thead>
+        <input
+            type="hidden"
+            name="section"
+            value="placements">
 
-<tr>
+        <!-- Search -->
 
-<th>Student</th>
+        <div class="search-box">
 
-<th>Company</th>
+            <i class="fa-solid fa-magnifying-glass"></i>
 
-<th>Job Role</th>
+            <input
+                type="text"
+                name="search"
+                class="search-input"
+                value="{{ search }}"
+                placeholder="Search Student, Company or Job Role">
 
-<th>Package</th>
+        </div>
 
-<th>Status</th>
+        <!-- Department -->
 
-<th>Actions</th>
+        <select
+            name="department"
+            class="filter-select">
 
-</tr>
+            <option value="">
+                All Departments
+            </option>
 
-</thead>
+            {% for department in departments %}
 
-<tbody id="placementTable">
+                <option
+                    value="{{ department.id }}"
+                    {% if selected_department == department.id|stringformat:"s" %}
+                        selected
+                    {% endif %}>
 
-{% for placement in placements %}
+                    {{ department.name }}
 
-<tr>
+                </option>
 
-<td>{{ placement.student.user.name }}</td>
+            {% endfor %}
 
-<td>{{ placement.company.name }}</td>
+        </select>
 
-<td>{{ placement.job_role }}</td>
+        <!-- Company -->
 
-<td>₹ {{ placement.package }}</td>
+        <select
+            name="company"
+            class="filter-select">
 
-<td>
+            <option value="">
+                All Companies
+            </option>
 
-{% if placement.status == "Placed" %}
+            {% for company in companies %}
 
-<span class="placed">
+                <option
+                    value="{{ company.id }}"
+                    {% if selected_company == company.id|stringformat:"s" %}
+                        selected
+                    {% endif %}>
 
-{{ placement.status }}
+                    {{ company.name }}
 
-</span>
+                </option>
 
-{% elif placement.status == "Pending" %}
+            {% endfor %}
 
-<span class="pending">
+        </select>
 
-{{ placement.status }}
+        <!-- Status -->
 
-</span>
+        <select
+            name="status"
+            class="filter-select">
 
-{% else %}
+            <option value="">
+                All Status
+            </option>
 
-<span class="rejected">
+            {% for value,label in statuses %}
 
-{{ placement.status }}
+                <option
+                    value="{{ value }}"
+                    {% if selected_status == value %}
+                        selected
+                    {% endif %}>
 
-</span>
+                    {{ label }}
 
-{% endif %}
+                </option>
 
-</td>
+            {% endfor %}
 
-<td>
+        </select>
 
-<a
-href="{% url 'placement_detail' placement.id %}"
-class="action view">
+        <!-- Date -->
 
-View
+        <input
+            type="date"
+            name="date"
+            value="{{ selected_date }}"
+            class="filter-select">
 
-</a>
+    </form>
 
-<a
-href="{% url 'placement_update' placement.id %}"
-class="action edit">
+    <div class="table-responsive">
 
-Edit
+        <table class="placement-table">
 
-</a>
+            <thead>
 
-<button
-type="button"
-class="action delete"
-data-bs-toggle="modal"
-data-bs-target="#deleteModal{{ placement.id }}">
+                <tr>
 
-Delete
+                    <th>Student</th>
+                    <th>Company</th>
+                    <th>Job Role</th>
+                    <th>Package</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
 
-</button>
+                </tr>
 
-</td>
+            </thead>
 
-</tr>
+            <tbody>
 
-<!-- Delete Modal -->
+            {% for placement in placements %}
 
-<div
-class="modal fade"
-id="deleteModal{{ placement.id }}"
-tabindex="-1">
+                <tr>
 
-<div class="modal-dialog modal-dialog-centered">
+                    <td>
 
-<div class="modal-content">
+                        <div class="placement-info">
 
-<div class="modal-header bg-danger text-white">
+                            <div class="avatar">
 
-<h5 class="modal-title">
+                                <i class="fa-solid fa-user-graduate"></i>
 
-Delete Placement
+                            </div>
 
-</h5>
+                            <div>
 
-<button
-type="button"
-class="btn-close btn-close-white"
-data-bs-dismiss="modal">
+                                <strong>
 
-</button>
+                                    {{ placement.student.user.name }}
 
-</div>
+                                </strong>
 
-<div class="modal-body text-center">
+                                <span>
 
-<div style="font-size:55px;">
+                                    {{ placement.student.student_id }}
 
-⚠️
+                                </span>
 
-</div>
+                            </div>
 
-<h5 class="mt-3">
+                        </div>
 
-Are you sure?
+                    </td>
 
-</h5>
+                    <td>
 
-<p>
+                        {{ placement.company.name }}
 
-Do you want to delete the placement record of
+                    </td>
 
-<strong>
+                    <td>
 
-{{ placement.student.user.name }}
+                        {{ placement.job_role }}
 
-</strong>
+                    </td>
 
-?
+                    <td>
 
-</p>
+                        <span class="package-badge">
 
-<p>
+                            ₹ {{ placement.package }}
 
-Company :
+                        </span>
 
-<strong>
+                    </td>
 
-{{ placement.company.name }}
+                    <td>
 
-</strong>
+                        {{ placement.placement_date|date:"d M Y" }}
 
-</p>
+                    </td>
 
-<p>
+                    <td>
 
-Role :
+                        {% if placement.status == "Placed" %}
 
-<strong>
+                            <span class="status placed">
 
-{{ placement.job_role }}
+                                Placed
 
-</strong>
+                            </span>
 
-</p>
+                        {% elif placement.status == "Pending" %}
 
-<small class="text-danger">
+                            <span class="status pending">
 
-This action cannot be undone.
+                                Pending
 
-</small>
+                            </span>
 
-</div>
+                        {% else %}
 
-<div class="modal-footer">
+                            <span class="status rejected">
 
-<button
-type="button"
-class="btn btn-secondary"
-data-bs-dismiss="modal">
+                                Rejected
 
-Cancel
+                            </span>
 
-</button>
+                        {% endif %}
 
-<form
-method="POST"
-action="{% url 'placement_delete' placement.id %}">
+                    </td>
 
-{% csrf_token %}
+                    <td>
 
-<button
-type="submit"
-class="btn btn-danger">
+                        <div class="actions">
 
-Delete
+                            <a href="?section=placement_detail&id={{ placement.id }}"
+                               class="view">
 
-</button>
+                                View
 
-</form>
+                            </a>
 
-</div>
+                            <a href="?section=placement_update&id={{ placement.id }}"
+                               class="edit">
 
-</div>
+                                Edit
 
-</div>
+                            </a>
 
-</div>
+                            <a href="?section=placement_delete&id={{ placement.id }}"
+                               class="delete"
+                               onclick="return confirm('Delete this placement record?')">
 
-{% empty %}
+                                Delete
 
-<tr>
+                            </a>
 
-<td
-colspan="6"
-class="no-data">
+                        </div>
 
-No Placement Records Found
+                    </td>
 
-</td>
+                </tr>
 
-</tr>
+            {% empty %}
 
-{% endfor %}
+                <tr>
 
-</tbody>
+                    <td colspan="7">
 
-</table>
+                        <div class="empty-state">
 
-</div>
+                            <i class="fa-solid fa-briefcase"></i>
+
+                            <h3>
+
+                                No Placements Found
+
+                            </h3>
+
+                            <p>
+
+                                No placement records available.
+
+                            </p>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
 
 </div>
 
 <script>
 
-function searchPlacement(){
+const search = document.querySelector(".search-input");
 
-let input=document.getElementById("searchInput").value.toLowerCase();
+const filters = document.querySelectorAll(".filter-select");
 
-let rows=document.querySelectorAll("#placementTable tr");
+let timer;
 
-rows.forEach(function(row){
+search.addEventListener("keyup", function(){
 
-let text=row.innerText.toLowerCase();
+    clearTimeout(timer);
 
-row.style.display=text.includes(input) ? "" : "none";
+    timer = setTimeout(() => {
+
+        this.form.submit();
+
+    }, 500);
 
 });
 
-}
+filters.forEach(filter => {
+
+    filter.addEventListener("change", function(){
+
+        this.form.submit();
+
+    });
+
+});
 
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-
-</html>
