@@ -92,73 +92,39 @@ body{
 
 /* Cards */
 
-.card-box{
+/* Dashboard Cards */
 
-    border:none;
-    border-radius:12px;
-    color:white;
-    padding:20px;
-    transition:.3s;
+.dashboard-card{
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.15);
+    transition: 0.3s;
+    min-height: 170px;
 }
 
-.card-box:hover{
-    transform:translateY(-5px);
+.dashboard-card:hover{
+    transform: translateY(-6px);
 }
 
-.card-box i{
-    font-size:35px;
-    margin-bottom:15px;
+.dashboard-card .card-body{
+    padding: 28px;
 }
 
-.blue{
-    background:#2563eb;
+.dashboard-card .icon{
+    font-size: 38px;
+    margin-bottom: 18px;
 }
 
-.green{
-    background:#16a34a;
+.dashboard-card h6{
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
 }
 
-.orange{
-    background:#ea580c;
-}
-
-.purple{
-    background:#7c3aed;
-}
-
-.red{
-    background:#dc2626;
-}
-
-.dark{
-    background:#0f172a;
-}
-
-/* Sections */
-
-.section-card{
-
-    background:white;
-    border-radius:10px;
-    box-shadow:0 3px 10px rgba(0,0,0,.08);
-    margin-top:25px;
-}
-
-.section-card .card-header{
-    font-weight:bold;
-    background:#2563eb;
-    color:white;
-}
-
-
-
-.card {
-    border-radius: 15px;
-}
-
-.card-header {
-    border-top-left-radius: 15px !important;
-    border-top-right-radius: 15px !important;
+.dashboard-card h2{
+    font-size: 40px;
+    font-weight: 700;
+    margin: 0;
 }
 
 .table th {
@@ -187,6 +153,35 @@ body{
     font-weight:bold;
 }
 
+
+
+
+.navbar{
+    height:75px;
+    background:#fff !important;
+    
+    height:75px;
+    background:#fff !important;
+    position:fixed;
+    top:0;
+    left:250px;
+    right:0;
+    z-index:1000;
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
+
+}
+
+.navbar-brand{
+    font-size:22px;
+    font-weight:700;
+}
+
+.navbar .btn{
+    border-radius:10px;
+    padding:8px 18px;
+}
+
+
 .nav-link{
     font-weight:500;
 }
@@ -197,7 +192,34 @@ body{
     width: 100%;
     
     
+} 
+
+
+
+.form-control{
+    border-radius:12px;
+    padding:10px 14px;
+    border:1px solid #d1d5db;
 }
+
+.form-control:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 .2rem rgba(37,99,235,.2);
+}
+
+.form-label{
+    margin-bottom:8px;
+}
+
+.card{
+    border-radius:20px;
+}
+
+
+
+
+
+
 
 
 
@@ -250,13 +272,14 @@ body{
 
                 
 
-                <li class="nav-item">
-                    <a href="{% url 'logout' %}"
-                       class="btn btn-light text-primary fw-bold">
-                        <i class="fa-solid fa-right-from-bracket me-1"></i>
-                        Logout
-                    </a>
-                </li>
+        <li class="nav-item">
+    <a href="{% url 'logout' %}"
+       class="text-danger fw-bold text-decoration-none"
+       onclick="return confirm('Are you sure you want to logout?');">
+        <i class="fa-solid fa-right-from-bracket me-1"></i>
+        Logout
+    </a>
+</li>
 
             </ul>
 
@@ -266,7 +289,13 @@ body{
 
 
 
-</nav> 
+</nav>  
+
+
+
+
+
+
 
 
 
@@ -360,189 +389,73 @@ body{
 
 <div class="row g-4">
 
-<div class="col-lg-4">
-<div class="card-box blue">
-
-<i class="fa fa-user-graduate"></i>
-
-<h5>Total Students</h5>
-
-<h2>{{ students_count }}</h2>
-
-</div>
-</div>
-
-<div class="col-lg-4">
-<div class="card-box green">
-
-<i class="fa fa-book-open"></i>
-
-<h5>My Courses</h5>
-
-<h2>{{ courses_count }}</h2>
-
-</div>
-</div>
-
-<div class="col-lg-4">
-<div class="card-box orange">
-
-<i class="fa fa-calendar-days"></i>
-
-<h5>Today's Classes</h5>
-
-<h2>{{ today_classes_count }}</h2>
-
-</div>
-</div>
-
-<div class="col-lg-4">
-<div class="card-box purple">
-
-<i class="fa fa-calendar-check"></i>
-
-<h5>Attendance</h5>
-
-<h2>{{ attendance_count }}</h2>
-
-</div>
-</div>
-
-<div class="col-lg-4">
-<div class="card-box red">
-
-<i class="fa fa-file-pen"></i>
-
-<h5>Exams</h5>
-
-<h2>{{ exam_count }}</h2>
-
-</div>
-</div>
-
-<div class="col-lg-4">
-<div class="card-box dark">
-
-<i class="fa fa-chart-line"></i>
-
-<h5>Results Published</h5>
-
-<h2>{{ results_count }}</h2>
-
-</div>
-</div>
-
-</div>
-
-<!-- Recent Timetable -->
-
-<div class="card section-card">
-
-    <div class="card-header">
-        Today's Timetable
+    <div class="col-lg-4 col-md-6">
+    <div class="card dashboard-card bg-white">
+        <div class="card-body">
+            <i class="fa-solid fa-user-graduate text-primary icon"></i>
+            <h6 class="text-dark">Total Students</h6>
+            <h2 class="text-dark">{{ students_count }}</h2>
+        </div>
     </div>
+</div>
 
-    <div class="card-body">
-
-        <table class="table table-striped">
-
-            <thead>
-                <tr>
-                    <th>Course</th>
-                    <th>Class</th>
-                    <th>Room</th>
-                    <th>Day</th>
-                    <th>Time</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-            {% for timetable in timetables %}
-
-            <tr>
-                <td>{{ timetable.course.name }}</td>
-                <td>{{ timetable.class_name }}</td>
-                <td>{{ timetable.room_no }}</td>
-                <td>{{ timetable.day }}</td>
-                <td>{{ timetable.start_time }} - {{ timetable.end_time }}</td>
-            </tr>
-
-            {% empty %}
-
-            <tr>
-                <td colspan="5" class="text-center">
-                    No Timetable Available
-                </td>
-            </tr>
-
-            {% endfor %}
-
-            </tbody>
-
-        </table>
-
+    <div class="col-lg-4 col-md-6">
+    <div class="card dashboard-card bg-white">
+        <div class="card-body">
+            <i class="fa-solid fa-book text-primary icon"></i>
+            <h6 class="text-dark">My Course</h6>
+            <h2 class="text-dark">{{ course_count }}</h2>
+        </div>
     </div>
+</div>
+
+    <div class="col-lg-4 col-md-6">
+    <div class="card dashboard-card bg-white">
+        <div class="card-body">
+           <i class="fa-solid fa-calendar text-primary icon"></i>
+            <h6 class="text-dark">Today Classes</h6>
+            <h2 class="text-dark">{{ class_count }}</h2>
+        </div>
+    </div>
+</div>
+
+    <div class="col-lg-4 col-md-6">
+    <div class="card dashboard-card bg-white">
+        <div class="card-body">
+           <i class="fa-solid fa-clipboard-check text-primary icon"></i>
+            <h6 class="text-dark">Attendance</h6>
+            <h2 class="text-dark">{{ class_count }}</h2>
+        </div>
+    </div>
+</div>
+
+    <div class="col-lg-4 col-md-6">
+    <div class="card dashboard-card bg-white">
+        <div class="card-body">
+           <i class="fa-solid fa-file-pen text-primary icon"></i>
+            <h6 class="text-dark">Exams</h6>
+            <h2 class="text-dark">{{ class_count }}</h2>
+        </div>
+    </div>
+</div>
+
+    <div class="col-lg-4 col-md-6">
+    <div class="card dashboard-card bg-white">
+        <div class="card-body">
+            <i class="fa-solid fa-chart-line text-primary icon"></i>
+            <h6 class="text-dark">Results</h6>
+            <h2 class="text-dark">{{ class_count }}</h2>
+        </div>
+    </div>
+</div>
 
 </div>
 
-<!-- Attendance -->
-
-<div class="card section-card">
-
-    <div class="card-header">
-        Recent Attendance
-    </div>
-
-    <div class="card-body">
-
-        <table class="table table-striped">
-
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Student</th>
-                    <th>Course</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-            {% for attendance in attendance_list|slice:":5" %}
-
-            <tr>
-                <td>{{ attendance.date }}</td>
-                <td>{{ attendance.student.user.name }}</td>
-                <td>{{ attendance.student.course.name }}</td>
-                <td>
-                    {% if attendance.status == "Present" %}
-                        <span class="badge bg-success">Present</span>
-                    {% elif attendance.status == "Absent" %}
-                        <span class="badge bg-danger">Absent</span>
-                    {% else %}
-                        <span class="badge bg-warning text-dark">Late</span>
-                    {% endif %}
-                </td>
-            </tr>
-
-            {% empty %}
-
-            <tr>
-                <td colspan="4" class="text-center">
-                    No Attendance Records
-                </td>
-            </tr>
-
-            {% endfor %}
-
-            </tbody>
-
-        </table>
-
-    </div>
-
 </div>
+
+
+
+
 <!-- Events -->
 
 
@@ -678,28 +591,102 @@ body{
 
 {% elif section == "edit_profile" %}
 
-<div class="card shadow">
-    <div class="card-header bg-primary text-white">
-        <h4>Edit Profile</h4>
-    </div>
+<div class="container mt-4">
+    <div class="card shadow-lg border-0 rounded-4">
 
-    <div class="card-body">
+        <div class="card-header bg-primary text-white py-3">
+            <h4 class="mb-0">
+                <i class="fa-solid fa-user-pen me-2"></i>
+                Edit Profile
+            </h4>
+        </div>
 
-        <form method="post">
-            {% csrf_token %}
+        <div class="card-body p-4">
 
-            {{ form.as_p }}
+            <form method="post">
+                {% csrf_token %}
 
-            <button type="submit" class="btn btn-success">
-                <i class="fa-solid fa-floppy-disk"></i>
-                Save Changes
-            </button>
+                <div class="row">
 
-            <a href="?section=profile" class="btn btn-secondary">
-                Cancel
-            </a>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="fa-solid fa-user me-2 text-primary"></i>
+                            Name
+                        </label>
+                        {{ form.name }}
+                    </div>
 
-        </form>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="fa-solid fa-envelope me-2 text-primary"></i>
+                            Email
+                        </label>
+                        {{ form.email }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="fa-solid fa-building me-2 text-primary"></i>
+                            Department
+                        </label>
+                        <input type="text"
+                               class="form-control bg-light"
+                               value="{{ teacher.department.name }}"
+                               readonly>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="fa-solid fa-graduation-cap me-2 text-primary"></i>
+                            Qualification
+                        </label>
+                        <input type="text"
+                               class="form-control bg-light"
+                               value="{{ teacher.qualification }}"
+                               readonly>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="fa-solid fa-briefcase me-2 text-primary"></i>
+                            Experience
+                        </label>
+                        <input type="text"
+                               class="form-control bg-light"
+                               value="{{ teacher.experience }} Years"
+                               readonly>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="fa-solid fa-indian-rupee-sign me-2 text-primary"></i>
+                            Salary
+                        </label>
+                        <input type="text"
+                               class="form-control bg-light"
+                               value="₹ {{ teacher.salary }}"
+                               readonly>
+                    </div>
+
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a href="?section=profile" class="btn btn-outline-secondary px-4">
+                        <i class="fa-solid fa-xmark me-2"></i>
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fa-solid fa-floppy-disk me-2"></i>
+                        Save Changes
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
 
     </div>
 </div>
@@ -1164,7 +1151,7 @@ body{
 <div class="card shadow">
     <div class="card-header bg-primary text-white">
         <h4>
-            <i class="fa fa-users"></i>
+            <i class="fa fa-users me-2"></i>
             My Students
         </h4>
     </div>
@@ -1172,13 +1159,11 @@ body{
     <div class="card-body">
 
         <table class="table table-bordered table-hover align-middle">
-
             <thead class="table-light">
                 <tr>
                     <th>#</th>
                     <th>Student ID</th>
                     <th>Name</th>
-                    <th>Course</th>
                     <th>Department</th>
                     <th>Semester</th>
                 </tr>
@@ -1186,34 +1171,51 @@ body{
 
             <tbody>
 
-            {% for student in students %}
-
                 <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ student.student_id }}</td>
-                    <td>{{ student.user.name }}</td>
-                    <td>{{ student.course.name }}</td>
-                    <td>{{ student.department.name }}</td>
-                    <td>{{ student.semester }}</td>
+                    <td>1</td>
+                    <td>STU001</td>
+                    <td>Rahul Kumar</td>
+                    <td>Computer Science</td>
+                    <td>5</td>
                 </tr>
 
-            {% empty %}
-
                 <tr>
-                    <td colspan="6" class="text-center">
-                        No students found.
-                    </td>
+                    <td>2</td>
+                    <td>STU002</td>
+                    <td>Anjali Nair</td>
+                    <td>Computer Science</td>
+                    <td>5</td>
                 </tr>
 
-            {% endfor %}
+                <tr>
+                    <td>3</td>
+                    <td>STU003</td>
+                    <td>Arjun Das</td>
+                    <td>Computer Science</td>
+                    <td>5</td>
+                </tr>
+
+                <tr>
+                    <td>4</td>
+                    <td>STU004</td>
+                    <td>Meera Joseph</td>
+                    <td>Computer Science</td>
+                    <td>5</td>
+                </tr>
+
+                <tr>
+                    <td>5</td>
+                    <td>STU005</td>
+                    <td>Mohammed Asif</td>
+                    <td>Computer Science</td>
+                    <td>5</td>
+                </tr>
 
             </tbody>
-
         </table>
 
     </div>
 </div>
-
 
 
 
@@ -1266,4 +1268,14 @@ new Chart(ctx, {
     }
 });
 </script>
-</html>
+</html> 
+
+
+
+
+
+
+
+
+
+
