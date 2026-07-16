@@ -1,12 +1,9 @@
 import random
-<<<<<<< HEAD
 from django.shortcuts import render, redirect,get_object_or_404
-=======
 from datetime import date
 from django.db.models import Sum
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
->>>>>>> c4dd427c09c3e7fe049f5a82dff2781af6074e5b
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth import login, logout
@@ -39,20 +36,20 @@ from placement.models import Company
 from placement.forms import CompanyForm
 from marks.models import Marks
 from marks.forms import MarksForm
-<<<<<<< HEAD
+
 from placement.forms import CompanyForm
 from placement.forms import PlacementForm
 from reports.forms import ReportForm
 from event.models import Event
 from event.forms import EventForm
 
-=======
+
 from event.models import Event
 from fees.models import Fee, PaymentStatus
 from library.models import Library
 from library.models import LibraryStatus
 from collections import OrderedDict
->>>>>>> c4dd427c09c3e7fe049f5a82dff2781af6074e5b
+
 
 
 def register(request):
@@ -73,12 +70,12 @@ def login_view(request):
             user = form.get_user()
             login(request, user)
             update_last_login(None, user)
-<<<<<<< HEAD
+
 
             
-=======
+
             messages.success(request, "Login Successful")
->>>>>>> c4dd427c09c3e7fe049f5a82dff2781af6074e5b
+
 
             if user.role == "ADMIN":
                 return redirect("admin_dashboard")
@@ -413,15 +410,14 @@ def admin_dashboard(request):
         context["form"] = form
         context["attendance"] = attendance
 
-<<<<<<< HEAD
+
 
 
       
 
 
 
-=======
->>>>>>> c4dd427c09c3e7fe049f5a82dff2781af6074e5b
+
     elif section == "exam_create":
         if request.method == "POST":
             form = ExamForm(request.POST)
@@ -489,7 +485,7 @@ def admin_dashboard(request):
         else:
             form = ReportForm()
 
-<<<<<<< HEAD
+
         context["form"] = form
 
 
@@ -724,9 +720,9 @@ def admin_dashboard(request):
         context["event"] = event                                                               
                                
 
-=======
+
         context["form"] = form                   
->>>>>>> c4dd427c09c3e7fe049f5a82dff2781af6074e5b
+
 
     elif section == "student_create":
         if request.method == "POST":
@@ -746,9 +742,6 @@ def admin_dashboard(request):
 @login_required
 def student_dashboard(request):
 
-<<<<<<< HEAD
-
-=======
     if request.user.role != "STUDENT":
         return HttpResponseForbidden(
             "You are not authorized to access this page."
@@ -1019,7 +1012,7 @@ def student_dashboard(request):
         )
 
     return render(request, "students/student_dashboard.html", context)
->>>>>>> c4dd427c09c3e7fe049f5a82dff2781af6074e5b
+
 
 
 @login_required
@@ -1050,12 +1043,11 @@ def forgot_password(request):
                 recipient_list=[email],
                 fail_silently=False,
             )
-<<<<<<< HEAD
 
 
-=======
+
             messages.success(request, "OTP Sent Successfully")
->>>>>>> c4dd427c09c3e7fe049f5a82dff2781af6074e5b
+
             return redirect("verify-otp")
 
     else:
