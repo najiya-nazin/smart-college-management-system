@@ -202,21 +202,17 @@ def teacher_dashboard(request):
 ).select_related("course")
 
     students = Student.objects.filter(
-    course__in=my_courses.values_list("course", flat=True)
+    department_id=teacher.department_id
 ).select_related(
     "user",
-    "department",
-    "course"
-).distinct()
+    "department"
+)
     
-    course_ids = my_courses.values_list("course_id", flat=True)
-    attendance = Attendance.objects.filter(
-    student__course__id__in=course_ids
-).select_related(
+    attendance = Attendance.objects.select_related(
     "student",
     "student__user",
     "student__department"
-).distinct().order_by("-date")
+).all().order_by("-date")
 
     exams = Exam.objects.filter(
     course__in=my_courses.values_list("course", flat=True)
@@ -289,16 +285,22 @@ def teacher_dashboard(request):
 
         
 
-    elif section == "attendance":
+    elif section == "attendance" and request.method == "POST":
 
-            attendance_form = AttendanceForm(request.POST)
+        attendance_form = AttendanceForm(request.POST)
 
-            if attendance_form.is_valid():
-                attendance_form.save()
 
-                return redirect(
-                    f"{reverse('teacher_dashboard')}?section=attendance"
-                )
+        print(attendance.count())
+        print(attendance)
+
+        if attendance_form.is_valid():
+            attendance_form.save()
+            messages.success(request, "Attendance added successfully.")
+            return redirect(
+            f"{reverse('teacher_dashboard')}?section=attendance"
+            )
+        else:
+            print(attendance_form.errors)
 
 
 
@@ -348,6 +350,7 @@ def teacher_dashboard(request):
 
        
         "courses_count":courses_count,
+        "exam_count":exam_count,
         "today_classes_count":today_classes_count,
         "exam_count":exam_count,
         "results_count":results_count,
