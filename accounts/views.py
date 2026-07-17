@@ -95,10 +95,6 @@ def login_view(request):
             user = form.get_user()
             login(request, user)
             update_last_login(None, user)
-
-            if user.role == Role.ADMIN:
-
-
             
 
             messages.success(request, "Login Successful")
