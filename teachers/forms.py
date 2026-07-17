@@ -1,6 +1,7 @@
 from django import forms
 from .models import Teacher
 from accounts.models import User
+from departments.models import Department
 
 
 class TeacherCreateForm(forms.ModelForm):
@@ -191,5 +192,48 @@ class TeacherUpdateForm(forms.ModelForm):
         if commit:
             teacher.user.save()
             teacher.save()
+
+        return teacher
+    
+
+    
+class TeacherProfileForm(forms.ModelForm):
+
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={"class": "form-control"})
+    )
+
+    class Meta:
+        model = Teacher
+        fields = []   # Teacher model-ൽ നിന്ന് ഒരു field-ും edit ചെയ്യുന്നില്ല
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["name"].initial = self.instance.user.name
+        self.fields["email"].initial = self.instance.user.email
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+
+        if User.objects.filter(email=email).exclude(
+            pk=self.instance.user.pk
+        ).exists():
+            raise forms.ValidationError("Email already exists.")
+
+        return email
+
+    def save(self, commit=True):
+        teacher = self.instance
+
+        teacher.user.name = self.cleaned_data["name"]
+        teacher.user.email = self.cleaned_data["email"]
+
+        if commit:
+            teacher.user.save()
 
         return teacher
