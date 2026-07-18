@@ -1,197 +1,592 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-
-{% if form.instance.pk %}
-
-Update Fee
-
-{% else %}
-
-Add Fee
-
-{% endif %}
-
-</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet">
 
 <style>
 
-*{
+/* ==========================================
+   FEE FORM
+========================================== */
+
+.fee-container{
+
+    max-width:1000px;
+
+    margin:auto;
+
+}
+
+/* ==========================================
+   PAGE HEADER
+========================================== */
+
+.page-header{
+
+    background:linear-gradient(135deg,#2d63e3,#4a84f4);
+
+    border-radius:16px;
+
+    padding:18px 24px;
+
+    margin-bottom:24px;
+
+}
+
+.page-header h2{
+
     margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Segoe UI,sans-serif;
+
+    color:#fff;
+
+    font-size:28px;
+
+    font-weight:700;
+
 }
 
-body{
-    background:#f4f7fb;
-}
+/* ==========================================
+   FORM CARD
+========================================== */
 
-.container{
-    max-width:900px;
-    margin:50px auto;
-}
+.form-card{
 
-.card{
-    border:none;
-    border-radius:15px;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
-}
+    background:#fff;
 
-.card-header{
-    background:#0d6efd;
-    color:white;
-    padding:20px 25px;
-    border-radius:15px 15px 0 0;
-}
+    border-radius:16px;
 
-.card-header h3{
-    margin:0;
-}
-
-.card-body{
     padding:30px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
 }
 
-form p{
-    margin-bottom:20px;
+/* ==========================================
+   FORM GRID
+========================================== */
+
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:22px;
+
 }
 
-form label{
-    display:block;
+.full-width{
+
+    grid-column:1/-1;
+
+}
+
+/* ==========================================
+   FORM GROUP
+========================================== */
+
+.form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.form-group label{
+
     margin-bottom:8px;
+
+    color:#334155;
+
+    font-size:14px;
+
     font-weight:600;
-    color:#495057;
+
 }
 
-form input,
-form select,
-form textarea{
+/* ==========================================
+   INPUTS
+========================================== */
+
+.form-group input,
+.form-group select,
+.form-group textarea{
 
     width:100%;
-    padding:10px 15px;
-    border:1px solid #ced4da;
+
+    padding:12px 15px;
+
+    border:1px solid #dbe3ef;
+
     border-radius:8px;
+
+    font-size:14px;
+
+    background:#fff;
+
+    transition:.3s;
+
+    box-sizing:border-box;
+
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+
     outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 3px rgba(37,99,235,.15);
+
+}
+
+.form-group textarea{
+
+    min-height:120px;
+
+    resize:vertical;
+
+}
+
+/* ==========================================
+   DATE FIELD
+========================================== */
+
+input[type="date"]{
+
+    cursor:pointer;
+
+}
+
+/* ==========================================
+   NUMBER FIELD
+========================================== */
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button{
+
+    opacity:1;
+
+}
+
+/* ==========================================
+   SELECT
+========================================== */
+
+select{
+
+    appearance:none;
+
+    -webkit-appearance:none;
+
+    -moz-appearance:none;
+
+    background:#fff;
+
+}
+
+/* ==========================================
+   ERRORS
+========================================== */
+
+.error{
+
+    margin-top:6px;
+
+    color:#dc2626;
+
+    font-size:13px;
+
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.form-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    margin-top:30px;
+
+    padding-top:20px;
+
+    border-top:1px solid #e5e7eb;
+
+}
+
+.btn-cancel,
+.btn-save{
+
+    min-width:140px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:8px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-decoration:none;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
     transition:.3s;
 
 }
 
-form input:focus,
-form select:focus,
-form textarea:focus{
+.btn-cancel{
 
-    border-color:#0d6efd;
-    box-shadow:0 0 8px rgba(13,110,253,.2);
+    background:#f1f5f9;
 
-}
-
-textarea{
-
-    resize:vertical;
-    min-height:120px;
+    color:#334155;
 
 }
 
-.button-group{
+.btn-cancel:hover{
 
-    display:flex;
-    justify-content:space-between;
-    margin-top:30px;
+    background:#e2e8f0;
 
 }
 
-.btn{
+.btn-save{
 
-    min-width:150px;
-    border-radius:8px;
-    font-weight:500;
+    background:#2563eb;
+
+    color:#fff;
+
+}
+
+.btn-save:hover{
+
+    background:#1d4ed8;
+
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:768px){
+
+    .page-header{
+
+        padding:16px 20px;
+
+    }
+
+    .page-header h2{
+
+        font-size:24px;
+
+    }
+
+    .form-card{
+
+        padding:20px;
+
+    }
+
+    .form-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .full-width{
+
+        grid-column:auto;
+
+    }
+
+    .form-actions{
+
+        flex-direction:column;
+
+    }
+
+    .btn-cancel,
+    .btn-save{
+
+        width:100%;
+
+    }
 
 }
 
 </style>
+<div class="fee-container">
 
-</head>
+    <!-- Page Header -->
 
-<body>
+    <div class="page-header">
 
-<div class="container">
+        <h2>
 
-<div class="card">
+            {% if form.instance.pk %}
 
-<div class="card-header">
+                Update Fee Record
 
-<h3>
+            {% else %}
 
-{% if form.instance.pk %}
+                Add Fee Record
 
-Update Fee
+            {% endif %}
 
-{% else %}
+        </h2>
 
-Add Fee
+    </div>
 
-{% endif %}
+    <!-- Form Card -->
 
-</h3>
+    <div class="form-card">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="form-grid">
+
+                <!-- Student -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.student.id_for_label }}">
+
+                        Student
+
+                    </label>
+
+                    {{ form.student }}
+
+                    {% if form.student.errors %}
+
+                        <small class="error">
+
+                            {{ form.student.errors|join:", " }}
+
+                        </small>
+
+                    {% endif %}
+
+                </div>
+
+                <!-- Semester -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.semester.id_for_label }}">
+
+                        Semester
+
+                    </label>
+
+                    {{ form.semester }}
+
+                    {% if form.semester.errors %}
+
+                        <small class="error">
+
+                            {{ form.semester.errors|join:", " }}
+
+                        </small>
+
+                    {% endif %}
+
+                </div>
+
+                <!-- Fee Type -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.fee_type.id_for_label }}">
+
+                        Fee Type
+
+                    </label>
+
+                    {{ form.fee_type }}
+
+                    {% if form.fee_type.errors %}
+
+                        <small class="error">
+
+                            {{ form.fee_type.errors|join:", " }}
+
+                        </small>
+
+                    {% endif %}
+
+                </div>
+
+                <!-- Total Amount -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.amount.id_for_label }}">
+
+                        Total Amount
+
+                    </label>
+
+                    {{ form.amount }}
+
+                    {% if form.amount.errors %}
+
+                        <small class="error">
+
+                            {{ form.amount.errors|join:", " }}
+
+                        </small>
+
+                    {% endif %}
+
+                </div>
+
+                <!-- Paid Amount -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.paid_amount.id_for_label }}">
+
+                        Paid Amount
+
+                    </label>
+
+                    {{ form.paid_amount }}
+
+                    {% if form.paid_amount.errors %}
+
+                        <small class="error">
+
+                            {{ form.paid_amount.errors|join:", " }}
+
+                        </small>
+
+                    {% endif %}
+
+                </div>
+
+                <!-- Payment Date -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.payment_date.id_for_label }}">
+
+                        Payment Date
+
+                    </label>
+
+                    {{ form.payment_date }}
+
+                    {% if form.payment_date.errors %}
+
+                        <small class="error">
+
+                            {{ form.payment_date.errors|join:", " }}
+
+                        </small>
+
+                    {% endif %}
+
+                </div>
+
+                <!-- Status -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.status.id_for_label }}">
+
+                        Payment Status
+
+                    </label>
+
+                    {{ form.status }}
+
+                    {% if form.status.errors %}
+
+                        <small class="error">
+
+                            {{ form.status.errors|join:", " }}
+
+                        </small>
+
+                    {% endif %}
+
+                </div>
+
+                <!-- Remarks -->
+
+                <div class="form-group full-width">
+
+                    <label for="{{ form.remarks.id_for_label }}">
+
+                        Remarks
+
+                    </label>
+
+                    {{ form.remarks }}
+
+                    {% if form.remarks.errors %}
+
+                        <small class="error">
+
+                            {{ form.remarks.errors|join:", " }}
+
+                        </small>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            <!-- Buttons -->
+
+            <div class="form-actions">
+
+                <a
+                    href="?section=fees"
+                    class="btn-cancel"
+                >
+
+                    Cancel
+
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn-save"
+                >
+
+                    {% if form.instance.pk %}
+
+                        Update Fee
+
+                    {% else %}
+
+                        Save Fee
+
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
 
 </div>
-
-<div class="card-body">
-
-<form method="POST">
-
-{% csrf_token %}
-
-{{ form.as_p }}
-
-<div class="button-group">
-
-<button
-type="submit"
-class="btn btn-primary">
-
-{% if form.instance.pk %}
-
-Update Fee
-
-{% else %}
-
-Save Fee
-
-{% endif %}
-
-</button>
-
-<a
-href="{% url 'fee-list' %}"
-class="btn btn-secondary">
-
-Back
-
-</a>
-
-</div>
-
-</form>
-
-</div>
-
-</div>
-
-</div>
-
-</body>
-
-</html>

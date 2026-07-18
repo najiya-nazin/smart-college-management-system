@@ -10,6 +10,9 @@ class TimetableForm(forms.ModelForm):
         ("BCom Coperation", "BCom Coperation"),
         ("BCA", "BCA"),
         ("BSC Computer", "BSC Computer"),
+        ("BSC Chemistry", "BSC Chemistry"),
+        ("BSC Maths", "BSC Maths"),
+        ("BA English", "BA English"),
 
     ]
 
@@ -83,16 +86,6 @@ class TimetableForm(forms.ModelForm):
                 "required": True,
             }),
         }
-
-    def clean_class_name(self):
-        class_name = self.cleaned_data.get("class_name")
-
-        if len(class_name.strip()) < 8:
-            raise forms.ValidationError(
-                "Class name must contain at least 8 characters."
-            )
-
-        return class_name
 
     def clean_room_no(self):
         room_no = self.cleaned_data.get("room_no")

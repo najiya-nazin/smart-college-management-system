@@ -357,6 +357,22 @@ tr:hover{
     </li>
 
     <li>
+    <a href="?section=fees"
+       {% if section == "fees" %}class="active"{% endif %}>
+        <i class="fa-solid fa-money-bill-wave"></i>
+        Fees
+    </a>
+    </li>
+
+    <li>
+    <a href="?section=library"
+       {% if section == "library" %}class="active"{% endif %}>
+        <i class="fa-solid fa-book"></i>
+        Library
+    </a>
+    </li>
+
+    <li>
         <a href="?section=placements"
            {% if section == "placements" %}class="active"{% endif %}>
             <i class="fa-solid fa-briefcase"></i>
@@ -399,10 +415,14 @@ tr:hover{
             </h3>
         </div>
 
-        <a href="{% url 'logout' %}" class="logout-btn">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            Logout
-        </a>
+        <a href="{% url 'logout' %}"
+   class="logout-btn"
+   onclick="return confirmLogout()">
+    <i class="fa-solid fa-right-from-bracket"></i>
+    Logout
+   </a>
+
+
     </div>
 
     <div class="content">
@@ -556,6 +576,30 @@ tr:hover{
         {% elif section == "event_detail" %}
             {% include "events/event_detail.html" %}
 
+        {% elif section == "library" %}
+            {% include "library/library_list.html" %}
+
+        {% elif section == "library_create" %}
+            {% include "library/library_form.html" %}
+
+        {% elif section == "library_detail" %}
+           {% include "library/library_detail.html" %}
+
+        {% elif section == "library_update" %}
+            {% include "library/library_form.html" %}
+
+        {% elif section == "fees" %}
+            {% include "fees/fee_list.html" %}
+
+        {% elif section == "fee_create" %}
+            {% include "fees/fee_form.html" %}
+
+        {% elif section == "fee_detail" %}
+            {% include "fees/fee_detail.html" %}
+
+        {% elif section == "fee_update" %}
+            {% include "fees/fee_form.html" %}
+
         {% endif %}
 
     </div>
@@ -640,6 +684,13 @@ new Chart(document.getElementById("departmentChart"), {
 
 });
 
+</script>
+<script>
+function confirmLogout() {
+
+    return confirm("Are you sure you want to logout?");
+
+}
 </script>
 </body>
 </html>

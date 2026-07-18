@@ -1,210 +1,363 @@
 {% load static %}
 <style>
-      /* ===================================
-   Container
+/* ===================================
+   DEPARTMENT FORM
 =================================== */
 
 .department-container{
-    width:100%;
-    padding:20px;
+
+    max-width:900px;
+
+    margin:auto;
+
+    padding:15px;
+
 }
 
 /* ===================================
-   Header
+   HEADER
 =================================== */
 
 .page-header{
+
     background:linear-gradient(135deg,#2563eb,#3b82f6);
+
     color:#fff;
-    border-radius:18px;
-    padding:18px 28px;
-    margin-bottom:22px;
+
+    border-radius:12px;
+
+    padding:15px 22px;
+
+    margin-bottom:18px;
+
 }
 
 .page-header h2{
-    margin:0;
-    font-size:30px;
-    font-weight:700;
-}
 
-.page-header i{
-    margin-right:10px;
+    margin:0;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
 }
 
 /* ===================================
-   Form Card
+   FORM CARD
 =================================== */
 
 .form-card{
+
     background:#fff;
-    border-radius:18px;
-    padding:30px;
-    box-shadow:0 8px 25px rgba(0,0,0,.06);
+
+    border-radius:12px;
+
+    box-shadow:0 6px 18px rgba(0,0,0,.08);
+
+    overflow:hidden;
+
 }
 
 /* ===================================
-   Grid
+   GRID
 =================================== */
 
 .department-form-grid{
+
     display:grid;
+
     grid-template-columns:1fr;
+
 }
 
+/* ===================================
+   INFORMATION CARD
+=================================== */
+
 .info-card{
+
     border:1px solid #e5e7eb;
-    border-radius:16px;
-    padding:25px;
+
+    padding:22px;
+
 }
 
 .info-card h3{
+
     color:#2563eb;
-    font-size:24px;
-    font-weight:700;
-    margin-bottom:22px;
-    padding-bottom:15px;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    margin:0 0 18px;
+
+    padding-bottom:12px;
+
     border-bottom:1px solid #edf2f7;
 
     display:flex;
+
     align-items:center;
-    gap:10px;
+
+    gap:8px;
+
 }
 
 /* ===================================
-   Form Grid
+   FORM GRID
 =================================== */
 
 .info-grid{
+
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:18px;
+
 }
 
 .full-width{
-    grid-column:1 / -1;
+
+    grid-column:1/-1;
+
 }
 
 /* ===================================
-   Inputs
+   FORM GROUP
 =================================== */
 
 .form-group{
+
     display:flex;
+
     flex-direction:column;
+
 }
 
 .form-group label{
+
+    margin-bottom:6px;
+
+    font-size:13px;
+
     font-weight:600;
-    margin-bottom:8px;
-    color:#1e293b;
+
+    color:#475569;
+
 }
+
+/* ===================================
+   INPUTS
+=================================== */
 
 .form-control,
 .form-select{
+
     width:100%;
-    height:46px;
+
+    height:40px;
+
     border:1px solid #dbe3ef;
-    border-radius:10px;
-    padding:0 15px;
-    font-size:15px;
+
+    border-radius:8px;
+
+    padding:0 12px;
+
+    font-size:14px;
+
+    transition:.3s;
+
+    box-sizing:border-box;
+
 }
 
 textarea.form-control{
-    height:140px;
-    padding:12px 15px;
-    resize:none;
+
+    height:90px;
+
+    padding:10px 12px;
+
+    resize:vertical;
+
 }
 
 .form-control:focus,
 .form-select:focus{
-    border-color:#2563eb;
-    box-shadow:0 0 0 3px rgba(37,99,235,.12);
+
     outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 2px rgba(37,99,235,.12);
+
 }
 
 /* ===================================
-   Error
+   ERROR
 =================================== */
 
 .errorlist{
+
     list-style:none;
-    margin-top:6px;
-    color:#dc2626;
-    font-size:14px;
+
+    margin-top:5px;
+
     padding:0;
+
+    color:#dc2626;
+
+    font-size:12px;
+
 }
 
 /* ===================================
-   Buttons
+   BUTTONS
 =================================== */
 
 .form-buttons{
+
     display:flex;
+
     justify-content:flex-end;
-    gap:15px;
-    margin-top:25px;
-    padding-top:20px;
+
+    gap:10px;
+
+    margin-top:18px;
+
+    padding-top:18px;
+
     border-top:1px solid #edf2f7;
+
 }
 
-.btn-cancel,
-.btn-save{
-    min-width:180px;
-    height:46px;
-    border-radius:10px;
+.btn-save,
+.btn-cancel{
+
+    min-width:120px;
+
+    height:40px;
+
+    border:none;
+
+    border-radius:8px;
 
     display:flex;
-    align-items:center;
+
     justify-content:center;
+
+    align-items:center;
+
     gap:8px;
 
     text-decoration:none;
+
+    font-size:14px;
+
     font-weight:600;
+
     transition:.3s;
-}
 
-.btn-cancel{
-    background:#e2e8f0;
-    color:#334155;
-}
-
-.btn-cancel:hover{
-    background:#cbd5e1;
-    color:#1e293b;
 }
 
 .btn-save{
-    border:none;
+
     background:#2563eb;
+
     color:#fff;
+
     cursor:pointer;
+
 }
 
 .btn-save:hover{
+
     background:#1d4ed8;
+
+}
+
+.btn-cancel{
+
+    background:#e2e8f0;
+
+    color:#334155;
+
+}
+
+.btn-cancel:hover{
+
+    background:#cbd5e1;
+
+    color:#1e293b;
+
 }
 
 /* ===================================
-   Responsive
+   RESPONSIVE
 =================================== */
 
 @media(max-width:768px){
 
+    .department-container{
+
+        max-width:100%;
+
+        padding:10px;
+
+    }
+
+    .page-header{
+
+        padding:14px 18px;
+
+    }
+
+    .page-header h2{
+
+        font-size:20px;
+
+    }
+
     .info-grid{
+
         grid-template-columns:1fr;
+
+    }
+
+    .full-width{
+
+        grid-column:auto;
+
+    }
+
+    .info-card{
+
+        padding:18px;
+
     }
 
     .form-buttons{
+
         flex-direction:column;
+
     }
 
     .btn-save,
     .btn-cancel{
+
         width:100%;
+
     }
 
 }
-    </style>
+</style>
 
 <div class="department-container">
 

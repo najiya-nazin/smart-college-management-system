@@ -53,6 +53,10 @@ from django.utils import timezone
 from django.db.models import Sum
 from placement.models import PlacementStatus
 
+from library.forms import LibraryForm
+
+from fees.forms import FeeForm
+
 
 # def register(request):
 #     if request.method == "POST":
@@ -73,14 +77,7 @@ def login_view(request):
             login(request, user)
             update_last_login(None, user)
 
-            
-
-            messages.success(request, "Login Successful")
-
-
-
             if user.role == "ADMIN":
-
                 return redirect("admin_dashboard")
 
             elif user.role == Role.TEACHER:
@@ -241,6 +238,23 @@ def admin_dashboard(request):
             "selected_department": department,
         })
 
+    # elif section == "student_create":
+    #     form = StudentCreateForm(request.POST or None)
+    #
+    #     if request.method == "POST":
+    #         if form.is_valid():
+    #             student = form.save()
+    #
+    #             courses = Course.objects.filter(
+    #                 department=student.department
+    #             )
+    #
+    #             student.course.set(courses)
+    #
+    #             return redirect(
+    #                 reverse("admin_dashboard") + "?section=students"
+    #             )
+
     elif section == "student_detail":
 
         student_id = request.GET.get("id")
@@ -275,6 +289,13 @@ def admin_dashboard(request):
 
             if form.is_valid():
                 form.save()
+
+                courses = Course.objects.filter(
+                    department=student.department
+                )
+
+                student.course.set(courses)
+                print(student.course.all())
 
                 return redirect(
                     reverse("admin_dashboard") + "?section=students"
@@ -378,7 +399,9 @@ def admin_dashboard(request):
                     salary=form.cleaned_data["salary"],
                 )
 
-                return redirect("teacher_list")
+                return redirect(
+                    reverse("admin_dashboard") + "?section=teachers"
+                )
 
         else:
 
@@ -1511,7 +1534,6 @@ def admin_dashboard(request):
 
         })
 
-
     elif section == "event_create":
 
         if request.method == "POST":
@@ -1520,11 +1542,6 @@ def admin_dashboard(request):
 
             if form.is_valid():
                 form.save()
-
-                messages.success(
-                    request,
-                    "Event created successfully."
-                )
 
                 return redirect(
                     reverse("admin_dashboard")
@@ -1554,11 +1571,6 @@ def admin_dashboard(request):
 
             if form.is_valid():
                 form.save()
-
-                messages.success(
-                    request,
-                    "Event updated successfully."
-                )
 
                 return redirect(
                     reverse("admin_dashboard")
@@ -1603,11 +1615,6 @@ def admin_dashboard(request):
         )
 
         event.delete()
-
-        messages.success(
-            request,
-            "Event deleted successfully."
-        )
 
         return redirect(
             reverse("admin_dashboard")
@@ -1672,14 +1679,251 @@ def admin_dashboard(request):
         if request.method == "POST":
             report.delete()
 
-            messages.success(
-                request,
-                "Report deleted successfully."
-            )
 
             return redirect(
                 f"{reverse('admin_dashboard')}?section=reports"
             )
+
+    elif section == "library":
+
+        search = request.GET.get("search", "")
+        status = request.GET.get("status", "")
+
+        library = Library.objects.select_related(
+            "student",
+            "book"
+        ).all()
+
+        if search:
+            library = library.filter(
+
+                Q(student__student_id__icontains=search) |
+                Q(student__user__name__icontains=search) |
+                Q(book__title__icontains=search) |
+                Q(book__author__icontains=search)
+
+            )
+
+        if status:
+            library = library.filter(
+                status=status
+            )
+
+        context.update({
+
+            "library": library,
+
+            "statuses": LibraryStatus.choices,
+
+            "selected_status": status,
+
+            "search": search,
+
+        })
+
+
+    # ==========================================
+    # LIBRARY CREATE
+    # ==========================================
+
+    elif section == "library_create":
+
+        form = LibraryForm()
+
+        if request.method == "POST":
+
+            form = LibraryForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+
+                return redirect(
+                    f"{reverse('admin_dashboard')}?section=library"
+                )
+
+        context["form"] = form
+
+
+    # ==========================================
+    # LIBRARY DETAIL
+    # ==========================================
+
+    elif section == "library_detail":
+
+        library = get_object_or_404(
+
+            Library.objects.select_related(
+                "student",
+                "book"
+            ),
+
+            pk=request.GET.get("id")
+
+        )
+
+        context["library"] = library
+
+
+    # ==========================================
+    # LIBRARY UPDATE
+    # ==========================================
+
+    elif section == "library_update":
+
+        library = get_object_or_404(
+            Library,
+            pk=request.GET.get("id")
+        )
+
+        form = LibraryForm(
+            instance=library
+        )
+
+        if request.method == "POST":
+
+            form = LibraryForm(
+                request.POST,
+                instance=library
+            )
+
+            if form.is_valid():
+                form.save()
+
+                return redirect(
+                    f"{reverse('admin_dashboard')}?section=library"
+                )
+
+        context.update({
+
+            "form": form,
+
+            "library": library
+
+        })
+
+
+    # ==========================================
+    # LIBRARY DELETE
+    # ==========================================
+
+    elif section == "library_delete":
+
+        library = get_object_or_404(
+            Library,
+            pk=request.GET.get("id")
+        )
+
+        if request.method == "POST":
+            library.delete()
+
+
+            return redirect(
+                f"{reverse('admin_dashboard')}?section=library"
+            )
+
+        context["library"] = library
+
+    elif section == "fees":
+
+        fees = Fee.objects.select_related(
+            "student",
+            "student__user"
+        ).all()
+
+        fees = fees.order_by("-payment_date")
+
+        for fee in fees:
+            fee.balance = fee.amount - fee.paid_amount
+
+        search = request.GET.get("search", "")
+        status = request.GET.get("status", "")
+
+        if search:
+            fees = fees.filter(
+
+                Q(student__student_id__icontains=search) |
+
+                Q(student__user__name__icontains=search)
+
+            )
+
+        if status:
+            fees = fees.filter(status=status)
+
+        context.update({
+
+            "fees": fees.order_by("-payment_date"),
+
+            "statuses": PaymentStatus.choices,
+
+            "selected_status": status,
+
+            "search": search,
+
+        })
+
+    elif section == "fee_create":
+
+        if request.method == "POST":
+
+            form = FeeForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+
+                return redirect(
+                    reverse("admin_dashboard") +
+                    "?section=fees"
+                )
+
+        else:
+
+            form = FeeForm()
+
+        context["form"] = form
+
+    elif section == "fee_detail":
+
+        fee = get_object_or_404(
+            Fee.objects.select_related(
+                "student",
+                "student__user"
+            ),
+            pk=request.GET.get("id")
+        )
+
+        fee.balance = fee.amount - fee.paid_amount
+
+        context["fee"] = fee
+
+    elif section == "fee_update":
+
+        fee = get_object_or_404(
+            Fee,
+            pk=request.GET.get("id")
+        )
+
+        if request.method == "POST":
+
+            form = FeeForm(
+                request.POST,
+                instance=fee
+            )
+
+            if form.is_valid():
+                form.save()
+
+
+                return redirect(
+                    reverse("admin_dashboard") +
+                    "?section=fees"
+                )
+
+        else:
+
+            form = FeeForm(instance=fee)
+
+        context["form"] = form
 
     return render(request, "accounts/admin_dashboard.html", context)
 
@@ -1944,14 +2188,6 @@ def student_dashboard(request):
 
 
 
-@login_required
-def logout_view(request):
-    logout(request)
-    messages.success(request, "Logout Successful")
-    return redirect("login")
-
-
-
 def forgot_password(request):
 
     if request.method == "POST":
@@ -2038,7 +2274,6 @@ def reset_password(request):
 @login_required
 def logout_view(request):
     logout(request)
-    messages.success(request, "Logout Successful")
     return redirect("login")
 
 

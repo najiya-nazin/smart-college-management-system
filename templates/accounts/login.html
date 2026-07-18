@@ -1,216 +1,1102 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Login</title>-->
+
+<!--    -->
+
+<!--    <style>-->
+<!--        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');-->
+
+<!--        *{-->
+<!--            margin:0;-->
+<!--            padding:0;-->
+<!--            box-sizing:border-box;-->
+<!--            font-family:'Poppins',sans-serif;-->
+<!--        }-->
+
+<!--        body{-->
+<!--            background:linear-gradient(135deg,#0f172a,#1e3a8a);-->
+<!--            height:100vh;-->
+<!--            display:flex;-->
+<!--            justify-content:center;-->
+<!--            align-items:center;-->
+<!--            padding:20px;-->
+<!--        }-->
+
+<!--        .container{-->
+<!--            width:100%;-->
+<!--            max-width:450px;-->
+<!--            background:#fff;-->
+<!--            padding:40px;-->
+<!--            border-radius:18px;-->
+<!--            box-shadow:0 20px 50px rgba(0,0,0,.25);-->
+<!--        }-->
+
+<!--        h2{-->
+<!--            text-align:center;-->
+<!--            margin-bottom:30px;-->
+<!--            color:#1e293b;-->
+<!--            font-size:32px;-->
+<!--            font-weight:600;-->
+<!--        }-->
+
+<!--        .form-group{-->
+<!--            margin-bottom:20px;-->
+<!--        }-->
+
+<!--        label{-->
+<!--            display:block;-->
+<!--            margin-bottom:8px;-->
+<!--            color:#334155;-->
+<!--            font-weight:500;-->
+<!--        }-->
+
+<!--        input{-->
+<!--            width:100%;-->
+<!--            padding:14px;-->
+<!--            border:1px solid #cbd5e1;-->
+<!--            border-radius:10px;-->
+<!--            font-size:15px;-->
+<!--            transition:.3s;-->
+<!--        }-->
+
+<!--        input:focus{-->
+<!--            outline:none;-->
+<!--            border-color:#2563eb;-->
+<!--            box-shadow:0 0 0 4px rgba(37,99,235,.15);-->
+<!--        }-->
+
+<!--        button{-->
+<!--            width:100%;-->
+<!--            padding:14px;-->
+<!--            border:none;-->
+<!--            border-radius:10px;-->
+<!--            background:#2563eb;-->
+<!--            color:#fff;-->
+<!--            font-size:16px;-->
+<!--            font-weight:600;-->
+<!--            cursor:pointer;-->
+<!--            transition:.3s;-->
+<!--        }-->
+
+<!--        button:hover{-->
+<!--            background:#1d4ed8;-->
+<!--            transform:translateY(-2px);-->
+<!--        }-->
+
+<!--        .success{-->
+<!--            background:#dcfce7;-->
+<!--            color:#15803d;-->
+<!--            padding:12px;-->
+<!--            border-radius:8px;-->
+<!--            margin-bottom:15px;-->
+<!--            border-left:5px solid #16a34a;-->
+<!--        }-->
+
+<!--        .error{-->
+<!--            background:#fee2e2;-->
+<!--            color:#dc2626;-->
+<!--            padding:12px;-->
+<!--            border-radius:8px;-->
+<!--            margin-bottom:15px;-->
+<!--            border-left:5px solid #dc2626;-->
+<!--        }-->
+
+<!--        .links{-->
+<!--            margin-top:20px;-->
+<!--            display:flex;-->
+<!--            justify-content:space-between;-->
+<!--            font-size:14px;-->
+<!--        }-->
+
+<!--        .links a{-->
+<!--            color:#2563eb;-->
+<!--            text-decoration:none;-->
+<!--            font-weight:500;-->
+<!--        }-->
+
+<!--        .links a:hover{-->
+<!--            text-decoration:underline;-->
+<!--        }-->
+
+<!--        @media(max-width:768px){-->
+
+<!--            .container{-->
+<!--                padding:30px;-->
+<!--            }-->
+
+<!--            h2{-->
+<!--                font-size:28px;-->
+<!--            }-->
+
+<!--        }-->
+
+
+
+
+<!--    </style>-->
+
+<!--</head>-->
+<!--<body>-->
+
+<!-- -->
+
+<!--<div class="container">-->
+
+<!--    <h2>Login</h2>-->
+
+<!--    {% if messages %}-->
+<!--        {% for message in messages %}-->
+<!--            <div class="success">-->
+<!--                {{ message }}-->
+<!--            </div>-->
+<!--        {% endfor %}-->
+<!--    {% endif %}-->
+
+<!--    {% if form.errors %}-->
+
+<!--        {% for field in form %}-->
+<!--            {% for error in field.errors %}-->
+<!--                <div class="error">-->
+<!--                    {{ error }}-->
+<!--                </div>-->
+<!--            {% endfor %}-->
+<!--        {% endfor %}-->
+
+<!--        {% for error in form.non_field_errors %}-->
+<!--            <div class="error">-->
+<!--                {{ error }}-->
+<!--            </div>-->
+<!--        {% endfor %}-->
+
+<!--    {% endif %}-->
+
+<!--    <form method="POST">-->
+
+<!--        {% csrf_token %}-->
+
+<!--        <div class="form-group">-->
+<!--            <label>Email Address</label>-->
+<!--            <input-->
+<!--                type="email"-->
+<!--                name="email"-->
+<!--                placeholder="Enter your email"-->
+<!--                required-->
+<!--            >-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label>Password</label>-->
+<!--            <input-->
+<!--                type="password"-->
+<!--                name="password"-->
+<!--                placeholder="Enter your password"-->
+<!--                required-->
+<!--            >-->
+<!--        </div>-->
+
+<!--        <button type="submit">-->
+<!--            Login-->
+<!--        </button>-->
+
+<!--    </form>-->
+
+<!--&lt;!&ndash;    <div class="links">&ndash;&gt;-->
+<!--&lt;!&ndash;        <a href="{% url 'forgot-password' %}">&ndash;&gt;-->
+<!--&lt;!&ndash;            Forgot Password?&ndash;&gt;-->
+<!--&lt;!&ndash;        </a>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
 
-    
+<meta charset="UTF-8">
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:'Poppins',sans-serif;
-        }
+<title>Smart College Management System</title>
 
-        body{
-            background:linear-gradient(135deg,#0f172a,#1e3a8a);
-            height:100vh;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            padding:20px;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet">
 
-        .container{
-            width:100%;
-            max-width:450px;
-            background:#fff;
-            padding:40px;
-            border-radius:18px;
-            box-shadow:0 20px 50px rgba(0,0,0,.25);
-        }
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-        h2{
-            text-align:center;
-            margin-bottom:30px;
-            color:#1e293b;
-            font-size:32px;
-            font-weight:600;
-        }
+<style>
+/* ===========================
+   RESET
+=========================== */
 
-        .form-group{
-            margin-bottom:20px;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
 
-        label{
-            display:block;
-            margin-bottom:8px;
-            color:#334155;
-            font-weight:500;
-        }
+body{
 
-        input{
-            width:100%;
-            padding:14px;
-            border:1px solid #cbd5e1;
-            border-radius:10px;
-            font-size:15px;
-            transition:.3s;
-        }
+    min-height:100vh;
 
-        input:focus{
-            outline:none;
-            border-color:#2563eb;
-            box-shadow:0 0 0 4px rgba(37,99,235,.15);
-        }
+    background:linear-gradient(
+        135deg,
+        #0F172A 0%,
+        #1E3A8A 55%,
+        #2563EB 100%
+    );
 
-        button{
-            width:100%;
-            padding:14px;
-            border:none;
-            border-radius:10px;
-            background:#2563eb;
-            color:#fff;
-            font-size:16px;
-            font-weight:600;
-            cursor:pointer;
-            transition:.3s;
-        }
+    overflow:hidden;
 
-        button:hover{
-            background:#1d4ed8;
-            transform:translateY(-2px);
-        }
+}
+.overlay{
 
-        .success{
-            background:#dcfce7;
-            color:#15803d;
-            padding:12px;
-            border-radius:8px;
-            margin-bottom:15px;
-            border-left:5px solid #16a34a;
-        }
+    width:100%;
+    min-height:100vh;
 
-        .error{
-            background:#fee2e2;
-            color:#dc2626;
-            padding:12px;
-            border-radius:8px;
-            margin-bottom:15px;
-            border-left:5px solid #dc2626;
-        }
+    display:flex;
 
-        .links{
-            margin-top:20px;
-            display:flex;
-            justify-content:space-between;
-            font-size:14px;
-        }
+    justify-content:space-between;
 
-        .links a{
-            color:#2563eb;
-            text-decoration:none;
-            font-weight:500;
-        }
+    align-items:center;
 
-        .links a:hover{
-            text-decoration:underline;
-        }
+    padding:70px;
 
-        @media(max-width:768px){
+}
 
-            .container{
-                padding:30px;
-            }
+.left-side{
 
-            h2{
-                font-size:28px;
-            }
+    width:55%;
 
-        }
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+.branding{
+
+    max-width:560px;
+
+}
+
+.logo{
+
+    width:95px;
+    height:95px;
+
+    border-radius:24px;
+
+    background:#2563EB;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:45px;
+
+    color:white;
+
+    margin-bottom:35px;
+
+    box-shadow:0 18px 35px rgba(37,99,235,.35);
+
+}
+
+.branding h1{
+
+    font-size:64px;
+
+    font-weight:700;
+
+    color:white;
+
+    line-height:1.1;
+
+}
+
+.branding h2{
+
+    margin-top:8px;
+
+    margin-bottom:28px;
+
+    font-size:36px;
+
+    font-weight:500;
+
+    color:#DBEAFE;
+
+}
+
+.branding p{
+
+    font-size:20px;
+
+    line-height:1.9;
+
+    color:#E2E8F0;
+
+    max-width:520px;
+
+}
+
+/* ===========================
+   RIGHT SIDE
+=========================== */
+
+.right-side{
+
+    width:45%;
+
+    display:flex;
+
+    justify-content:center;
+
+}
+
+.login-card{
+
+    width:100%;
+
+    max-width:470px;
+
+    background:white;
+
+    border-radius:28px;
+
+    padding:50px;
+
+    box-shadow:
+
+        0 20px 60px rgba(15,23,42,.18);
+
+}
+
+.login-card h3{
+
+    font-size:38px;
+
+    color:#1E293B;
+
+    margin-bottom:8px;
+
+}
+
+.login-card p{
+
+    color:#64748B;
+
+    margin-bottom:35px;
+
+}
+
+
+/* ===========================
+   INPUT
+=========================== */
+
+.input-box{
+    position: relative;
+    margin-bottom: 22px;
+}
+
+.input-icon{
+    position: absolute;
+    left:18px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#64748B;
+    font-size:18px;
+    z-index:2;
+}
+
+.input-box input{
+
+    width:100%;
+    height:58px;
+
+    border:1px solid #CBD5E1;
+    border-radius:15px;
+
+    background:#fff;
+
+    padding-left:50px;
+    padding-right:50px;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+.input-box input:focus{
+
+    outline:none;
+
+    border-color:#2563EB;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.15);
+
+}
+
+
+<!--.input-icon{-->
+
+<!--    position:absolute;-->
+
+<!--    left:18px;-->
+
+<!--    top:50%;-->
+
+<!--    transform:translateY(-50%);-->
+
+<!--    color:#64748B;-->
+
+<!--    font-size:18px;-->
+
+<!--}-->
+#togglePassword{
+
+    position:absolute;
+
+    right:18px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    cursor:pointer;
+
+    color:#64748B;
+
+    z-index:2;
+
+    font-size:18px;
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+
+/* ===========================
+   OPTIONS
+=========================== */
+
+.options{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin:25px 0;
+
+    font-size:14px;
+
+}
+
+.options label{
+
+    display:flex;
+
+    gap:8px;
+
+    align-items:center;
+
+    color:#475569;
+
+}
+
+.options input{
+
+    accent-color:#4F46E5;
+
+}
+
+.options a{
+
+    color:#2563EB;
+
+    font-weight:600;
+
+}
+
+.options a:hover{
+
+    color:#1D4ED8;
+
+}
+
+
+/* ===========================
+   BUTTON
+=========================== */
+
+button{
+
+    width:100%;
+
+    height:58px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:linear-gradient(
+        135deg,
+        #2563EB,
+        #1D4ED8
+    );
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.35s;
+
+}
+
+button:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 15px 35px rgba(99,102,241,.35);
+
+}
+
+button i{
+
+    margin-left:10px;
+
+}
+
+
+/* ===========================
+   ALERTS
+=========================== */
+
+.success{
+
+    background:#DCFCE7;
+
+    color:#15803D;
+
+    padding:14px;
+
+    border-radius:10px;
+
+    margin-bottom:18px;
+
+}
+
+.error{
+
+    background:#FEE2E2;
+
+    color:#DC2626;
+
+    padding:14px;
+
+    border-radius:10px;
+
+    margin-bottom:18px;
+
+}
+/* ==========================================
+   RESPONSIVE DESIGN
+========================================== */
+
+@media (max-width:1100px){
+
+    .overlay{
+        padding:40px;
+    }
+
+    .branding h1{
+        font-size:42px;
+    }
+
+    .branding h2{
+        font-size:30px;
+    }
+
+    .login-card{
+        padding:35px;
+    }
+
+}
+
+@media (max-width:900px){
+
+    body{
+        overflow:auto;
+    }
+
+    .overlay{
+
+        flex-direction:column;
+
+        justify-content:center;
+
+        gap:40px;
+
+        padding:30px;
+
+    }
+
+    .left-side,
+    .right-side{
+
+        width:100%;
+
+    }
+
+    .left-side{
+
+        text-align:center;
+
+        padding-right:0;
+
+    }
+
+    .branding{
+
+        margin:auto;
+
+    }
+
+    .logo{
+
+        margin:auto auto 25px;
+
+    }
+
+    .login-card{
+
+        max-width:520px;
+
+        margin:auto;
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    .overlay{
+
+        padding:20px;
+
+    }
+
+    .branding h1{
+
+        font-size:34px;
+
+    }
+
+    .branding h2{
+
+        font-size:24px;
+
+    }
+
+    .branding p{
+
+        font-size:15px;
+
+    }
+
+    .login-card{
+
+        padding:30px 25px;
+
+        border-radius:22px;
+
+    }
+
+    .login-card h3{
+
+        font-size:30px;
+
+    }
+
+    .input-box input{
+
+        height:52px;
+
+    }
+
+    button{
+
+        height:52px;
+
+    }
+
+}
 
 
 
+/* ==========================================
+   ANIMATIONS
+========================================== */
 
-    </style>
+.logo{
 
-</head>
+    animation:float 3s ease-in-out infinite;
+
+}
+
+@keyframes float{
+
+    0%{
+
+        transform:translateY(0px);
+
+    }
+
+    50%{
+
+        transform:translateY(-12px);
+
+    }
+
+    100%{
+
+        transform:translateY(0px);
+
+    }
+
+}
+
+.login-card{
+
+    animation:fadeUp .8s ease;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(40px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+button{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+button::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:-120%;
+
+    top:0;
+
+    width:120%;
+
+    height:100%;
+
+    background:rgba(255,255,255,.18);
+
+    transform:skewX(-30deg);
+
+    transition:.6s;
+
+}
+
+button:hover::before{
+
+    left:120%;
+
+}
+
+.input-box input{
+
+    background:#fff;
+
+}
+
+.input-box input:hover{
+
+    border-color:#818CF8;
+
+}
+
+.options a:hover{
+
+    color:#312E81;
+
+}
+
+
+
+/* ==========================================
+   SCROLLBAR
+========================================== */
+
+::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#6366F1;
+
+    border-radius:20px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#E2E8F0;
+
+}
+/* Microsoft Edge password reveal button */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+
+/* Chromium password reveal */
+input::-webkit-credentials-auto-fill-button {
+    display: none !important;
+}
+</style>
+    </head>
+
 <body>
 
- 
+<div class="overlay">
 
-<div class="container">
+<div class="left-side">
 
-    <h2>Login</h2>
+<div class="branding">
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="success">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
+<div class="logo">
 
-    {% if form.errors %}
-
-        {% for field in form %}
-            {% for error in field.errors %}
-                <div class="error">
-                    {{ error }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-
-        {% for error in form.non_field_errors %}
-            <div class="error">
-                {{ error }}
-            </div>
-        {% endfor %}
-
-    {% endif %}
-
-    <form method="POST">
-
-        {% csrf_token %}
-
-        <div class="form-group">
-            <label>Email Address</label>
-            <input
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                required
-            >
-        </div>
-
-        <div class="form-group">
-            <label>Password</label>
-            <input
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                required
-            >
-        </div>
-
-        <button type="submit">
-            Login
-        </button>
-
-    </form>
-
-    <div class="links">
-        <a href="{% url 'forgot-password' %}">
-            Forgot Password?
-        </a>
-    </div>
+<i class="bi bi-mortarboard-fill"></i>
 
 </div>
+
+<h1>
+Smart College
+</h1>
+
+<h2>
+Management System
+</h2>
+
+<p>
+
+Manage Students, Teachers,
+Attendance, Timetable,
+Examinations and Placements
+with one modern platform.
+
+</p>
+
+</div>
+
+</div>
+
+
+<div class="right-side">
+
+<div class="login-card">
+
+<h3>
+
+Welcome Back
+
+</h3>
+
+<p>
+
+Sign in to continue
+
+</p>
+
+
+{% if messages %}
+{% for message in messages %}
+
+<div class="success">
+
+{{ message }}
+
+</div>
+
+{% endfor %}
+{% endif %}
+
+
+{% if form.errors %}
+
+{% for field in form %}
+{% for error in field.errors %}
+
+<div class="error">
+
+{{ error }}
+
+</div>
+
+{% endfor %}
+{% endfor %}
+
+{% for error in form.non_field_errors %}
+
+<div class="error">
+
+{{ error }}
+
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+
+<form method="POST">
+
+{% csrf_token %}
+
+
+<div class="input-box">
+
+    <i class="bi bi-envelope-fill input-icon"></i>
+
+    <input
+        type="email"
+        name="email"
+        placeholder="Email Address"
+        required>
+
+</div>
+
+
+<div class="input-box">
+
+    <i class="bi bi-lock-fill input-icon"></i>
+
+    <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Password"
+        required>
+
+    <span id="togglePassword">
+        <i class="bi bi-eye-fill"></i>
+    </span>
+
+</div>
+
+
+<!--<div class="options">-->
+
+<!--<label>-->
+
+<!--<input type="checkbox">-->
+
+<!--Remember me-->
+
+<!--</label>-->
+
+<!--<a href="#">-->
+
+<!--Forgot Password?-->
+
+<!--</a>-->
+
+<!--</div>-->
+
+
+<button type="submit">
+
+Login
+
+<i class="bi bi-arrow-right-circle-fill"></i>
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+<script>
+
+const togglePassword = document.getElementById("togglePassword");
+const password = document.getElementById("password");
+
+togglePassword.addEventListener("click", function(){
+
+    if(password.type === "password"){
+
+        password.type = "text";
+
+        this.innerHTML =
+        '<i class="bi bi-eye-slash-fill"></i>';
+
+    }else{
+
+        password.type = "password";
+
+        this.innerHTML =
+        '<i class="bi bi-eye-fill"></i>';
+
+    }
+
+});
+
+</script>
 
 </body>
 </html>
